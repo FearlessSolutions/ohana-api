@@ -11,7 +11,7 @@
   .contact
     = t('views.about.contact.connect_html')
     %div
-      = form_tag('/feedback', method: :post) do
+      = form_tag('/feedback', method: :post, html: { data: { turbo: false }}) do
         %p
           = label_tag 'organization_name', t('views.about.contact.organization_name')
           = text_field_tag 'organization_name', nil, class: 'organization-name', aria: { label: t('views.about.contact.organization_name') }
@@ -27,6 +27,7 @@
         %p.required-fields-note
           = t('labels.required_field')
         = hidden_field_tag 'agent', user_agent
+        = flash[:recaptcha_error]
         - if @show_checkbox_recaptcha
           = recaptcha_tags
         - else
