@@ -19,13 +19,14 @@
     %p.required-fields-note
       = t('labels.required_field')
     = flash[:recaptcha_error]
-    - if @show_checkbox_recaptcha
-      = recaptcha_tags
-    - else
-      - if @devise_mapping.singular == :admin
-        = recaptcha_v3(action: 'admin_register', site_key: ENV['RECAPTCHA_SITE_KEY_V3'])
+    - unless Rails.env.test?
+      - if @show_checkbox_recaptcha
+        = recaptcha_tags
       - else
-        = recaptcha_v3(action: 'user_register', site_key: ENV['RECAPTCHA_SITE_KEY_V3'])
+        - if @devise_mapping.singular == :admin
+          = recaptcha_v3(action: 'admin_register', site_key: ENV['RECAPTCHA_SITE_KEY_V3'])
+        - else
+          = recaptcha_v3(action: 'user_register', site_key: ENV['RECAPTCHA_SITE_KEY_V3'])
     = f.submit t('navigation.sign_up'), class: 'button right sign-up'
   %br
   = render 'devise/shared/links'

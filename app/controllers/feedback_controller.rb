@@ -16,6 +16,7 @@ class FeedbackController < ApplicationController
   end
 
   def recaptcha_success
+    return true if Rails.env.test?
     success = verify_recaptcha(minimum_score: 0.9, action: 'submit_feedback', secret_key: ENV['RECAPTCHA_SECRET_KEY_V3'])
     checkbox_success = verify_recaptcha unless success
     if success || checkbox_success

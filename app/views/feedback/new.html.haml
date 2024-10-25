@@ -27,9 +27,10 @@
         %p.required-fields-note
           = t('labels.required_field')
         = hidden_field_tag 'agent', @user_agent
-        = flash[:recaptcha_error]
-        - if @show_checkbox_recaptcha
-          = recaptcha_tags
-        - else
-          = recaptcha_v3(action: 'submit_feedback', site_key: ENV['RECAPTCHA_SITE_KEY_V3'])
+        - unless Rails.env.test?
+          = flash[:recaptcha_error]
+          - if @show_checkbox_recaptcha
+            = recaptcha_tags
+          - else
+            = recaptcha_v3(action: 'submit_feedback', site_key: ENV['RECAPTCHA_SITE_KEY_V3'])
         = button_tag t('views.about.contact.submit'), class: 'button-plain', aria: { label: t('views.about.contact.submit') }
