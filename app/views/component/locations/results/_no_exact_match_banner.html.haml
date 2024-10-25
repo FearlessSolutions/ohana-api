@@ -1,0 +1,7 @@
+- if !@exact_match_found && @search.locations.present? && params[:keyword].present?
+  %div.no-exact-match-banner{role: "alert", "aria-live": "polite"}
+    %h2.visuallyhidden Search Results Information
+    %p
+      No exact matches found. 
+      %span{"aria-label": "Showing related results for #{params[:keyword]}"}
+        Showing related results for "#{params[:keyword]}".

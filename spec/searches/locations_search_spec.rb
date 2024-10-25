@@ -33,9 +33,9 @@ RSpec.describe LocationsSearch, :elasticsearch do
 
       results = search({keywords: 'Salvation Army'}).objects
 
-      expect(results[0].id).to eq(featured_location.id)
-      expect(results[1].id).to eq(location_name_exact_match.id)
-      expect(results[2].id).to eq(location_name_partial_match.id)
+      expect(results[0].id).to eq(location_name_exact_match.id)
+      expect(results[1].id).to eq(location_name_partial_match.id)
+      expect(results[2].id).to eq(featured_location.id)
       expect(results[3].id).to eq(location_with_org_matching_tags.id)
       expect(results).not_to include(location_random_attributes)
     end
@@ -66,8 +66,8 @@ RSpec.describe LocationsSearch, :elasticsearch do
 
       results = search({keywords: 'Financial Aid And Loans'}).objects
 
-      expect(results[0].id).to be(featured_location.id)
-      expect(results[1].id).to be(location_organization_match.id)
+      expect(results[0].id).to be(location_organization_match.id)
+      expect(results[1].id).to be(featured_location.id)
       expect(results[2].id).to be(location_category_service_match.id)
     end
 
@@ -95,8 +95,8 @@ RSpec.describe LocationsSearch, :elasticsearch do
 
       results = search({keywords: 'Financial Aid And Loans'}).objects
 
-      expect(results[0].id).to be(featured_location.id)
-      expect(results[1].id).to be(location_name_exact_match.id)
+      expect(results[0].id).to be(location_name_exact_match.id)
+      expect(results[1].id).to be(featured_location.id)
       expect(results[2].id).to be(location_sub_category_service_match.id)
     end
   end
@@ -518,8 +518,8 @@ RSpec.describe LocationsSearch, :elasticsearch do
       results = search({keywords: "#{term_1} #{term_2}"}).objects
 
       expect(results.first.id).to eq(location_desc_and_match.id)
-      expect(results.second.id).to eq(location_service_name_and_match.id)
-      expect(results.third.id).to eq(location_service_dec_and_match.id)
+      expect(results.second.id).to eq(location_service_dec_and_match.id)
+      expect(results.third.id).to eq(location_service_name_and_match.id)
       expect(results).not_to include(location_random_terms)
     end
 

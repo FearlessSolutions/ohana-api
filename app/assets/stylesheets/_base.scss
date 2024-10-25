@@ -665,6 +665,13 @@ body {
   }
 }
 
+#results-entries {
+  .no-exact-match-banner ~ .results-header {
+    top: 550px;
+    position: absolute !important;
+  }
+}
+
 .detail-header {
   top: 0;
 }
@@ -704,6 +711,10 @@ body {
 
   a {
     text-decoration: none;
+  }
+
+  @media (max-width: 767px) {
+    padding-top: 20px;
   }
 
   // No results styling.
@@ -765,6 +776,21 @@ body {
     display: table-row;
   }
 }
+
+.no-exact-match-banner {
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 4px;
+  padding: 15px;
+  margin-bottom: 20px;
+  margin-right: 20px;
+  margin-left: 20px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 600;
+  color: #495057;
+}
+
 //=================================================================================
 // Results - terminology infobox. Certain keywords display an informational box
 // above the search results. See app/helpers/info_box_helper.rb for more info.

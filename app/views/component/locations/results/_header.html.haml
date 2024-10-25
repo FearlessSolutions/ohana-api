@@ -1,2 +1,3 @@
-%header.results-header#floating-results-header
-  = render 'component/locations/results/header_summary', search: search
+- header_class = @exact_match_found ? '' : 'no-exact-match'
+%header.results-header#floating-results-header{class: header_class}
+  = render 'component/locations/results/header_summary', search: search 

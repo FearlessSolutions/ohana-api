@@ -13,7 +13,7 @@ class LocationsController < ApplicationController
 
     # Performs the actual search using the processed search parameters above
     set_coordinates
-    locations = LocationsSearch.new(
+    @locations_search = LocationsSearch.new(
       accessibility: search_params[:accessibility],
       category_ids: search_params[:category_ids],
       distance: search_params[:distance],
@@ -27,7 +27,8 @@ class LocationsController < ApplicationController
       per_page: search_params[:per_page],
       languages: search_params[:languages],
       matched_category: @matched_category
-    ).search.load&.objects
+    )
+    locations = @locations_search.search.load&.objects
     @search = Search.new(locations, params)
 
 
@@ -45,6 +46,8 @@ class LocationsController < ApplicationController
     @selected_categories = params[:categories] || []
     @keyword_matched_category = @matched_category.present? && params[:keyword].present?
     @clear_categories = params[:keyword].present? && !@matched_category
+
+    @exact_match_found = @locations_search.exact_match_found?
 
     # caches the search results and renders the view
     cache_page(@search.locations) if @search.locations.present?
@@ -166,7 +169,6 @@ class LocationsController < ApplicationController
     search_params[:main_category] = @matched_category.parent&.name || @matched_category.name
     @main_category_selected_name = search_params[:main_category]
     @main_category_selected_id = @matched_category.parent&.id || @matched_category.id
-    search_params[:keyword] = nil
     search_params[:category_ids] = [@matched_category.id]
   end
 

@@ -1,4 +1,6 @@
 %section#results-entries
+  = render 'component/locations/results/no_exact_match_banner'
+
   - unless search.map_data.empty?
     = render 'component/locations/results/map_view', search: search, address: @address
 
