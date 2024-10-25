@@ -69,7 +69,7 @@ vendor/bundle/*
 yarn-debug.log*
 .yarn-integrity
 
-.env.dev
+.env.local
 /.nix-bundler/
 
 /app/assets/builds/*
