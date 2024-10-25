@@ -141,6 +141,7 @@ Rails.application.routes.draw do
   get 'locations/*id/' => 'locations#show', as: 'location'
   get '/about' => 'about#index'
   post '/feedback' => 'feedback#create'
+  get '/feedback' => 'feedback#new'
   get '.well-known/status' => 'status#check_status'
 
   post '/favorite.json' => 'favorites#create'
