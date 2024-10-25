@@ -1,9 +1,9 @@
+- content_for(:meta_description, "Contact CHARMcare")
+- title 'Feedback'
+
 %div.about-container
   .about-summary
-    %img{ src: asset_path(SETTINGS[:site_logo_alt]), alt: "#{SETTINGS[:site_title]} #{SETTINGS[:site_subtitle]}", class: "logo", aria: { label: "#{t('branding.logo')} large logo" } }
-    = t('views.about.charmcare_summary_html')
-    %button.button-plain{ onclick: "window.location.href='#{SETTINGS[:baltimore_accountable_health_community]}'", aria: { label: t('views.about.learn_more', community: SETTINGS[:baltimore_accountable_health_community]) } }
-      = t('views.about.learn_more')
+    Contact CHARMcare
 
   %h1
     = t('views.about.contact.connect_with_us')
@@ -26,7 +26,7 @@
           = text_area_tag 'message', nil, rows: '4', required: 'true', class: 'comment', aria: { label: t('views.about.contact.message') }
         %p.required-fields-note
           = t('labels.required_field')
-        = hidden_field_tag 'agent', user_agent
+        = hidden_field_tag 'agent', @user_agent
         - if @show_checkbox_recaptcha
           = recaptcha_tags
         - else
