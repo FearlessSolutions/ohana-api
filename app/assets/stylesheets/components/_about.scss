@@ -3,11 +3,13 @@
 }
 
 // Only used on /about route when JS is disabled.
-.about .close-button {
+.about .close-button,
+.feedback .close-button {
   display: none;
 }
 
-.about .main {
+.about .main,
+.feedback .main {
   display: block;
   padding: 0 15%;
   background: $white !important;
