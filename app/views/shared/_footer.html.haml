@@ -5,7 +5,7 @@
         %img{ src: asset_path(SETTINGS[:site_logo]), alt: "#{t('titles.brand')} Footer Logo" }
       %span.subtitle= SETTINGS[:site_subtitle]
 
-    .footer-links{ role: 'navigation', aria: { label: 'Footer Navigation' } }
+    .footer-links.hidden{ role: 'navigation', aria: { label: 'Footer Navigation' } }
       .column
         %a{ href: '/about#about-box', aria: { label: t('links.about_charmcare') } }= t('links.about_charmcare')
         %a{ href: '/about#about-box', aria: { label: t('links.connect_with_us') } }= t('links.connect_with_us')

@@ -10,7 +10,7 @@
     %span
   %nav#nav-menu
     %ul.desktop-only
-      %li
+      %li.hidden
         %a.popup-trigger.popup-default.button-small.about-btn#about-btn{ href: '/about#about-box', aria: { label: t('navigation.list_your_services') } }
           = t('navigation.list_your_services')
       - if user_signed_in?
@@ -47,7 +47,7 @@
           %img{ src: asset_path('language_flags/korean_language_flag.png'), alt: 'Korean' }
         %a.translate-link{ href: '#', data: { lang: 'es' }, aria: { label: 'Translate page to Spanish' } }
           %img{ src: asset_path('language_flags/spanish_language_flag.png'), alt: 'Spanish' }
-      %li
+      %li.hidden
         %a{ href: '/about#about-box', aria: { label: t('navigation.list_your_services ') } }
           = t('navigation.list_your_services')
       - if user_signed_in?
