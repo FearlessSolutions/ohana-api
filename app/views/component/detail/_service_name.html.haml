@@ -1,5 +1,5 @@
 %section.name-box
-  %span.name
+  %span.name{ id: "#{service.name.split("(").first.split(" ").join("")}" }
     = service.name
   - if service.alternate_name.present?
     %span.alternate-name

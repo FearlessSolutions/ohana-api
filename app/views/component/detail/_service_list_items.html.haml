@@ -1,0 +1,10 @@
+%section.content
+  %section.icon-text-block
+    %i.fa.fa-hashtag{ tabindex: "0", role: "img", aria: { label: "Services marker" } }
+    %h4.annotated-text-block= t('labels.services')
+    %ul
+      - location.services.each_with_index do |service, i|
+        %li
+          %a{ href: "##{service.name.split("(").first.split(" ").join("")}" }
+            #{service.name} |
+            %i.fa.fa-plus{role: "img", aria: { label: "More info" } }
