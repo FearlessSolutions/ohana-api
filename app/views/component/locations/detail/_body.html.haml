@@ -27,6 +27,8 @@
           = render 'component/detail/audience', location: location
           = render 'component/detail/phones', phones: location.phones
           = render 'component/detail/address', location: location, lines: 2
+          - if location.services.present?
+            = render 'component/detail/service_list_items', location: location
         .flex-column  
           = render 'component/detail/website', website: location.website
           = render 'component/detail/email', email: location.email
