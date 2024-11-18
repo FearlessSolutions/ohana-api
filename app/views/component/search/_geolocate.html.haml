@@ -19,7 +19,7 @@
   %legend.sr-only= t('labels.distance_filter')
   = label_tag 'distance', 'Radius', for: 'distance'
   = select_tag :distance, 
-               options_for_select([["1 mile", 1], ["2 miles", 2], ["5 miles", 5], ["10 miles", 10], ["15 miles", 15], ["20 miles", 20], ["25 miles", 25], ["30 miles", 30], ["35 miles", 35], ["40 miles", 40]], @selected_distance_filter), 
+               options_for_select([["0.5 miles", 0.5], ["1 mile", 1], ["2 miles", 2], ["5 miles", 5], ["10 miles", 10], ["15 miles", 15], ["20 miles", 20], ["25 miles", 25], ["30 miles", 30]], @selected_distance_filter), 
                include_blank: 'All', 
                class: "category-search-select-left-menu",
                aria: { describedby: 'Distance from location selected' }

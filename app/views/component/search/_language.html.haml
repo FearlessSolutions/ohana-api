@@ -1,6 +1,6 @@
-= field_set_tag nil, id: 'language-filter', class: 'input-search-filter input-search-filter-option' do
+= field_set_tag nil, id: 'languages-spoken-filter', class: 'input-search-filter input-search-filter-option' do
   %legend.sr-only= 'Language Filter'
-  = label_tag :languages, 'Language', style: "font-size: 16px;"
+  = label_tag :languages, 'Language(s) Spoken', style: "font-size: 16px;"
   = select_tag :languages, 
               options_for_select(@languages, params[:languages]), 
               include_blank: 'All', 

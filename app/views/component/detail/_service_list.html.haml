@@ -1,7 +1,7 @@
 %section.content
   %span{ itemprop: 'serviceName' }
     %section.icon-text-block
-      %i.fa.fa-tags{ tabindex: "0", role: "img", aria: { label: "Services marker" } }
+      %i.fa.fa-handshake-o{ tabindex: "0", role: "img", aria: { label: "Services marker" } }
       %h4.annotated-text-block= t('labels.services')
     - location.services.each_with_index do |service, i|
       - if i < location.services.size-1
