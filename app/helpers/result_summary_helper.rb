@@ -42,4 +42,8 @@ module ResultSummaryHelper
       location_path([location.organization.slug, location.slug], request.query_parameters)
     end
   end
+
+  def service_id_for(service_name)
+    service_name.split("(").first.split(" ").join("")
+  end
 end

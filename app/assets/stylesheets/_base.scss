@@ -936,7 +936,17 @@ body {
 
     .content {
       margin-left: 20px;
+
+      a {
+        color: $dark_purple;
+        font-size: $font_size_100;
+      }
+
+      a:hover {
+        text-decoration: underline;
+      }
     }
+
 
     .kind {
       color: $primary-dark;
@@ -1556,6 +1566,10 @@ body {
   .flex-column {
     max-width: 50%;
     flex-grow: 1;
+  }
+
+  .overview-flex-container > .flex-column:first-child {
+    padding-right: 32px;
   }
 
   .overview-flex-container > * {
