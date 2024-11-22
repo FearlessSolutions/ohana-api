@@ -178,15 +178,15 @@ class LocationsSearch
 
     query.query(bool: {
       should: [
-        { term: { "organization_name_exact": { value: keywords.downcase, boost: 160 } } },
-        { term: { "name_exact": { value: keywords.downcase, boost: 120 } } },
-        { term: { "categories_exact": { value: keywords.downcase, boost: 80 } } },
-        { term: { "sub_categories_exact": { value: keywords.downcase, boost: 40 } } }
+        { term: { "service_names_exact": { value: keywords.downcase, boost: 10 } } },
+        { term: { "service_description_exact": { value: keywords.downcase, boost: 8 } } },
+        { term: { "service_tags_exact": { value: keywords.downcase, boost: 5 } } },
+        { term: { "name": { value: keywords.downcase, boost: 1 } } }
       ],
       must: [{
         multi_match: {
           query: keywords,
-          fields: %w[organization_name^20 name^16 categories^14 organization_tags^12 tags^10 service_tags^8 description^6 service_names^4 service_descriptions^2 keywords],
+          fields: %w[service_names^10 service_descriptions^8 service_tags^7 organization_name^4 name^3 categories^2 organization_tags^1 tags description keywords],
           fuzziness: 'AUTO'
         }
       }]
@@ -233,35 +233,35 @@ class LocationsSearch
       }
     elsif keywords.present?
       {
+
         bool: {
           should: [
             # Exact phrase matches
-            { match_phrase: { "organization_name": { query: keywords, boost: 200 } } },
-            { match_phrase: { "name": { query: keywords, boost: 120 } } },
-            { match_phrase: { "description": { query: keywords, boost: 50 } } },
-            { match_phrase: { "service_descriptions": { query: keywords, boost: 50 } } },
+            { match_phrase: { "service_name": { query: keywords, boost: 10 } } },
+            { match_phrase: { "service_descriptions": { query: keywords, boost: 8 } } },
+            { match_phrase: { "service_tags": { query: keywords, boost: 5 } } },
+            { match_phrase: { "name": { query: keywords, boost: 1 } } },
 
             # All words must match
-            { match: { "organization_name": { query: keywords, boost: 150, operator: "and" } } },
-            { match: { "name": { query: keywords, boost: 15, operator: "and" } } },
-            { match: { "description": { query: keywords, boost: 5, operator: "and" } } },
-            { match: { "service_descriptions": { query: keywords, boost: 5, operator: "and" } } },
+            { match: { "service_name": { query: keywords, boost: 10, operator: "and" } } },
+            { match: { "service_descriptions": { query: keywords, boost: 8, operator: "and" } } },
+            { match: { "service_tags": { query: keywords, boost: 5, operator: "and" } } },
+            { match: { "name": { query: keywords, boost: 1, operator: "and" } } },
 
             # Partial and fuzzy matches
             { multi_match: {
                 query: keywords,
                 fields: %w[
-                  organization_name^100
-                  name^16
-                  categories^12
-                  organization_tags^10
-                  tags^8
-                  service_tags^6
-                  description^4
-                  service_descriptions^4
-                  service_names^2
-                  keywords
-                ],
+                  service_names^10
+                  service_descriptions^8
+                  service_tags^7
+                  organization_name^4
+                  name^3
+                  categories^2
+                  organization_tags^1
+                  tags
+                  description
+                  keywords],
                 type: "best_fields",
                 fuzziness: 'AUTO',
                 prefix_length: 2
