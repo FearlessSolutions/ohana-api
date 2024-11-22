@@ -5,6 +5,8 @@
       %h4.annotated-text-block= t('labels.services')
     - location.services.each_with_index do |service, i|
       - if i < location.services.size-1
-        %span.name #{service.name},
+        %a{ href: "#{location_link_for(location)}/##{service_id_for(service.name)}"}
+          #{service.name},
       - else
-        %span.name #{service.name}
+        %a{ href: "#{location_link_for(location)}/##{service_id_for(service.name)}"}
+          #{service.name}
