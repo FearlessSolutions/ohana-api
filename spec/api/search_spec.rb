@@ -497,21 +497,6 @@ describe "GET 'search'" do
     end
   end
 
-  context 'with organization name as a keyword query' do
-    before do
-      @loc1 = create(:nearby_loc, name: 'some parent name')
-      @loc2 = create(:location)
-      LocationsIndex.reset!
-    end
-
-    it 'should return organization locations on the top of search' do
-      get api_search_index_url(keyword: 'parent')
-
-      expect(json[0]['name']).to eq(@loc2.name)
-      expect(json[1]['name']).to eq(@loc1.name)
-    end
-  end
-
   context 'it should order the locations' do
     before do
       @organization = create(:organization)

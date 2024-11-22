@@ -237,13 +237,13 @@ class LocationsSearch
         bool: {
           should: [
             # Exact phrase matches
-            { match_phrase: { "service_name": { query: keywords, boost: 10 } } },
+            { match_phrase: { "service_names": { query: keywords, boost: 10 } } },
             { match_phrase: { "service_descriptions": { query: keywords, boost: 8 } } },
             { match_phrase: { "service_tags": { query: keywords, boost: 5 } } },
             { match_phrase: { "name": { query: keywords, boost: 1 } } },
 
             # All words must match
-            { match: { "service_name": { query: keywords, boost: 10, operator: "and" } } },
+            { match: { "service_names": { query: keywords, boost: 10, operator: "and" } } },
             { match: { "service_descriptions": { query: keywords, boost: 8, operator: "and" } } },
             { match: { "service_tags": { query: keywords, boost: 5, operator: "and" } } },
             { match: { "name": { query: keywords, boost: 1, operator: "and" } } },
