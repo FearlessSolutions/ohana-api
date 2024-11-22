@@ -32,6 +32,10 @@
               - if location.short_desc.present?
                 .short-desc-list-view
                   = render_markdown(location.short_desc)
+
+          - if location.services.present? && location.services.size > 0
+            = render 'component/detail/service_list', location: location
+
           - if user_signed_in?
             - services = Location.get(location.id)[:services]
             - if services.present? && services.size > 0
