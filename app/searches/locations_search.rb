@@ -7,6 +7,7 @@ class LocationsSearch
   attribute :zipcode, type: String
   attribute :keywords, type: String
   attribute :org_name, type: String
+  attribute :main_category_name, type: String
   attribute :category_ids, type: Array
   attribute :tags, type: String
   attribute :archived_at, type: Date
@@ -49,6 +50,7 @@ class LocationsSearch
         { match_phrase: { "organization_name": { query: keyword_to_use, slop: 0 } } },
         { match_phrase: { "name": { query: keyword_to_use, slop: 0 } } },
         { match_phrase: { "categories": { query: keyword_to_use, slop: 0 } } },
+
         # Partial matches
         { match_phrase: { "organization_name": { query: keyword_to_use } } },
         { match_phrase: { "name": { query: keyword_to_use } } },
@@ -174,19 +176,26 @@ class LocationsSearch
   end
 
   def keyword_filter(query = index)
-    return query unless keywords?
+    return query if keywords.blank? && main_category_name.blank?
+
+    search_terms =
+    if keywords.present?
+      keywords.downcase
+    else
+      main_category_name.downcase
+    end
 
     query.query(bool: {
       should: [
-        { term: { "service_names_exact": { value: keywords.downcase, boost: 10 } } },
-        { term: { "service_description_exact": { value: keywords.downcase, boost: 8 } } },
-        { term: { "service_tags_exact": { value: keywords.downcase, boost: 5 } } },
-        { term: { "name": { value: keywords.downcase, boost: 1 } } }
+        { term: { "service_names_exact": { value: search_terms, boost: 10 } } },
+        { term: { "service_description_exact": { value: search_terms, boost: 8 } } },
+        { term: { "service_tags_exact": { value: search_terms, boost: 5 } } },
+        { term: { "name": { value: search_terms, boost: 1 } } }
       ],
       must: [{
         multi_match: {
-          query: keywords,
-          fields: %w[service_names^10 service_descriptions^8 service_tags^7 organization_name^4 name^3 categories^2 organization_tags^1 tags description keywords],
+          query: search_terms,
+          fields: %w[service_names^10 service_descriptions^8 service_tags^7 organization_name^4 name^3 categories^2 organization_tags^1 tags description search_terms],
           fuzziness: 'AUTO'
         }
       }]
@@ -222,58 +231,22 @@ class LocationsSearch
   end
 
   def build_query
-    base_query = if matched_category.is_a?(Category)
-      {
-        bool: {
-          should: [
-            { term: { category_ids: matched_category.id } },
-            { term: { "categories_exact": matched_category.name.downcase } }
-          ]
-        }
-      }
-    elsif keywords.present?
-      {
+    search_terms =
+      if matched_category.is_a?(Category)
+        matched_category.name.downcase
+      elsif keywords.blank? && main_category_name.present?
+        main_category_name.downcase
+      elsif keywords.present?
+        keywords.downcase
+      end
 
-        bool: {
-          should: [
-            # Exact phrase matches
-            { match_phrase: { "service_names": { query: keywords, boost: 10 } } },
-            { match_phrase: { "service_descriptions": { query: keywords, boost: 8 } } },
-            { match_phrase: { "service_tags": { query: keywords, boost: 5 } } },
-            { match_phrase: { "name": { query: keywords, boost: 1 } } },
 
-            # All words must match
-            { match: { "service_names": { query: keywords, boost: 10, operator: "and" } } },
-            { match: { "service_descriptions": { query: keywords, boost: 8, operator: "and" } } },
-            { match: { "service_tags": { query: keywords, boost: 5, operator: "and" } } },
-            { match: { "name": { query: keywords, boost: 1, operator: "and" } } },
-
-            # Partial and fuzzy matches
-            { multi_match: {
-                query: keywords,
-                fields: %w[
-                  service_names^10
-                  service_descriptions^8
-                  service_tags^7
-                  organization_name^4
-                  name^3
-                  categories^2
-                  organization_tags^1
-                  tags
-                  description
-                  keywords],
-                type: "best_fields",
-                fuzziness: 'AUTO',
-                prefix_length: 2
-              }
-            }
-          ],
-          minimum_should_match: 1
-        }
-      }
-    else
-      { match_all: {} }
-    end
+    base_query =
+      if search_terms.blank?
+        { match_all: {} }
+      else
+        build_weighted_query(search_terms)
+      end
 
     {
       function_score: {
@@ -287,6 +260,48 @@ class LocationsSearch
         boost_mode: "multiply"
       }
     }
+  end
+
+  def build_weighted_query(search_terms)
+    {
+      bool: {
+        should: [
+          # Exact phrase matches
+          { match_phrase: { "service_names": { query: search_terms, boost: 10 } } },
+          { match_phrase: { "service_descriptions": { query: search_terms, boost: 8 } } },
+          { match_phrase: { "service_tags": { query: search_terms, boost: 5 } } },
+          { match_phrase: { "name": { query: search_terms, boost: 1 } } },
+
+          # All words must match
+          { match: { "service_names": { query: search_terms, boost: 10, operator: "and" } } },
+          { match: { "service_descriptions": { query: search_terms, boost: 8, operator: "and" } } },
+          { match: { "service_tags": { query: search_terms, boost: 5, operator: "and" } } },
+          { match: { "name": { query: search_terms, boost: 1, operator: "and" } } },
+
+          # Partial and fuzzy matches
+          { multi_match: {
+              query: search_terms,
+              fields: %w[
+                service_names^10
+                service_descriptions^8
+                service_tags^7
+                organization_name^4
+                name^3
+                categories^2
+                organization_tags^1
+                tags
+                description
+                search_terms],
+              type: "best_fields",
+              fuzziness: 'AUTO',
+              prefix_length: 2
+            }
+          }
+        ],
+        minimum_should_match: 1
+      }
+    }
+
   end
 
   def apply_filters(query)

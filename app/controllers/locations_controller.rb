@@ -15,6 +15,7 @@ class LocationsController < ApplicationController
     set_coordinates
     @locations_search = LocationsSearch.new(
       accessibility: search_params[:accessibility],
+      main_category_name: @main_category_selected_name,
       category_ids: search_params[:category_ids],
       distance: search_params[:distance],
       keywords: search_params[:keyword],
