@@ -190,6 +190,7 @@ en:
       download_regular_schedules: 'Download Regular Schedules'
       download_services: 'Download Services'
       search: 'Search'
+      apply_filters: 'Apply Filters'
       clear_filters: 'Clear Filters'
       clear_search: 'Clear Search'
       flag: 'Flag Resources'
