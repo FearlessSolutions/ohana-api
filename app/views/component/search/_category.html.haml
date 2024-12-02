@@ -2,7 +2,6 @@
 = field_set_tag nil, id: 'category-options', class: 'input-search-filter input-search-filter-option' do
   %legend.sr-only= t('labels.category')
   = label_tag 'main_category', t('labels.category')
-  - binding.pry
   = select_tag :main_category, options_for_select(categories_for_select, @main_category_selected_name), include_blank: 'All', class: "category-search-select-left-menu"
 
 :javascript
