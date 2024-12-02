@@ -17,6 +17,7 @@ class LocationsSearch
   attribute :long, type: Float
   attribute :distance, type: Integer
   attribute :languages, type: Array
+  attribute :from_filters_menu, type: String
 
   attribute :page, type: String
   attribute :per_page, type: String

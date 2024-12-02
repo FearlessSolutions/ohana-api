@@ -1,4 +1,5 @@
 = form_tag('/locations', method: :get, id: 'form-search', role: 'search') do
+  = hidden_field_tag("source", "homepage")
   %section#search-box
     %div
       %div.search-form

@@ -46,7 +46,7 @@ module FilterCategoriesHelper
     }
   end
 
-  def subcategrory_id_by_name(subcategory_name, main_category_id)
+  def subcategory_id_by_name(subcategory_name, main_category_id)
     fetch_categories if @categories.nil?
     category = @categories.find { |sub_cat| sub_cat.name == subcategory_name && sub_cat.parent_id == main_category_id }
     category&.id
@@ -56,7 +56,7 @@ module FilterCategoriesHelper
     return [] if subcategories.blank? || main_category_id.blank?
 
     subcategories.map do |subcategory|
-      id = subcategrory_id_by_name(subcategory, main_category_id)
+      id = subcategory_id_by_name(subcategory, main_category_id)
       id.present? ? id : nil
     end.compact
   end

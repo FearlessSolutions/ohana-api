@@ -7,9 +7,6 @@ import { initializeMapToggle } from '../../util/map/map_toggle';
 var _keyword;
 var _agency;
 
-// The form to submit.
-var _searchForm;
-
 var _categorySelect;
 
 // The number of search options selected for filter count on smaller screens
@@ -21,9 +18,6 @@ function init() {
   // Set up text input filters
   _keyword = TextInput.create('keyword-search-box');
   _agency = TextInput.create('org-name-options');
-
-  // Capture form submission.
-  _searchForm = document.getElementById('form-search');
 
   // Add on change function for category dropdown menu
   _categorySelect = document.getElementById('main_category');
@@ -56,12 +50,24 @@ function init() {
 
   $("#reset-filters-button").click(e => _resetFilters(e));
 
+  $("#keyword-search-button").click(e => {_resetFilters(e); })
+
+  $("button-apply-filters").click(e => {
+    updateAppliedSearchOptionsCount();
+    _getSearchResults(e);
+  });
+
   $("#button-geolocate").click(e => {
     _getCurrentLocation(e);
     updateAppliedSearchOptionsCount();
   });
 
   $("#form-search").change(e => {
+    _handleFormChange(e);
+    updateAppliedSearchOptionsCount();
+  });
+
+  $("#form-filters").change(e => {
     _handleFormChange(e);
     updateAppliedSearchOptionsCount();
   });
@@ -202,9 +208,6 @@ function _getSearchResults(e){
       }
     });
 }
-
-
-
 
 function _updateSubCategories(){
   var selectedCategoryName = _categorySelect.value;
