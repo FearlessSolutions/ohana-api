@@ -10,6 +10,7 @@
         %span.filter-count
   %section#search-box
     = form_tag('/locations', method: :get, id: 'form-filters', return: false) do
+      = hidden_field_tag("source", "filters")
 
       %section#search-options
 
@@ -21,7 +22,6 @@
 
       .search-button-container
         %button#reset-filters-button{ type: "button" } Clear Filters
-        -# %button.search-option-filter-button{ type: "submit" } Apply Filters
         = button_tag(type: 'submit', name: nil, id: 'button-apply-filters', class: 'search-option-filter-button', aria: { label: t('buttons.apply_filters') }) do
           %span
             = t('buttons.apply_filters')

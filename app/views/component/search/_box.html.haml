@@ -1,4 +1,5 @@
 = form_tag('/locations', method: :get, id: 'form-search', role: 'search') do
+  = hidden_field_tag("source", "homepage")
   %section#search-box
     %div
       %div.search-form
@@ -20,7 +21,7 @@
                   %hr
                   - recommended_tags.each do |recommended_tag|
                     = link_to recommended_tag.name, "#", class: "recommended-tag", data: { tags: recommended_tag.tags.map(&:name).join(", ") }
-          %div  
+          %div
             = button_tag(type: 'submit', name: nil, id: 'button-search', class: 'landing-button-icon', aria: { label: t('buttons.homepage_search') }) do
               %span
                 = t('buttons.homepage_search')
