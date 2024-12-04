@@ -257,6 +257,15 @@ input.search-input:-webkit-autofill {
   color: #474747 !important;
 }
 
+p.fieldset-title {
+  font-size: 18px !important;
+  font-weight: 500 !important;
+  line-height: 20px !important;
+  letter-spacing: .025rem !important;
+  color: #474747 !important;
+  margin: -12px 0 12px 0;
+}
+
 .input-search-filter {
   @include input-placeholder(RGB($grey, 0.6), regular);
   position: relative;
