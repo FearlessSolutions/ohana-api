@@ -29,23 +29,23 @@ class LocationsController < ApplicationController
       matched_category: @matched_category
     )
     locations = @locations_search.search.load&.objects
-    @search = Search.new(locations, params)
+    @search = Search.new(locations, search_params)
 
 
     # additional params for the view based on the user inputs in the search menu
-    @keyword = params[:keyword]
-    @lat = params[:lat]
-    @long = params[:long]
-    @address = params[:address]
+    @keyword = search_params[:keyword]
+    @lat = search_params[:lat]
+    @long = search_params[:long]
+    @address = search_params[:address]
     @languages = Location.active_languages
-    @selected_language = params[:languages]&.first
+    @selected_language = search_params[:languages]&.first
     @address = 'Current Location' if @address.nil? && @lat.present? && @long.present?
-    @selected_distance_filter = params[:distance]
+    @selected_distance_filter = search_params[:distance]
 
     @main_category_selected_name = search_params[:main_category]
-    @selected_categories = params[:categories] || []
-    @keyword_matched_category = @matched_category.present? && params[:keyword].present?
-    @clear_categories = params[:keyword].blank? && @main_category_selected_name.blank?
+    @selected_categories = search_params[:categories] || []
+    @keyword_matched_category = @matched_category.present? && search_params[:keyword].present?
+    @clear_categories = search_params[:keyword].blank? && @main_category_selected_name.blank?
 
     @exact_match_found = @locations_search.exact_match_found?
 
@@ -126,9 +126,6 @@ class LocationsController < ApplicationController
     @main_category_selected_id = ""
 
     if is_new_search?
-      # reset main category if a new search request comes from the side bar
-      params[:main_category] = "" if params[:source] == "side_bar"
-
       set_new_search_params
     else
       set_filters
@@ -147,7 +144,7 @@ class LocationsController < ApplicationController
   def is_new_search?
     ## a new search is performed when searching from the homepage or
     # from the search button in the side search bar
-    if params[:source] == "homepage" || params[:button] || params[:form]
+    if params[:source] == "homepage" || params[:button]
       return true
     end
 
@@ -155,6 +152,9 @@ class LocationsController < ApplicationController
   end
 
   def set_new_search_params
+    # reset main category if a new search request comes from the side bar
+    params[:main_category] = "" if params[:source] == "side_bar"
+
     # if a keyword is present in a new search, reset all categories
     if params[:keyword].present?
       params[:categories] = []
