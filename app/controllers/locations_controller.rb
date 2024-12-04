@@ -8,8 +8,7 @@ class LocationsController < ApplicationController
     # translator = KeywordTranslator.new(params[:keyword], current_language, 'en')
     # params[:keyword] = translator.translated_keyword
 
-    initialize_search_parameters
-    search_params = process_search_params(params.dup)
+    search_params = process_request
 
     # Performs the actual search using the processed search parameters above
     set_coordinates
@@ -43,10 +42,10 @@ class LocationsController < ApplicationController
     @address = 'Current Location' if @address.nil? && @lat.present? && @long.present?
     @selected_distance_filter = params[:distance]
 
-    @main_category_selected_name = search_params[:main_category] if @matched_category
+    @main_category_selected_name = search_params[:main_category]
     @selected_categories = params[:categories] || []
     @keyword_matched_category = @matched_category.present? && params[:keyword].present?
-    @clear_categories = params[:keyword].present? && !@matched_category
+    @clear_categories = params[:keyword].blank? && @main_category_selected_name.blank?
 
     @exact_match_found = @locations_search.exact_match_found?
 
@@ -80,7 +79,6 @@ class LocationsController < ApplicationController
       @current_user_id = 0
     end
 
-    # @keywords = @location.services.map { |s| s[:keywords] }.flatten.compact.uniq
     @categories = @location.services.map { |s| s[:categories] }.flatten.compact.uniq
 
     request.query_parameters["layout"] = true
@@ -123,87 +121,106 @@ class LocationsController < ApplicationController
 
   private
 
-  def initialize_search_parameters
+  def process_request
     @main_category_selected_name = ""
     @main_category_selected_id = ""
-    process_main_category
-    process_subcategories
-  end
 
-  # processes the main category selection from the params
-  def process_main_category
-    return if params[:main_category].blank?
-    return unless validate_category
+    if is_new_search?
+      # reset main category if a new search request comes from the side bar
+      params[:main_category] = "" if params[:source] == "side_bar"
 
-    @main_category_selected_name = params[:main_category]
-    @main_category_selected_id = helpers.get_category_id_by_name(@main_category_selected_name)
-    params[:main_category_id] = @main_category_selected_id
-  end
-
-  def process_subcategories
-    return if params["categories"].blank? && @main_category_selected_id.blank?
-
-    if params["categories"].present?
-      subcategory_ids = helpers.get_subcategories_ids(params["categories"], @main_category_selected_id)
-      params["category_ids"] = subcategory_ids
-    elsif @main_category_selected_id.present?
-      params["category_ids"] = [@main_category_selected_id]
-    end
-  end
-
-  def process_search_params(search_params)
-    search_params["main_category"] ||= ""
-    @matched_category = match_keyword_to_subcategory(search_params[:keyword])
-
-    if @matched_category
-      handle_matched_category(search_params)
+      set_new_search_params
     else
-      handle_unmatched_category(search_params)
+      set_filters
     end
 
-    search_params
+    params
   end
 
+  def set_filters
+    set_main_category_params
+    set_subcategories_params
 
-  def handle_matched_category(search_params)
-    search_params[:categories] = [@matched_category.id]
-    search_params[:main_category] = @matched_category.parent&.name || @matched_category.name
-    @main_category_selected_name = search_params[:main_category]
-    @main_category_selected_id = @matched_category.parent&.id || @matched_category.id
-    search_params[:category_ids] = [@matched_category.id]
+    params
   end
 
-  def handle_unmatched_category(search_params)
-    if search_params[:keyword].present?
-      search_params[:categories] = []
-      search_params[:main_category] = ""
+  def is_new_search?
+    ## a new search is performed when searching from the homepage or
+    # from the search button in the side search bar
+    if params[:source] == "homepage" || params[:button] || params[:form]
+      return true
+    end
+
+    false
+  end
+
+  def set_new_search_params
+    # if a keyword is present in a new search, reset all categories
+    if params[:keyword].present?
+      params[:categories] = []
+      params[:main_category] = ""
+      params[:category_ids] = []
       @main_category_selected_name = ""
       @main_category_selected_id = nil
-      search_params[:category_ids] = []
+
+      # check if the keyword(s) match an existing category or subcategory
+      @matched_category = match_keyword_to_subcategory(params[:keyword])
     else
-      @main_category_selected_name = search_params[:main_category]
-      @main_category_selected_id = helpers.get_category_id_by_name(@main_category_selected_name) if @main_category_selected_name.present?
-      process_category_params(search_params)
+      @matched_category = nil
     end
+
+    # set the category and subcategory parameters (if any) for a new search
+    set_category_params
+
+    params
   end
 
-  def clear_category_params(search_params)
-    search_params[:main_category] = ""
-    params[:categories] = []
+  def set_category_params
+    set_main_category_params
+
+    # if a subcategory was matched, set the subcategories as well
+    if @matched_category && @matched_category.parent&.name.present?
+      set_subcategories_params
+    end
+
+    params
   end
 
-  def set_main_category(search_params)
-    @main_category_selected_name = search_params[:main_category]
-    @main_category_selected_id = helpers.get_category_id_by_name(@main_category_selected_name) if @main_category_selected_name.present?
-    search_params["categories"] = [@main_category_selected_id] if @main_category_selected_id.present?
+  def set_main_category_params
+    return if params[:main_category].blank? && @matched_category.nil?
+
+    ## if the keyword(s) matched a category/subcategory, set the main category and
+    # any applicable subccategories accordingly
+    if @matched_category
+      @main_category_selected_name = @matched_category.parent&.name || @matched_category.name
+      @main_category_selected_id = @matched_category.parent&.id || @matched_category.id
+      params[:main_category] = @main_category_selected_name
+      params[:categories] = [@matched_category.name]
+      params[:category_ids] = [@matched_category.id]
+
+    ## otherwise, use the selected main category, if present
+    elsif params[:main_category].present?
+      @main_category_selected_name = params[:main_category]
+      @main_category_selected_id = helpers.get_category_id_by_name(@main_category_selected_name)
+      params[:category_ids] = [@main_category_selected_id]
+    end
+
+    return unless validate_category
+
+    params
   end
 
-  def process_category_params(search_params)
-    if search_params["categories"].present?
-      search_params["category_ids"] = helpers.get_subcategories_ids(search_params["categories"], @main_category_selected_id)
+  def set_subcategories_params
+    return if params[:categories].blank? && @main_category_selected_id.blank?
+
+    if params[:categories].present?
+      subcategory_ids = helpers.get_subcategories_ids(params[:categories], @main_category_selected_id)
+      params[:category_ids] = subcategory_ids
     elsif @main_category_selected_id.present?
-      search_params["category_ids"] = [@main_category_selected_id]
+      params[:category_ids] = [@main_category_selected_id]
     end
+
+    params
   end
 
   # exact keyword search match with subcategory

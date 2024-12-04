@@ -56,12 +56,16 @@ function init() {
 
   $("#reset-filters-button").click(e => _resetFilters(e));
 
+  $("button-apply-filters").click(e => {
+    updateAppliedSearchOptionsCount();
+  });
+
   $("#button-geolocate").click(e => {
     _getCurrentLocation(e);
     updateAppliedSearchOptionsCount();
   });
 
-  $("#form-search").change(e => {
+  $("#form-filters").change(e => {
     _handleFormChange(e);
     updateAppliedSearchOptionsCount();
   });
@@ -156,7 +160,7 @@ function _getCurrentLocation(e){
 function _resetFilters(e){
   e.preventDefault();
   $(':input').each(function() {
-    // don't clear the keyword field
+    // clear all fields except the keyword field
     if ($(this).attr("id") != "keyword") {
       $(this).val("");
     }
@@ -164,7 +168,10 @@ function _resetFilters(e){
 
   const url = new URL(window.location.href);
   url.searchParams.delete('main_category');
+  url.searchParams.delete('categories');
   url.searchParams.delete('languages');
+  url.searchParams.delete('distance');
+  url.searchParams.delete('address');
   window.history.replaceState({}, '', url.toString());
 
   _updateSubCategories();
@@ -212,7 +219,6 @@ function _updateSubCategories(){
   var iconContainer = document.getElementById('iconContainer');
   var filterDropdownContainer = document.getElementById('filterDropdownContainer');
   var subcategoriesListContainerElement = document.getElementById('subcategoriesList');
-  var categoriesFiltersContainer = document.getElementById('categoryFiltersContainerDiv');
   var subcategoriesFilterTitle = document.getElementById('subcategoriesFilterTitle');
   var parentCategoryDiv = document.getElementById('parent-category');
 
@@ -266,7 +272,6 @@ function _updateSubCategories(){
 
           var container = document.createElement("div");
           container.classList.add("filter-category-item");
-          // container.classList.add("hide");
 
           var checkbox = document.createElement('input');
           checkbox.type = "checkbox";

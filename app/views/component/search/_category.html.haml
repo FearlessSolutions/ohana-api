@@ -29,7 +29,7 @@
     function updateSubcategories(subcategories) {
       var $subcategoriesContainer = $('#subcategoriesList');
       $subcategoriesContainer.empty();
-      
+
       if (subcategories && subcategories.length > 0) {
         subcategories.forEach(function(subcat) {
           var $div = $('<div>', { class: 'filter-category-item' });
@@ -44,7 +44,7 @@
             for: 'category_' + subcat.replace(/\s+/g, '_'),
             text: subcat
           });
-          
+
           $div.append($checkbox).append($label);
           $subcategoriesContainer.append($div);
         });
@@ -56,10 +56,11 @@
       var matchedCategoryParentName = "#{@matched_category&.parent&.name || @matched_category&.name}";
       var keywordMatchedCategory = #{@keyword_matched_category};
       var clearCategories = #{@clear_categories};
-      
+
+
       if (matchedCategoryName && keywordMatchedCategory) {
         $('#main_category').val(matchedCategoryParentName);
-        
+
         var checkbox = $('input[type="checkbox"][value="' + matchedCategoryName + '"]');
         if (checkbox.length) {
           checkbox.prop('checked', true);
@@ -81,10 +82,7 @@
       $('#main_category').val('');
     }
 
-    $('#form-search').on('submit', function() {
+    $('#keyword-search-button').on('submit', function() {
       var keyword = $('#keyword-search-box').val();
-      if (keyword && !#{@matched_category.present?}) {
-        clearSubcategories();
-      }
     });
   });
