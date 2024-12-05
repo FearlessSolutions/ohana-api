@@ -56,6 +56,8 @@ function init() {
 
   $("#reset-filters-button").click(e => _resetFilters(e));
 
+  $("#keyword-search-button").click(e => _resetNonCategoryFilters(e));
+
   $("button-apply-filters").click(e => {
     updateAppliedSearchOptionsCount();
   });
@@ -155,6 +157,15 @@ function _getCurrentLocation(e){
   moveLoadingBar();
   navigator.geolocation.getCurrentPosition(success, error, options);
 
+}
+
+function _resetNonCategoryFilters(e){
+  $(':input').each(function() {
+    let currElementId = $(this).attr("id");
+    if (["address", "distance", "languages"].includes(currElementId)) {
+      $(this).val("");
+    }
+  });
 }
 
 function _resetFilters(e){
