@@ -142,7 +142,7 @@ class LocationsController < ApplicationController
   end
 
   def is_new_search?
-    ## a new search is performed when searching from the homepage or
+    # a new search is performed when searching from the homepage or
     # from the search button in the side search bar
     if params[:source] == "homepage" || params[:button]
       return true
@@ -189,8 +189,8 @@ class LocationsController < ApplicationController
   def set_main_category_params
     return if params[:main_category].blank? && @matched_category.nil?
 
-    ## if the keyword(s) matched a category/subcategory, set the main category and
-    # any applicable subccategories accordingly
+    # if the keyword(s) matched a category/subcategory, set the main category and
+    # any applicable subcategories accordingly
     if @matched_category
       @main_category_selected_name = @matched_category.parent&.name || @matched_category.name
       @main_category_selected_id = @matched_category.parent&.id || @matched_category.id

@@ -257,15 +257,6 @@ input.search-input:-webkit-autofill {
   color: #474747 !important;
 }
 
-p.fieldset-title {
-  font-size: 18px !important;
-  font-weight: 500 !important;
-  line-height: 20px !important;
-  letter-spacing: .025rem !important;
-  color: #474747 !important;
-  margin: -12px 0 12px 0;
-}
-
 .input-search-filter {
   @include input-placeholder(RGB($grey, 0.6), regular);
   position: relative;
@@ -341,7 +332,11 @@ p.fieldset-title {
 }
 
 .input-search-filter.input-search-filter-option {
-    .input-search-filter-option {
+  > p {
+    margin: -12px 0 12px 0;
+  }
+
+  .input-search-filter-option {
     font-size: $font_size_100;
     border: none;
     margin: 0;
@@ -371,6 +366,7 @@ p.fieldset-title {
       .fa {
         color: $search-button-fa-hover-color;
       }
+
     }
 
     // Prevent hover state appearance when 'disabled' attribute is present.
