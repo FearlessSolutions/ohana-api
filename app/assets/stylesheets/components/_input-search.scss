@@ -332,7 +332,11 @@ input.search-input:-webkit-autofill {
 }
 
 .input-search-filter.input-search-filter-option {
-    .input-search-filter-option {
+  > p {
+    margin: -12px 0 12px 0;
+  }
+
+  .input-search-filter-option {
     font-size: $font_size_100;
     border: none;
     margin: 0;
@@ -362,6 +366,7 @@ input.search-input:-webkit-autofill {
       .fa {
         color: $search-button-fa-hover-color;
       }
+
     }
 
     // Prevent hover state appearance when 'disabled' attribute is present.

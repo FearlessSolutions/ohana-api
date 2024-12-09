@@ -6,10 +6,11 @@
         %svg.chevron-icon(width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg")
           %path(d="M9.08366 1.25L5.00033 5.33333L0.916992 1.25" stroke="#474747" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round")
         %svg.line-icon(width="1" height="20" viewBox="0 0 1 20" fill="none" xmlns="http://www.w3.org/2000/svg")
-          %line(x1="0.5" y1="2.18557e-08" x2="0.499999" y2="20" stroke="#878787")          
-        %span.filter-count          
+          %line(x1="0.5" y1="2.18557e-08" x2="0.499999" y2="20" stroke="#878787")
+        %span.filter-count
   %section#search-box
-    = form_tag('/locations', method: :get, id: 'form-search', return: false) do
+    = form_tag('/locations', method: :get, id: 'form-filters', return: false) do
+      = hidden_field_tag("source", "side_bar")
 
       %section#search-options
 
@@ -20,5 +21,7 @@
         = render 'component/search/language'
 
       .search-button-container
-        %button#reset-button{ type: "button" } Clear Filters
-        %button.search-option-filter-button{ type: "submit" } Apply Filters
+        %button#reset-filters-button{ type: "button" } Clear Filters
+        = button_tag(type: 'submit', name: nil, id: 'button-apply-filters', class: 'search-option-filter-button', aria: { label: t('buttons.apply_filters') }) do
+          %span
+            = t('buttons.apply_filters')

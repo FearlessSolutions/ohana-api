@@ -53,22 +53,29 @@ function init() {
   }
 
   _openCheckedSections();
-  
-  $("#reset-button").click(e => _resetFilters(e));
+
+  $("#reset-filters-button").click(e => _resetFilters(e));
+
+  $("#keyword-search-button").click(e => _resetNonCategoryFilters(e));
+
+  $("button-apply-filters").click(e => {
+    updateAppliedSearchOptionsCount();
+  });
+
   $("#button-geolocate").click(e => {
     _getCurrentLocation(e);
     updateAppliedSearchOptionsCount();
   });
-  
-  $("#form-search").change(e => {
+
+  $("#form-filters").change(e => {
     _handleFormChange(e);
     updateAppliedSearchOptionsCount();
   });
-  
+
   $("#keyword").on('input', debounce(() => {
     updateAppliedSearchOptionsCount();
   }, 500));
-  
+
   $("#address").on('input', debounce(() => {
     updateAppliedSearchOptionsCount();
   }, 500));
@@ -92,7 +99,7 @@ var debounce = function (func, wait, immediate) {
 
 function _handleFormChange(e){
 
-  if (e.target.type == "text" || e.target.type == "search"){ return; } 
+  if (e.target.type == "text" || e.target.type == "search"){ return; }
 
   if (e.target.id == "main_category"){
     //if main category was changed clear subcategories before form submit
@@ -105,7 +112,7 @@ function _handleFormChange(e){
 }
 
 function _getCurrentLocation(e){
-  
+
   var options = {
     enableHighAccuracy: false,
     timeout: 20000,
@@ -142,7 +149,7 @@ function _getCurrentLocation(e){
     }
   }
 
-  
+
   e.preventDefault();
   $('#address').val('Current Location');
   $('#button-geolocate').addClass('geolocated');
@@ -152,18 +159,32 @@ function _getCurrentLocation(e){
 
 }
 
+function _resetNonCategoryFilters(e){
+  $(':input').each(function() {
+    let currElementId = $(this).attr("id");
+    if (["address", "distance", "languages"].includes(currElementId)) {
+      $(this).val("");
+    }
+  });
+}
+
 function _resetFilters(e){
   e.preventDefault();
   $(':input').each(function() {
-    $(this).val("");
+    // clear all fields except the keyword field
+    if ($(this).attr("id") != "keyword") {
+      $(this).val("");
+    }
   });
 
   const url = new URL(window.location.href);
-  url.searchParams.delete('keyword');
   url.searchParams.delete('main_category');
+  url.searchParams.delete('categories');
   url.searchParams.delete('languages');
+  url.searchParams.delete('distance');
+  url.searchParams.delete('address');
   window.history.replaceState({}, '', url.toString());
-  
+
   _updateSubCategories();
   updateAppliedSearchOptionsCount();
   _getSearchResults(e);
@@ -171,7 +192,7 @@ function _resetFilters(e){
 
 function _getSearchResults(e){
 
-  var formData = $("#form-search").serialize();
+  var formData = $("#form-filters").serialize();
   const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
     $.ajax({
@@ -191,14 +212,13 @@ function _getSearchResults(e){
         }
 
         //remove layout=false from pagination hrefs
-        $('nav a').each(function(){ 
+        $('nav a').each(function(){
             var oldUrl = $(this).attr("href");
-            var newUrl = oldUrl.replace("&layout=false", ""); 
-            $(this).attr("href", newUrl); 
+            var newUrl = oldUrl.replace("&layout=false", "");
+            $(this).attr("href", newUrl);
         });
-        
       }
-    });  
+    });
 }
 
 
@@ -210,7 +230,6 @@ function _updateSubCategories(){
   var iconContainer = document.getElementById('iconContainer');
   var filterDropdownContainer = document.getElementById('filterDropdownContainer');
   var subcategoriesListContainerElement = document.getElementById('subcategoriesList');
-  var categoriesFiltersContainer = document.getElementById('categoryFiltersContainerDiv');
   var subcategoriesFilterTitle = document.getElementById('subcategoriesFilterTitle');
   var parentCategoryDiv = document.getElementById('parent-category');
 
@@ -241,9 +260,9 @@ function _updateSubCategories(){
         category_name : selectedCategoryName,
       },
       success: function(data) {
-        
+
         subCategoriesFilterTitleElement.textContent = data.category_title;
-  
+
         iconContainer.classList.add("fa");
         iconContainer.classList.remove("fa-chevron-down");
         iconContainer.classList.add("fa-chevron-down");
@@ -253,32 +272,29 @@ function _updateSubCategories(){
         parentCategoryDiv.classList.add("hoverable");
         parentCategoryDiv.setAttribute("aria-label", "Click enter to expand and collapse filters");
         parentCategoryDiv.setAttribute("aria-expanded", "true");
-  
+
         filterDropdownContainer.classList.add("filter-dropdown-closed");
-  
+
         subcategoriesListContainerElement.innerHTML = "";
-      
+
         data.sub_cat_array.forEach(subCategoryName => {
 
           var id_string = "category_"+subCategoryName.replace(/ /g,'')
-  
+
           var container = document.createElement("div");
           container.classList.add("filter-category-item");
-          // container.classList.add("hide");
-  
-          var checkbox = document.createElement('input'); 
-          checkbox.type = "checkbox";  
+
+          var checkbox = document.createElement('input');
+          checkbox.type = "checkbox";
           checkbox.id = id_string;
           checkbox.name = "categories[]";
           checkbox.value = subCategoryName;
-  
           var subcategoryLabel = document.createElement('label');
           subcategoryLabel.appendChild(document.createTextNode(subCategoryName));
           subcategoryLabel.setAttribute("for", id_string)
-  
           container.appendChild(checkbox);
           container.appendChild(subcategoryLabel);
-  
+
           subcategoriesListContainerElement.appendChild(container);
         });
       }
@@ -296,7 +312,7 @@ function _openCheckedSections() {
 }
 
 function _openSection(element) {
-  
+
   document.querySelectorAll('.filter-category-item').forEach(function(item) {
     $(item).toggleClass('hide');
   });

@@ -41,7 +41,7 @@
   text-overflow: ellipsis;
 }
 
-#reset-button {
+#reset-filters-button {
   font-family: $font_sans_serif;
   font-size: 14px;
   line-height: 16px;
@@ -53,7 +53,7 @@
   letter-spacing: 0.05rem;
 }
 
-#reset-button:hover {
+#reset-filters-button:hover {
   text-decoration: underline;
   cursor: pointer;
 }
