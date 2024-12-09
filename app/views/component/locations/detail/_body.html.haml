@@ -46,7 +46,6 @@
         %hr
         %section.service-list{ itemscope: '', itemtype: 'http://schema.org/Service', id: "service-list" }
         - location.services.each_with_index do |service, i|
-          -p i
           - if (i%2).zero?
             %div.service-row.service-title-blue{ id: "service-row-#{i}", role: 'button', tabindex: '0' }
               = render 'component/detail/service_name', service: service, i: i
