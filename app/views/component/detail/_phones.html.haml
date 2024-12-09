@@ -1,9 +1,16 @@
 - if phones.present?
-    %section.phone.icon-text-block{ itemscope: '', itemtype: 'http://schema.org/ContactPoint' }
-        %span{ tabindex: "0", role: "img", aria: { label: "Phone" } }
-            %i.fa.fa-phone{'aria-label': 'Phone'}
-        %span.annotated-text-block
-            %h4= t('labels.phone')
-        %br  
-        - phones.each do |phone|
-            = render 'component/detail/phone', phone: phone, show_phone_type_and_department: true
+  %section.phone.icon-text-block{ itemscope: '', itemtype: 'http://schema.org/ContactPoint' }
+    %h4= t('labels.phone')
+    - phones.each do |phone|
+      - if phone.number_type == "voice"
+        %span{ role: "img", aria: { label: "Phone" } }
+          %i.fa.fa-phone{'aria-label': 'Phone'}
+      - elsif phone.number_type == "fax"
+        %span{ role: "img", aria: { label: "Fax" } }
+          %i.fa.fa-fax{'aria-label': 'Fax'}
+      - elsif phone.number_type == "sms"
+        %span{ role: "img", aria: { label: "sms" } }
+          %i.fa.fa-comment{'aria-label': 'sms'}
+      %span.annotated-text-block
+        = render 'component/detail/phone', phone: phone, show_phone_type_and_department: true
+      %br

@@ -1,12 +1,12 @@
 - if service.regular_schedules.present?
   %section.regular_schedules
-    %h1= t('service_fields.regular_schedule')
+    %h4= t('service_fields.regular_schedule')
     %span
       = regular_hours_for(service.regular_schedules)
 
 - if service.holiday_schedules.present?
   %section.holiday_schedules
-    %h1= t('service_fields.holiday_schedule')
+    %h4= t('service_fields.holiday_schedule')
     %span
       = render 'component/detail/location_holiday_schedule', schedules: service.holiday_schedules
 

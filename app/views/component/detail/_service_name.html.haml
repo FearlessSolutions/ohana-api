@@ -1,6 +1,7 @@
-%section.name-box
-  %span.name{ id: "#{service_id_for(service.name)}" }
+%i.fa.fa-chevron-down{'aria-label': 'Expand', 'id': "service-chevron-#{i}"}
+%div.service-title
+  %h3.name{ id: "service-title-#{i}"}
     = service.name
   - if service.alternate_name.present?
-    %span.alternate-name
+    %span.alternate-name{ id: "service-alt-#{i}" }
       (#{service.alternate_name})
