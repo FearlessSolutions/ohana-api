@@ -33,7 +33,6 @@ class Admin
         end
         respond_with_navigational(resource) do
           flash.discard(:recaptcha_error)
-          render :new
         end
       end
     end
