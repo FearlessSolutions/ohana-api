@@ -16,7 +16,7 @@
             Thank you for sending us feedback about this resource.
             %br
             Please tell us more about the issue you identified.
-            = form_for :flag, url: flag_path, html: { id: 'flag-form', role: 'form' } do |f|
+            = form_for :flag, url: flag_path, html: { id: 'flag-form', role: 'form', class: 'form-container' } do |f|
               = hidden_field(:flag, :resource_type, value: @resource_type)
               = hidden_field(:flag, :resource_id, value: @resource_id)
               = f.fields_for :report_attributes do |rf|
@@ -25,22 +25,57 @@
                   %p
                     = rf.check_box checkbox_name(attribute[:name]), class: "report-input-checkbox", id: checkbox_name(attribute[:name]), data: { "target-id" => attribute[:name] }, aria: { describedby: "#{attribute[:name]}_description" }
                     = rf.label attribute[:name], attribute[:label], class: "report-label", for: checkbox_name(attribute[:name])
-                    - if attribute[:details_required] != false
-                      = rf.text_area attribute[:name], placeholder: "Please describe.", class: "js-input-field hidden", id: attribute[:name], aria: { label: "Description of the issue" }
-              %p  
-                = f.label :email
-                = f.email_field :email, value: current_user&.email, class: "js-input-field", autocomplete: "email"
+
+                    - if attribute[:name] == :employee_of_the_org
+                      - if user_signed_in?
+                        = rf.email_field :email, value: current_user&.email, class: "js-input-field hidden", id: attribute[:name], autocomplete: "email", aria: { label: "Email address" }
+                      -else
+                        = rf.email_field :email, placeholder: "your.email@example.com", class: "js-input-field hidden", id: attribute[:name], autocomplete: "email", aria: { label: "Email address" }
+                      = label_tag :email, "You must provide an email address and you agree to being contacted regarding the resource", class: 'search-hint hidden', id: 'email-label'
+                    - else
+                      - if attribute[:details_required] == true
+                        = rf.text_area attribute[:name], placeholder: "Please describe (required).", class: "js-input-field hidden", id: attribute[:name], aria: { label: "Description of the issue" }
+                      - elsif attribute[:details_required] != false
+                        = rf.text_area attribute[:name], placeholder: "Please describe (optional).", class: "js-input-field hidden", id: attribute[:name], aria: { label: "Description of the issue" }
+
               = f.button 'Send!', class: 'button-plain', type:"submit", data: { disable_with: "Sending..." }, aria: { label: "Send" }
 
 :javascript
-  $(function() {
+  $(document).ready(function(){
+
+    const $allCheckboxes = $(".flag-form input[type='checkbox']");
+
+    $allCheckboxes.val('false');
+
+    $allCheckboxes.on('click', function() {
+      const $this = $(this);
+      const textFieldTargetID = $(this).data('target-id');
+      const $inputElement = $(`.js-input-field:input[id='${textFieldTargetID}']`);
+      const $emailLabel = $('#email-label');
+      const $orgEmployee = 'employee_of_the_org';
+
+      if ($this.is(':checked')) {
+        $this.val('true');
+        $inputElement.removeClass('hidden');
+        if (textFieldTargetID == $orgEmployee) {
+          $emailLabel.removeClass('hidden');
+        }
+      } else {
+        $this.val('false');
+        $inputElement.addClass('hidden');
+        if (textFieldTargetID == $orgEmployee) {
+          $emailLabel.addClass('hidden');
+        }
+      }
+    });
+
     $('#flag-form').on('submit', function() {
       var anyChecked = $('.report-input-checkbox').is(':checked');
       var anyFilled = $('.js-input-field').filter(function() {
         return $(this).val() !== '';
       }).length > 0;
-      
-      if (!anyChecked && !anyFilled) {
+
+      if (!anyChecked) {
         var message = 'Please enter your email or check one of the feedback boxes before submitting.';
 
         var alertDiv = $('<div>', {
@@ -53,7 +88,7 @@
         $('body').append(alertDiv);
         setTimeout(function() {
           alertDiv.remove();
-          
+
           alert(message);
         }, 100);
 

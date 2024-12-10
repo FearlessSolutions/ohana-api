@@ -42,17 +42,13 @@ class Flag < ApplicationRecord
       },
       {
         name: :other,
-        label: "Other"
+        label: "Other",
+        details_required: true
       },
       {
         name: :employee_of_the_org,
-        label: "I am an employee of this organization.",
-        details_required: false
-      },
-      {
-        name: :contact_me,
-        label: "Yes, I agree to have a CHARMcare representative contact me regarding this resource.",
-        details_required: false
+        label: "I am an employee of the organization.",
+        details_required: true
       }
     ]
   end
