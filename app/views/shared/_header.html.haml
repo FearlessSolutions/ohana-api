@@ -4,6 +4,18 @@
       %a{ href: '/', target: '_self', aria: { label: t('branding.logo') } }
         %img{ src: asset_path(SETTINGS[:site_logo]), alt: "#{SETTINGS[:site_title]} Logo" }
     %h2.header-title= t('branding.header', location: t('branding.location'))
+
+  -# search bar - only displays on desktop
+  %div.desktop-only.hidden{id: "search-bar-header"}
+    = form_tag('/locations', method: :get, id: 'form-header', return: false) do
+      = hidden_field_tag("source", "header")
+      %div.input-search-filter
+        %div.filter-input-group
+          %i.button-icon.fa.fa-search
+          = search_field_tag :keyword, params[:keyword], placeholder: t('placeholders.search'), class: "search-input"
+          = label_tag 'keyword', t('labels.search_services'), class: 'sr-only'
+          = button_tag t('buttons.update_search_results'), type: 'submit', class: 'search-button', id: 'keyword-search-button'
+
   %button#hamburger{ aria: { label: 'Toggle navigation' } }
     %span
     %span
