@@ -5,7 +5,7 @@
         %img{ src: asset_path(SETTINGS[:site_logo]), alt: "#{SETTINGS[:site_title]} Logo" }
     %h2.header-title= t('branding.header', location: t('branding.location'))
 
-  -# search bar - only displays on desktop
+  -# search bar - only appears on desktop
   %div.desktop-only.hidden{id: "search-bar-header"}
     = form_tag('/locations', method: :get, id: 'form-header', return: false) do
       = hidden_field_tag("source", "header")
