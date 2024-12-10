@@ -1,25 +1,34 @@
 = field_set_tag nil, id: 'category-options', class: 'input-search-filter input-search-filter-option' do
-  %p.filter-results-label
-    Filter Results
-  %legend.sr-only= t('labels.category')
+  %legend.filter-results-label= t('labels.filters.filters_menu_title')
   = label_tag 'main_category', t('labels.category')
   = select_tag :main_category, options_for_select(categories_for_select, @main_category_selected_name), include_blank: 'All', class: "category-search-select-left-menu"
 
 :javascript
   $(document).ready(function() {
     function loadSubcategories(categoryName) {
+      const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
       if (categoryName) {
         $.ajax({
           type: 'POST',
           url: '/locations/get_subcategories_by_category',
+          headers: {
+            'X-CSRF-Token': csrfToken
+          },
           data: { category_name: categoryName },
           dataType: 'json',
           success: function(data) {
             updateSubcategories(data.sub_cat_array);
             checkMatchedCategory();
           },
-          error: function(xhr, status, error) {
-            console.error("Error fetching subcategories:", error);
+          error: function(jqXHR, textStatus, errorThrown) {
+            if (jqXHR.status === 422) {
+              // Handle 422 error
+              console.error('Unprocessable Entity:', jqXHR.responseJSON);
+            } else {
+              // Handle other errors
+              console.error(textStatus, errorThrown);
+            }
           }
         });
       } else {
@@ -30,20 +39,21 @@
     function updateSubcategories(subcategories) {
       var $subcategoriesContainer = $('#subcategoriesList');
       $subcategoriesContainer.empty();
+      var selec
 
       if (subcategories && subcategories.length > 0) {
-        subcategories.forEach(function(subcat) {
+        subcategories.forEach( (subcat, i) => {
           var $div = $('<div>', { class: 'filter-category-item' });
-          var $subcatName = subcat.replace(/\s+/g, "_")
+          var $selectedCategories = #{raw @selected_categories}
           var $checkbox = $('<input>', {
             type: 'checkbox',
             name: 'categories[]',
             value: subcat,
-            id: 'category_' + $subcatName,
-            checked: #{@selected_categories}.includes(subcat)
+            id: `category_${i}`,
+            checked: $selectedCategories.includes(subcat)
           });
           var $label = $('<label>', {
-            for: 'category_' + $subcatName,
+            for: 'category_${i}' + $subcatName,
             text: subcat
           });
 
