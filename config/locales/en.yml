@@ -551,6 +551,8 @@ en:
     filters:
       category_filter_title: 'Services Provided'
       filters_menu_title: 'Filter Results'
+      location: 'Location'
+      radius: 'Radius'
     topic_prompt: 'Choose a topic below to begin a search'
     phone: 'Phone'
     location: 'Location'
