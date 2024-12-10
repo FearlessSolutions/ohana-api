@@ -39,21 +39,20 @@
     function updateSubcategories(subcategories) {
       var $subcategoriesContainer = $('#subcategoriesList');
       $subcategoriesContainer.empty();
-      var selec
 
       if (subcategories && subcategories.length > 0) {
-        subcategories.forEach( (subcat, i) => {
+        subcategories.forEach(function(subcat) {
           var $div = $('<div>', { class: 'filter-category-item' });
-          var $selectedCategories = #{raw @selected_categories}
+          var $subcatName = subcat.replace(/\s+/g, "_")
           var $checkbox = $('<input>', {
             type: 'checkbox',
             name: 'categories[]',
             value: subcat,
-            id: `category_${i}`,
-            checked: $selectedCategories.includes(subcat)
+            id: 'category_' + $subcatName,
+            checked: #{@selected_categories}.includes(subcat)
           });
           var $label = $('<label>', {
-            for: 'category_${i}' + $subcatName,
+            for: 'category_' + $subcatName,
             text: subcat
           });
 
