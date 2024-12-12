@@ -8,6 +8,12 @@ module ApplicationHelper
     last_updated_text.html_safe
   end
 
+  def number_of_visits(location_id)
+    times_visited = Ahoy::Event.where(name: 'Location Visit', properties: {id: "#{@location.id}"}).count
+    number_visits = "<p> Number of visits: #{times_visited}</p>"
+    number_visits.html_safe
+  end
+
   def upload_server
     Rails.configuration.upload_server
   end
