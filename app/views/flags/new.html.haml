@@ -84,6 +84,12 @@
         showErrorPopUp('Please fill out the required form field.');
         return false;
       }
+
+      if (!isEmailValid($('#employee_of_the_org').val())){
+        showErrorPopUp('Please enter a valid email address.');
+        $('#employee_of_the_org').addClass('alert-mode');
+        return false;
+      }
     });
 
     function showErrorPopUp(message){
@@ -161,4 +167,15 @@
         }
       }
     });
+
+
+    function isEmailValid(email) {
+      const regex = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+      if (!regex.test(email)) {
+        return false;
+      }
+      else {
+        return true;
+      }
+    }
   });
