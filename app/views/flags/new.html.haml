@@ -23,14 +23,14 @@
                 %br
                 - Flag.report_attributes_schema.each do |attribute|
                   %p
-                    = rf.check_box checkbox_name(attribute[:name]), class: "report-input-checkbox", id: checkbox_name(attribute[:name]), data: { "target-id" => attribute[:name] }, aria: { describedby: "#{attribute[:name]}_description" }
+                    = rf.check_box checkbox_name(attribute[:name]), class: "report-input-checkbox", id: checkbox_name(attribute[:name]), data: { "target-id" => attribute[:name], "required" => "#{raw attribute[:details_required]}" }, aria: { describedby: "#{attribute[:name]}_description" }
                     = rf.label attribute[:name], attribute[:label], class: "report-label", for: checkbox_name(attribute[:name])
 
                     - if attribute[:name] == :employee_of_the_org
                       - if user_signed_in?
-                        = rf.email_field :email, value: current_user&.email, class: "js-input-field hidden", id: attribute[:name], autocomplete: "email", aria: { label: "Email address" }
+                        = rf.email_field attribute[:name], value: current_user&.email, class: "js-input-field hidden", id: attribute[:name], autocomplete: "email", aria: { label: "Email address" }
                       -else
-                        = rf.email_field :email, placeholder: "your.email@example.com", class: "js-input-field hidden", id: attribute[:name], autocomplete: "email", aria: { label: "Email address" }
+                        = rf.email_field attribute[:name], placeholder: "your.email@example.com", class: "js-input-field hidden", id: attribute[:name], autocomplete: "email", aria: { label: "Email address" }
                       = label_tag :email, "You must provide an email address and you agree to being contacted regarding the resource", class: 'search-hint hidden', id: 'email-label'
                     - else
                       - if attribute[:details_required] == true
@@ -70,29 +70,51 @@
     });
 
     $('#flag-form').on('submit', function() {
-      var anyChecked = $('.report-input-checkbox').is(':checked');
-      var anyFilled = $('.js-input-field').filter(function() {
-        return $(this).val() !== '';
-      }).length > 0;
+      const anyChecked = $('.report-input-checkbox').is(':checked');
 
       if (!anyChecked) {
-        var message = 'Please enter your email or check one of the feedback boxes before submitting.';
+        showErrorPopUp('Please check one of the feedback boxes before submitting.');
+        return false;
+      }
 
-        var alertDiv = $('<div>', {
-          'class': 'sr-only',
-          'role': 'alert',
-          'aria-live': 'assertive',
-          text: message
-        });
+      const emptyRequiredFields = checkForEmptyRequiredFields();
 
-        $('body').append(alertDiv);
-        setTimeout(function() {
-          alertDiv.remove();
-
-          alert(message);
-        }, 100);
-
+      if (emptyRequiredFields.length > 0){
+        showErrorPopUp('Please fill out the required form field.');
         return false;
       }
     });
+
+    function showErrorPopUp(message){
+      const alertDiv = $('<div>', {
+        'class': 'sr-only',
+        'role': 'alert',
+        'aria-live': 'assertive',
+        text: message
+      });
+
+      $('body').append(alertDiv);
+      setTimeout(function() {
+        alertDiv.remove();
+
+        alert(message);
+      }, 100);
+    };
+
+    function checkForEmptyRequiredFields() {
+      let emptyFields = [];
+
+      $(".report-input-checkbox[data-required='true']").each(function() {
+        // is checkbox checked?
+        if ($(this).prop('checked') == true){
+          const textarea_id = "#" + $(this).attr('id').replace('_selected', '')
+          // check if there is valid text in the text field
+          if ($(textarea_id).val().length < 4) {
+            emptyFields.push(textarea_id);
+          }
+        }
+      });
+
+      return emptyFields;
+    };
   });
