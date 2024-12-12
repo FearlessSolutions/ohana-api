@@ -10,7 +10,7 @@ label.report-label {
   width: 97%;
 }
 
-.form-container{
+.form-container {
   display: flex;
   flex-direction: column;
   justify-items: center;
@@ -24,7 +24,7 @@ label.report-label {
     padding-bottom: 1em !important;
   }
 
-  button{
+  button {
     align-self: center;
     margin-top: 1rem;
   }
@@ -34,14 +34,24 @@ label.report-label {
     margin: 1rem 0;
   }
 
-  input#employee_of_the_org{
-    margin-bottom: 0px;
+  textarea, input {
+    margin-bottom: 0px !important;
   }
 
-  #email-label {
+  textarea.alert-mode, input.alert-mode{
+    outline: 1px solid $red !important;
+  }
+
+  label.detail {
     flex: 1;
-    font-size: $font_size_100;
+    font-size: $font_size_95;
     color: $greyscale_dark;
   }
+
+  label.alert-mode {
+    color: $red !important;
+  }
+
+
 
 }
