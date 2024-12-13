@@ -280,13 +280,15 @@
 
   initPrintButton();
 
-  
+
   document.querySelectorAll('.service-row').forEach( row => {
     row.addEventListener("click", toggleServiceCard);
+    row.addEventListener("keydown", toggleServiceCard);
   });
 
   document.querySelectorAll('.service-item').forEach( item => {
     item.addEventListener("click", openServiceCard);
+    item.addEventListener("keydown", toggleServiceCard);
   });
 
 

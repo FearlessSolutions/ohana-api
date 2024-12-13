@@ -1,10 +1,10 @@
 %section.content
   %section.icon-text-block
-    %i.fa.fa-handshake-o{ role: "img", aria: { label: "Services marker" } }
+    %i.fa.fa-handshake-o{ tabindex: "0", role: "img", aria: { label: "Services" } }
     %h4.annotated-text-block= t('labels.services')
     %ul
       - location.services.each_with_index do |service, i|
         %li
-          %i.fa.fa-angle-right{role: 'img', aria: { label: "Item" } }
-          %span.annotated-text-block.service-item{ id: "service-item-#{i}", role: 'button' }
+          %i.fa.fa-angle-right{role: 'img', aria: { label: "Service item" } }
+          %span.annotated-text-block.service-item{ tabindex: "0", id: "service-item-#{i}", role: 'button' }
             #{service.name}

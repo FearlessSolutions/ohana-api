@@ -3,14 +3,14 @@
     %h4= t('labels.phone')
     - phones.each do |phone|
       - if phone.number_type == "voice"
-        %span{ role: "img", aria: { label: "Phone" } }
-          %i.fa.fa-phone{'aria-label': 'Phone'}
+        %span
+          %i.fa.fa-phone{ tabindex: '0', role: 'img', aria: {label: 'Phone'}}
       - elsif phone.number_type == "fax"
-        %span{ role: "img", aria: { label: "Fax" } }
-          %i.fa.fa-fax{'aria-label': 'Fax'}
+        %show_phone_type_and_department
+          %i.fa.fa-fax{ tabindex: '0', role: 'img', aria: { label: 'Fax' }}
       - elsif phone.number_type == "sms"
-        %span{ role: "img", aria: { label: "sms" } }
-          %i.fa.fa-comment{'aria-label': 'sms'}
+        %span
+          %i.fa.fa-comment{ tabindex: '0', role: 'img', aria: { label: "SMS" }}
       %span.annotated-text-block
         = render 'component/detail/phone', phone: phone, show_phone_type_and_department: true
       %br
