@@ -25,6 +25,9 @@ class Admin
       @location = Location.find(params[:id])
       @org = @location.organization
       @updated = @location.updated_at
+      @date_range_options = get_date_range_options
+      @date_range = @date_range_options[2]
+      @number_visits_per_date_range = query_number_of_visits
       authorize @location
     end
 
@@ -82,6 +85,58 @@ class Admin
       @locations = Kaminari.paginate_array(policy_scope(Location)).
                    page(params[:page]).per(params[:per_page])
       @locations.map! { |location| location.append(@location = Location.find(location[0])) }
+    end
+
+    def get_date_range_options
+      ['Yesterday', 'Last 7 Days', 'Last 30 Days', 'Last Month', 'Last Quarter', 'Last 12 Months']
+    end
+
+    def query_number_of_visits
+      intervals = createDateRanges
+      times_visited = []
+      intervals.each do |interval|
+        times_visited <<
+        Ahoy::Event.where(name: 'Location Visit', properties: {id: "#{@location.id}"}, time: interval).count
+      end
+
+      times_visited
+    end
+
+    def createDateRanges
+      now = Time.now
+      today = Time.utc(now.year, now.month, now.day)
+      yesterday = today - 1
+
+      last_month = Time.utc(now.year, now.month-1, now.day)
+      current_quarter = Time.utc(now.year, now.month, now.day).beginning_of_quarter
+      last_quarter =
+        if current_quarter.month < 4
+          Time.utc(current_quarter.year-1, 12, current_quarter.day)
+        else
+          Time.utc(current_quarter.year, current_quarter.month-1, current_quarter.day)
+        end
+
+      date_ranges = get_date_range_options
+      intervals = []
+
+      date_ranges.each do |date_range|
+        case date_range
+        when 'Yesterday'
+          intervals << ((today - (60*60*24))..yesterday)
+        when 'Last 7 Days'
+          intervals << ((today - (60*60*24*7))..yesterday)
+        when 'Last 30 Days'
+          intervals << ((today - (60*60*24*30))..yesterday)
+        when 'Last Month'
+          intervals << (last_month.beginning_of_month..last_month.end_of_month)
+        when 'Last Quarter'
+          intervals << (last_quarter.beginning_of_quarter..last_quarter.end_of_quarter)
+        when 'Last 12 Months'
+          intervals << ((today - (60*60*24*365))..yesterday)
+        end
+      end
+
+      intervals
     end
 
     private

@@ -8,10 +8,10 @@ module ApplicationHelper
     last_updated_text.html_safe
   end
 
-  def number_of_visits(location_id)
-    times_visited = Ahoy::Event.where(name: 'Location Visit', properties: {id: "#{@location.id}"}).count
-    number_visits = "<p> Number of visits: #{times_visited}</p>"
-    number_visits.html_safe
+  def number_of_visits(date_range_options, date_range, number_visits_per_date_range)
+    index = date_range_options.find_index(date_range)
+    visits = "<span> #{number_visits_per_date_range[index]} </\span>"
+    visits.html_safe
   end
 
   def upload_server

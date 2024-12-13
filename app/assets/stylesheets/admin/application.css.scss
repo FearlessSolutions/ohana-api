@@ -99,6 +99,17 @@
   }
 
   p { padding-top: 10px; }
+
+  select {
+    height: 3rem;
+    padding: 4px;
+    font-size: $font_size_95;
+    line-height: 1.5;
+    color: $greyscale_dark;
+    border-color: $blue;
+    border-radius: 5px;
+    vertical-align: middle;
+  }
 }
 
 .inst-box {
