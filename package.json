@@ -8,6 +8,7 @@
     "node": "18.x"
   },
   "dependencies": {
+    "ahoy.js": "^0.4.4",
     "google-maps-infobox": "^2.0.0",
     "jquery": "^3.7.0",
     "mini-css-extract-plugin": "^2.7.6",
