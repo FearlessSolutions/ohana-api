@@ -5,17 +5,6 @@
         %img{ src: asset_path(SETTINGS[:site_logo]), alt: "#{SETTINGS[:site_title]} Logo" }
     %h2.header-title= t('branding.header', location: t('branding.location'))
 
-  -# search bar - only appears on desktop
-  %div.desktop-only.hidden{id: "search-bar-header"}
-    = form_tag('/locations', method: :get, id: 'form-header', return: false) do
-      = hidden_field_tag("source", "header")
-      %div.input-search-filter
-        %div.filter-input-group
-          %i.button-icon.fa.fa-search
-          = search_field_tag :keyword, params[:keyword], placeholder: t('placeholders.search'), class: "search-input"
-          = label_tag 'keyword', t('labels.search_services'), class: 'sr-only'
-          = button_tag t('buttons.update_search_results'), type: 'submit', class: 'search-button', id: 'keyword-search-button'
-
   %button#hamburger{ aria: { label: 'Toggle navigation' } }
     %span
     %span
@@ -79,22 +68,31 @@
         %li
           %a{ href: new_user_session_path, aria: { label: t('navigation.sign_in') } }
             = t('navigation.sign_in')
-%div#translation-bar-desktop
-  %span= t('navigation.translate_to')
-  %a.translate-link{ href: '#', data: { lang: 'en' }, aria: { label: 'Translate to English' } }
-    %img{ src: asset_path('language_flags/english_language_flag.png'), alt: 'English' }
-  %a.translate-link{ href: '#', data: { lang: 'ar' }, aria: { label: 'Translate to Arabic' } }
-    %img{ src: asset_path('language_flags/arabic_language_flag.png'), alt: 'Arabic' }
-  %a.translate-link{ href: '#', data: { lang: 'zh-CN' }, aria: { label: 'Translate to Chinese (Simplified)' } }
-    %img{ src: asset_path('language_flags/chinese_simplified_language_flag.png'), alt: 'Chinese (Simplified)' }
-  %a.translate-link{ href: '#', data: { lang: 'zh-TW' }, aria: { label: 'Translate to Chinese (Traditional)' } }
-    %img{ src: asset_path('language_flags/chinese_traditional_language_flag.png'), alt: 'Chinese (Traditional)' }
-  %a.translate-link{ href: '#', data: { lang: 'fr' }, aria: { label: 'Translate to French' } }
-    %img{ src: asset_path('language_flags/french_language_flag.png'), alt: 'French' }
-  %a.translate-link{ href: '#', data: { lang: 'ko' }, aria: { label: 'Translate to Korean' } }
-    %img{ src: asset_path('language_flags/korean_language_flag.png'), alt: 'Korean' }
-  %a.translate-link{ href: '#', data: { lang: 'es' }, aria: { label: 'Translate to Spanish' } }
-    %img{ src: asset_path('language_flags/spanish_language_flag.png'), alt: 'Spanish' }
+%div#aux-bar
+  %div#search-bar-aux
+    %div#search-group.hidden
+      = form_tag('/locations', method: :get, id: 'form-header', return: false) do
+        = hidden_field_tag("source", "header")
+        = search_field_tag :keyword, params[:keyword], placeholder: t('placeholders.search'), class: "search-input"
+        = label_tag 'keyword', t('labels.search_services'), class: 'sr-only'
+        = button_tag '', type: 'submit', class: 'search-button', id: 'keyword-search-button' do
+          %i.button-icon.fa.fa-search
+  %div#translation-bar-desktop
+    %span= t('navigation.translate_to')
+    %a.translate-link{ href: '#', data: { lang: 'en' }, aria: { label: 'Translate to English' } }
+      %img{ src: asset_path('language_flags/english_language_flag.png'), alt: 'English' }
+    %a.translate-link{ href: '#', data: { lang: 'ar' }, aria: { label: 'Translate to Arabic' } }
+      %img{ src: asset_path('language_flags/arabic_language_flag.png'), alt: 'Arabic' }
+    %a.translate-link{ href: '#', data: { lang: 'zh-CN' }, aria: { label: 'Translate to Chinese (Simplified)' } }
+      %img{ src: asset_path('language_flags/chinese_simplified_language_flag.png'), alt: 'Chinese (Simplified)' }
+    %a.translate-link{ href: '#', data: { lang: 'zh-TW' }, aria: { label: 'Translate to Chinese (Traditional)' } }
+      %img{ src: asset_path('language_flags/chinese_traditional_language_flag.png'), alt: 'Chinese (Traditional)' }
+    %a.translate-link{ href: '#', data: { lang: 'fr' }, aria: { label: 'Translate to French' } }
+      %img{ src: asset_path('language_flags/french_language_flag.png'), alt: 'French' }
+    %a.translate-link{ href: '#', data: { lang: 'ko' }, aria: { label: 'Translate to Korean' } }
+      %img{ src: asset_path('language_flags/korean_language_flag.png'), alt: 'Korean' }
+    %a.translate-link{ href: '#', data: { lang: 'es' }, aria: { label: 'Translate to Spanish' } }
+      %img{ src: asset_path('language_flags/spanish_language_flag.png'), alt: 'Spanish' }
 
 - unless current_page?(root_path) || current_page?(new_user_session_path) || current_page?(new_user_registration_path) || current_page?(new_admin_session_path) || current_page?(new_admin_registration_path) || current_page?(new_user_password_path)
   %nav#breadcrumb
