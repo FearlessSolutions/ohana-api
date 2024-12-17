@@ -47,13 +47,13 @@
         %section.service-list{ itemscope: '', itemtype: 'http://schema.org/Service', id: "service-list" }
         - location.services.each_with_index do |service, i|
           - if (i%2).zero?
-            %div.service-row.service-title-blue{ id: "service-row-#{i}", role: 'button', tabindex: '0' }
+            %div.service-row.service-title-blue{ id: "service-row-#{i}", role: 'button', tabindex: '0', aria: {label: 'Expand/Collapse Section', expanded: 'false'} }
               = render 'component/detail/service_name', service: service, i: i
               = render 'component/detail/service_status', service: service
             %section.collapsed.service-details-card.service-title-blue{ id: "service-card-#{i}"}
               = render 'component/detail/service_details_card', service: service
           - else
-            %div.service-row.service-title-grey{ id: "service-row-#{i}", role: 'button', tabindex: '0'  }
+            %div.service-row.service-title-grey{ id: "service-row-#{i}", role: 'button', tabindex: '0', aria: {label: 'Expand/Collapse Section', expanded: 'false'} }
               = render 'component/detail/service_name', service: service, i: i
               = render 'component/detail/service_status', service: service
             %section.collapsed.service-details-card.service-title-grey{ id: "service-card-#{i}"}
@@ -288,12 +288,16 @@
 
   document.querySelectorAll('.service-item').forEach( item => {
     item.addEventListener("click", openServiceCard);
-    item.addEventListener("keydown", toggleServiceCard);
+    item.addEventListener("keydown", openServiceCard);
   });
 
 
   // Open service details card
   function openServiceCard(e){
+    if (e.type != 'click' && e.key != 'Enter'){
+      return false;
+    }
+
     const serviceRowId = e.target.id;
     const i = serviceRowId.split("-").pop();
 
@@ -312,11 +316,17 @@
     let serviceCardElement = document.getElementById(`service-card-${i}`);
     serviceCardElement.classList.remove("collapsed");
 
+    e.target.setAttribute("aria-expanded", "true");
+
     chevron.scrollIntoView({ alignToTop: true, behavior: "smooth"});
   }
 
   // Toggle service details card open or closed
   function toggleServiceCard(e){
+    if (e.type != 'click' && e.key != 'Enter'){
+      return false;
+    }
+
     const serviceRowId = e.target.id;
     const i = serviceRowId.split("-").pop();
 
@@ -334,6 +344,8 @@
 
     let serviceCardElement = document.getElementById(`service-card-${i}`);
     serviceCardElement.classList.toggle("collapsed");
+
+    e.target.setAttribute("aria-expanded", serviceCardElement.classList.contains("collapsed")? "false" : "true");
   }
 
   });
