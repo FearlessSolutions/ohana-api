@@ -67,7 +67,7 @@ class LocationsController < ApplicationController
   def show
     id = params[:id].split('/').last
     @location = Location.get(id)
-    ahoy.track("Location Visit", properties: {"id" => "#{@location.id}"})
+    ahoy.track("Location Visit", id:"#{@location.id}")
 
     if current_user.present?
       @current_user = current_user
