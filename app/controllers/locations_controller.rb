@@ -49,6 +49,9 @@ class LocationsController < ApplicationController
 
     @exact_match_found = @locations_search.exact_match_found?
 
+    # tracks info about the current search
+    ahoy.track("Perform Search", keywords: params[:keyword], results: @search.locations.total_count)
+
     # caches the search results and renders the view
     cache_page(@search.locations) if @search.locations.present?
 
@@ -67,7 +70,7 @@ class LocationsController < ApplicationController
   def show
     id = params[:id].split('/').last
     @location = Location.get(id)
-    ahoy.track("Location Visit", id:"#{@location.id}")
+    ahoy.track("Location Visit", id: "#{@location.id}")
 
     if current_user.present?
       @current_user = current_user

@@ -8,3 +8,6 @@ Ahoy.api = true
 # we recommend configuring local geocoding as well
 # see https://github.com/ankane/ahoy#geocoding
 Ahoy.geocode = false
+
+# allow RSpec testing of Ahoy tracking
+Ahoy.track_bots = Rails.env.test?
