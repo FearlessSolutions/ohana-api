@@ -12,16 +12,16 @@ label.report-label {
 
 .form-container {
   display: flex;
-  flex-direction: column;
-  justify-items: center;
   align-items: flex-start;
-  padding: 2rem 4rem;
-  margin-top: 1rem;
+  flex-flow: column wrap;
+  padding: 10%;
   width: 70vmin;
+  margin-top: 1rem;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 
   p {
     padding-bottom: 1em !important;
+    width: 100%;
   }
 
   button {
@@ -32,10 +32,7 @@ label.report-label {
   .js-input-field {
     max-width: 100%;
     margin: 1rem 0;
-  }
-
-  textarea, input {
-    margin-bottom: 0px !important;
+    margin-bottom: 0;
   }
 
   textarea.alert-mode, input.alert-mode{
