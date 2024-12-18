@@ -1,6 +1,7 @@
 .content-box
   %h2= @location.name == @org.try(:name) ? @location.name : "#{@org.try(:name)} / #{@location.name}"
   = last_updated_at(@updated)
+  = number_of_updates(@number_updates_past_month)
   %p
     Number of times visited:
     %span#visits

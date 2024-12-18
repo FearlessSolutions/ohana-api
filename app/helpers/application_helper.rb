@@ -14,6 +14,11 @@ module ApplicationHelper
     visits.html_safe
   end
 
+  def number_of_updates(number_updates_past_month)
+    updates = '<p>Updates in the past month: ' + "#{number_updates_past_month}" + '</p>'
+    updates.html_safe
+  end
+
   def upload_server
     Rails.configuration.upload_server
   end

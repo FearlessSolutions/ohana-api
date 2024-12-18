@@ -28,6 +28,7 @@ class Admin
       @org = @location.organization
       @updated = @location.updated_at
       @number_visits_per_date_range = get_visits_per_date_range
+      @number_updates_past_month = get_number_of_updates
 
       authorize @location
     end
@@ -45,10 +46,12 @@ class Admin
       @location.assign_attributes(location_params)
       @org = @location.organization
       @number_visits_per_date_range = get_visits_per_date_range
+      @number_updates_past_month = get_number_of_updates
 
       authorize @location
 
       if @location.save
+        ahoy.track("Location Update", id: "#{@location.id}")
         redirect_to [:admin, @location],
                     notice: 'Location was successfully updated.'
       else
@@ -95,6 +98,12 @@ class Admin
 
     def set_default_date_range
       @date_range = @date_range_options[2]
+    end
+
+    def get_number_of_updates
+      today = Time.current.end_of_day
+      one_month_ago = 1.month.ago.beginning_of_day
+      Ahoy::Event.where(name: 'Location Update', properties: {id: "#{@location.id}"}, time: one_month_ago..today).count
     end
 
     def get_visits_per_date_range
