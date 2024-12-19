@@ -1,6 +1,6 @@
 = field_set_tag nil, id: 'geolocation-filter', class: 'input-search-filter input-search-filter-option' do
   %legend.sr-only= 'Geolocation Filter'
-  = label_tag 'address', 'Location', id: 'address-label'
+  = label_tag 'address', t('filters.location'), id: 'address-label'
   #geolocate-box
     = hidden_field_tag :lat, @lat
     = hidden_field_tag :long, @long
@@ -8,20 +8,22 @@
       = button_tag 'geolocate', id: 'geolocate' do
         %svg{width: "26", height: "26", viewBox: "0 0 22 22", fill: "none", xmlns: "http://www.w3.org/2000/svg", class: "geolocated", id: "button-geolocate", "aria-label" => t('buttons.services_near_me'), title: t('buttons.services_near_me')}
           %path{d: "M19.94 10C19.48 5.83 16.17 2.52 12 2.06V0H10V2.06C5.83 2.52 2.52 5.83 2.06 10H0V12H2.06C2.52 16.17 5.83 19.48 10 19.94V22H12V19.94C16.17 19.48 19.48 16.17 19.94 12H22V10H19.94ZM11 18C7.13 18 4 14.87 4 11C4 7.13 7.13 4 11 4C14.87 4 18 7.13 18 11C18 14.87 14.87 18 11 18Z", fill: "#222222"}
-    - else 
+    - else
       %svg{width: "26", height: "26", viewBox: "0 0 22 22", fill: "none", xmlns: "http://www.w3.org/2000/svg", id: "button-geolocate", "aria-label" => t('buttons.services_near_me'), title: t('buttons.services_near_me')}
         %path{d: "M19.94 10C19.48 5.83 16.17 2.52 12 2.06V0H10V2.06C5.83 2.52 2.52 5.83 2.06 10H0V12H2.06C2.52 16.17 5.83 19.48 10 19.94V22H12V19.94C16.17 19.48 19.48 16.17 19.94 12H22V10H19.94ZM11 18C7.13 18 4 14.87 4 11C4 7.13 7.13 4 11 4C14.87 4 18 7.13 18 11C18 14.87 14.87 18 11 18Z", fill: "#222222"}
 
-    = text_field_tag :address, @address, class: "search-address-input"
-  = label_tag nil, t('labels.search_hint_location'), class: 'search-hint'
+    = text_field_tag :address, @address, class: "search-address-input",  autocomplete: "off"
+  %span.search-hint
+    = t('labels.search_hint_location')
 
 = field_set_tag nil, id: 'distance-filter', class: 'input-search-filter input-search-filter-option' do
   %legend.sr-only= t('labels.distance_filter')
-  = label_tag 'distance', 'Radius', for: 'distance'
-  = select_tag :distance, 
+  = label_tag 'distance', t('filters.radius'), for: 'distance'
+  = select_tag :distance,
                options_for_select([["0.5 miles", 0.5], ["1 mile", 1], ["2 miles", 2], ["5 miles", 5], ["10 miles", 10], ["15 miles", 15], ["20 miles", 20], ["25 miles", 25], ["30 miles", 30]], @selected_distance_filter), 
-               include_blank: 'All', 
+               include_blank: 'All',
                class: "category-search-select-left-menu",
                aria: { describedby: 'Distance from location selected' }
 
-  = label_tag nil, t('labels.search_hint_distance'), class: 'search-hint'               
+  %span.search-hint
+    =t('labels.search_hint_distance')
