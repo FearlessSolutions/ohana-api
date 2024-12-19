@@ -3,32 +3,7 @@
   = last_updated_at(@updated)
   %p
     Number of times visited:
-    %span#visits
-      = number_of_visits(@date_range_options, @date_range, @number_visits_per_date_range)
-  = label_tag :date_range, 'Date range', class: 'sr-only'
-  = select_tag :date_range, options_for_select(@date_range_options, @date_range), id: 'date-range-selector'
+    %ul
+      = number_of_visits(@location.id)
 = form_for [:admin, @location], html: { class: 'edit-entry', novalidate: true } do |f|
   = render 'form', f: f, location: @location, org: @org
-
-:javascript
-  $(document).ready(function() {
-    $('#date-range-selector').on('change', function(){
-      dateRange = $(this).val();
-
-      const dateRangeOptions = #{raw @date_range_options};
-
-      var index = -1;
-      dateRangeOptions.forEach( function(option, i){
-        if (option == dateRange){
-          index = i;
-        }
-      })
-
-      if (index == -1){
-        console.error("Error finding date range option.")
-      }
-
-      const visits = #{raw @number_visits_per_date_range};
-      $('#visits').text(visits[index]);
-    });
-  });

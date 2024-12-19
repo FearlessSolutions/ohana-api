@@ -2,8 +2,6 @@ class Admin
   class LocationsController < ApplicationController
     include ActionView::Helpers::TextHelper
     before_action :authenticate_admin!
-    before_action :get_date_range_options
-    before_action :set_default_date_range
     layout 'admin'
 
     include Searchable
@@ -27,7 +25,6 @@ class Admin
       @location = Location.find(params[:id])
       @org = @location.organization
       @updated = @location.updated_at
-      @number_visits_per_date_range = get_visits_per_date_range
 
       authorize @location
     end
@@ -44,7 +41,6 @@ class Admin
       @location = Location.find(params[:id])
       @location.assign_attributes(location_params)
       @org = @location.organization
-      @number_visits_per_date_range = get_visits_per_date_range
 
       authorize @location
 
@@ -89,54 +85,6 @@ class Admin
       @locations.map! { |location| location.append(@location = Location.find(location[0])) }
     end
 
-    def get_date_range_options
-      @date_range_options = ['Yesterday', 'Last 7 Days', 'Last 30 Days', 'Last Month', 'Last Quarter', 'Last 12 Months']
-    end
-
-    def set_default_date_range
-      @date_range = @date_range_options[2]
-    end
-
-    def get_visits_per_date_range
-      intervals = create_date_ranges
-      times_visited = []
-      intervals.each do |interval|
-        times_visited <<
-        Ahoy::Event.where(name: 'Location Visit', properties: {id: "#{@location.id}"}, time: interval).count
-      end
-
-      times_visited
-    end
-
-    def create_date_ranges
-      todays_date= Date.current
-      today = todays_date.to_time(:utc).beginning_of_day
-      yesterday_end = Date.yesterday.to_time(:utc).end_of_day
-
-      date_ranges = get_date_range_options
-      intervals = []
-
-      date_ranges.each do |date_range|
-        case date_range
-        when 'Yesterday'
-          intervals << (Date.yesterday.to_time(:utc).beginning_of_day..yesterday_end)
-        when 'Last 7 Days'
-          intervals << ((today - 7.days)..yesterday_end)
-        when 'Last 30 Days'
-          intervals << ((today - 30.days)..yesterday_end)
-        when 'Last Month'
-          last_month = today.prev_month
-          intervals << (last_month.beginning_of_month..last_month.end_of_month)
-        when 'Last Quarter'
-          prev_quarter = today.prev_quarter
-          intervals << (prev_quarter.beginning_of_quarter..prev_quarter.end_of_quarter)
-        when 'Last 12 Months'
-          intervals << ((today.prev_year)..yesterday_end)
-        end
-      end
-
-      intervals
-    end
 
     private
 
