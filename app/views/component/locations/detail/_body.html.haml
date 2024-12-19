@@ -294,10 +294,11 @@
 
   // Open service details card
   function openServiceCard(e){
-    if (e.type != 'click' && e.key != 'Enter'){
+    if (!isEventValid(e)){
       return false;
     }
 
+    e.target.setAttribute("aria-expanded", "true");
     const serviceRowId = e.target.id;
     const i = serviceRowId.split("-").pop();
 
@@ -316,14 +317,12 @@
     let serviceCardElement = document.getElementById(`service-card-${i}`);
     serviceCardElement.classList.remove("collapsed");
 
-    e.target.setAttribute("aria-expanded", "true");
-
     chevron.scrollIntoView({ alignToTop: true, behavior: "smooth"});
   }
 
   // Toggle service details card open or closed
   function toggleServiceCard(e){
-    if (e.type != 'click' && e.key != 'Enter'){
+    if (!isEventValid(e)){
       return false;
     }
 
@@ -345,7 +344,15 @@
     let serviceCardElement = document.getElementById(`service-card-${i}`);
     serviceCardElement.classList.toggle("collapsed");
 
-    e.target.setAttribute("aria-expanded", serviceCardElement.classList.contains("collapsed")? "false" : "true");
+    e.target.setAttribute("aria-expanded", e.target.classList.contains("closed")? "false" : "true");
+  }
+
+  function isEventValid(e){
+    if (e.type != 'click' && e.key != 'Enter'){
+      return false;
+    }
+
+    return true;
   }
 
   // reveal header search box
