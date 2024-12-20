@@ -37,28 +37,23 @@ class Flag < ApplicationRecord
         label: "The hours, location, or contact information is incorrect."
       },
       {
-        name: :the_service_listed_are_incorrect,
+        name: :the_info_listed_is_incorrect,
         label: "Information listed on this resource page is incorrect."
       },
       {
         name: :other,
-        label: "Other"
+        label: "Other",
+        details_required: true
       },
       {
         name: :employee_of_the_org,
-        label: "I am an employee of this organization.",
-        details_required: false
-      },
-      {
-        name: :contact_me,
-        label: "Yes, I agree to have a CHARMcare representative contact me regarding this resource.",
-        details_required: false
+        label: "I am an employee of the organization.",
+        details_required: true
       }
     ]
   end
 
   def self.details_required?(attr_name)
-    puts attr_name
     get_schema_attribute_by_name(attr_name)[:details_required] != false
   end
 
@@ -90,11 +85,14 @@ class Flag < ApplicationRecord
       selection_input = report_attributes.find do |input_name, input_value|
         input_name.include?(attr_name.to_s + '_selected')
       end
-      selected = selection_input[1] == "1"
+
+      selected = selection_input[1]
+      selected = "1" if selection_input[1] == "true"
+
       value_input = report_attributes.find do |input_name, input_value|
         input_name == attr_name.to_s
       end
-      if Flag.details_required?(attr_name)
+      if selected == "1" && Flag.details_required?(attr_name)
         value = value_input[1]
       else
         value = "No details required"
@@ -123,3 +121,6 @@ class Flag < ApplicationRecord
   end
 
 end
+
+
+
