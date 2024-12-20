@@ -1,4 +1,7 @@
 module ApplicationHelper
+
+  TODAY = Date.current.to_time(:utc).beginning_of_day
+
   def version
     @version ||= File.read('VERSION').chomp
   end
@@ -8,15 +11,70 @@ module ApplicationHelper
     last_updated_text.html_safe
   end
 
-  def number_of_visits(date_range_options, date_range, number_visits_per_date_range)
-    index = date_range_options.find_index(date_range)
-    visits = "<span> #{number_visits_per_date_range[index]} </\span>"
+  def number_of_updates(location_id)
+    total = number_of_updates_past_thirty_days(location_id)
+    updates = '<p>Updates in the past month: ' + "#{total}" + '</p>'
+    updates.html_safe
+  end
+
+  def number_of_updates_past_thirty_days(location_id)
+    past_thirty_days = ((TODAY - 30.days)..TODAY.end_of_day)
+    Ahoy::Event.where(name: 'Location Update', properties: {id: "#{location_id}"}, time: past_thirty_days).count
+  end
+
+  def number_of_visits(location_id)
+    visits = ""
+    date_ranges = get_date_range_options
+    number_visits_per_date_range = get_visits_per_date_range(location_id)
+
+    number_visits_per_date_range.each_with_index do |total, i|
+      visits << "<li>#{date_ranges[i]}: #{total}</li>"
+    end
+
     visits.html_safe
   end
 
-  def number_of_updates(number_updates_past_month)
-    updates = '<p>Updates in the past month: ' + "#{number_updates_past_month}" + '</p>'
-    updates.html_safe
+  def get_date_range_options
+    ['Yesterday', 'Last 7 Days', 'Last 30 Days', 'Last Month', 'Last Quarter', 'Last 12 Months']
+  end
+
+  def get_visits_per_date_range(location_id)
+    intervals = create_date_ranges
+    times_visited = []
+    intervals.each do |interval|
+      times_visited <<
+      Ahoy::Event.where(name: 'Location Visit', properties: {id: "#{@location.id}"}, time: interval).count
+    end
+    times_visited
+  end
+
+  def create_date_ranges
+    yesterday_end = Date.yesterday.to_time(:utc).end_of_day
+
+    date_ranges = get_date_range_options
+    intervals = []
+
+    date_ranges.each do |date_range|
+      case date_range
+      when 'Yesterday'
+        intervals << (Date.yesterday.to_time(:utc).beginning_of_day..yesterday_end)
+      when 'Last 7 Days'
+        intervals << ((TODAY - 7.days)..TODAY.end_of_day)
+      when 'Last 30 Days'
+        intervals << ((TODAY - 30.days)..TODAY.end_of_day)
+      when 'Last Month'
+        last_month = TODAY.prev_month
+        intervals << (last_month.beginning_of_month..last_month.end_of_month)
+      when 'Last Quarter'
+        prev_quarter = TODAY.prev_quarter
+        intervals << (prev_quarter.beginning_of_quarter..prev_quarter.end_of_quarter)
+      when 'Last 12 Months'
+        intervals << ((TODAY.prev_year)..TODAY.end_of_day)
+      end
+    end
+
+    intervals
+
   end
 
   def upload_server
