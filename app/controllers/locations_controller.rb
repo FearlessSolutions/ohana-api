@@ -50,7 +50,11 @@ class LocationsController < ApplicationController
     @exact_match_found = @locations_search.exact_match_found?
 
     # tracks info about the current search
-    ahoy.track("Perform Search", keywords: params[:keyword], results: @search.locations.total_count)
+    ahoy.track( "Perform Search",
+                keywords: params[:keyword],
+                main_category: @main_category_selected_name,
+                subcategories: @selected_categories,
+                results: @search.locations.total_count)
 
     # caches the search results and renders the view
     cache_page(@search.locations) if @search.locations.present?
