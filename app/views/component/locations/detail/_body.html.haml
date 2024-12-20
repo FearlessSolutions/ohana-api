@@ -16,7 +16,7 @@
           %h2.agency
             = link_to locations_path(org_name: location.organization.name), role: "link", aria: { label: "View all locations for #{superscript_ordinals(location.organization.name)}" } do
               = superscript_ordinals(location.organization.name)
-    
+
 
 
     %section.overview-box
@@ -29,7 +29,7 @@
           = render 'component/detail/address', location: location, lines: 2
           - if location.services.present?
             = render 'component/detail/service_list_items', location: location
-        .flex-column  
+        .flex-column
           = render 'component/detail/website', website: location.website
           = render 'component/detail/email', email: location.email
           - if location.regular_schedules.present?
@@ -37,38 +37,31 @@
 
     %section.general-information
       %h2 General Information
-      %hr    
-      = render 'component/detail/location_description', location: location    
+      %hr
+      = render 'component/detail/location_description', location: location
 
     - if location.services.present?
       %section.services-box
         %h2 Services
-        %hr    
-        - location.services.each do |service|
-
-          %section.service{ itemscope: '', itemtype: 'http://schema.org/Service' }
-            %section.title-box
+        %hr
+        %section.service-list{ itemscope: '', itemtype: 'http://schema.org/Service', id: "service-list" }
+        - location.services.each_with_index do |service, i|
+          - if (i%2).zero?
+            %div.service-row.service-title-blue{ id: "service-row-#{i}", role: 'button', tabindex: '0', aria: {label: 'Expand/Collapse Section', expanded: 'false'} }
+              = render 'component/detail/service_name', service: service, i: i
               = render 'component/detail/service_status', service: service
-              = render 'component/detail/service_name', service: service
-            = render 'component/detail/service_description', service: service
-            = render 'component/detail/service_wait', service: service
-            = render 'component/detail/phones', phones: service.phones
-            = render 'component/detail/service_hours', service: service
-            = render 'component/detail/service_address_details', service: service
-            = render 'component/detail/service_fees', service: service
-            = render 'component/detail/service_audience', service: service
-            = render 'component/detail/service_eligibility', service: service
-            = render 'component/detail/service_application_process', service: service
-            = render 'component/detail/languages', service: service
-            = render 'component/detail/service_interpretation_services', service: service
-            = render 'component/detail/service_required_documents', service: service
-            = render 'component/detail/service_accepted_payments', service: service
-            = render 'component/detail/service_service_areas', service: service
-            = render 'component/detail/service_situations', service: service
-            = render 'component/detail/service_categories', service: service
-            = render 'component/detail/service_website', service: service
-  //locations sidebar
+            %section.collapsed.service-details-card.service-title-blue{ id: "service-card-#{i}"}
+              = render 'component/detail/service_details_card', service: service
+          - else
+            %div.service-row.service-title-grey{ id: "service-row-#{i}", role: 'button', tabindex: '0', aria: {label: 'Expand/Collapse Section', expanded: 'false'} }
+              = render 'component/detail/service_name', service: service, i: i
+              = render 'component/detail/service_status', service: service
+            %section.collapsed.service-details-card.service-title-grey{ id: "service-card-#{i}"}
+              = render 'component/detail/service_details_card', service: service
+          - if i < location.services.length-1
+            %hr.hr-service-divider
 
+  / locations sidebar
   .location-sidebar-box
     %aside.location-sidebar
 
@@ -110,7 +103,7 @@
               %i.fa.fa-id-card{ aria: { hidden: 'true' } }
               %span.annotated-text-block
                 %h4 Name
-              %br  
+              %br
               %section.location-sidebar-content
                 %section.contact-name-box
                   %section.contact-name
@@ -125,7 +118,7 @@
                   %section.phones.location-sidebar-content-group
                     = render 'component/detail/phones', phones: contact.phones
 
-  
+
 
       .sidebar-header
         %h1 Other Information
@@ -153,10 +146,10 @@
 
       %section.location-sidebar-footer
         %span.location-sidebar-content
-        Last Updated: #{@location.updated_at.strftime("%B %d, %Y at %I:%M %p") }      
+        Last Updated: #{@location.updated_at.strftime("%B %d, %Y at %I:%M %p") }
         %a{ href: new_flag_path(resource_type: 'Location', resource_id: location.id) }
           Report an issue with this resource
-            
+
 :javascript
   $(document).ready(function(){
 
@@ -202,7 +195,7 @@
         $('body').append(alertDiv);
         setTimeout(function() {
           alertDiv.remove();
-          
+
           alert(message);
         }, 100);
 
@@ -286,6 +279,81 @@
   }
 
   initPrintButton();
+
+
+  document.querySelectorAll('.service-row').forEach( row => {
+    row.addEventListener("click", toggleServiceCard);
+    row.addEventListener("keydown", toggleServiceCard);
+  });
+
+  document.querySelectorAll('.service-item').forEach( item => {
+    item.addEventListener("click", openServiceCard);
+    item.addEventListener("keydown", openServiceCard);
+  });
+
+
+  // Open service details card
+  function openServiceCard(e){
+    if (!isEventValid(e)){
+      return false;
+    }
+
+    e.target.setAttribute("aria-expanded", "true");
+    const serviceRowId = e.target.id;
+    const i = serviceRowId.split("-").pop();
+
+    let chevron = document.getElementById(`service-chevron-${i}`);
+    chevron.classList.add("fa-chevron-up");
+    chevron.classList.remove("fa-chevron-down");
+
+    let titleElement = document.getElementById(`service-title-${i}`);
+    titleElement.classList.add("expanded");
+
+    let alternateTitleElement = document.getElementById(`service-alt-${i}`);
+    if (alternateTitleElement) {
+      alternateTitleElement.classList.add("expanded");
+    }
+
+    let serviceCardElement = document.getElementById(`service-card-${i}`);
+    serviceCardElement.classList.remove("collapsed");
+
+    chevron.scrollIntoView({ alignToTop: true, behavior: "smooth"});
+  }
+
+  // Toggle service details card open or closed
+  function toggleServiceCard(e){
+    if (!isEventValid(e)){
+      return false;
+    }
+
+    const serviceRowId = e.target.id;
+    const i = serviceRowId.split("-").pop();
+
+    let chevron = document.getElementById(`service-chevron-${i}`);
+    chevron.classList.toggle("fa-chevron-down");
+    chevron.classList.toggle("fa-chevron-up");
+
+    let titleElement = document.getElementById(`service-title-${i}`);
+    titleElement.classList.toggle("expanded");
+
+    let alternateTitleElement = document.getElementById(`service-alt-${i}`);
+    if (alternateTitleElement) {
+      alternateTitleElement.classList.toggle("expanded");
+    }
+
+    let serviceCardElement = document.getElementById(`service-card-${i}`);
+    serviceCardElement.classList.toggle("collapsed");
+
+    e.target.setAttribute("aria-expanded", serviceCardElement.classList.contains("collapsed")? "false" : "true");
+  }
+
+  function isEventValid(e){
+    if (e.type != 'click' && e.key != 'Enter'){
+      return false;
+    }
+
+    return true;
+  }
 
   // reveal header search box
   document.getElementById('search-group').classList.remove('hidden');

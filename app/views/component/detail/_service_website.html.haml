@@ -3,7 +3,7 @@
 
 - if service.website.present?
   %section.website.icon-text-block
-    %i.fa.fa-external-link-square{'aria-label': 'Website'}
+    %i.fa.fa-external-link-square{tabindex: '0', role: 'img', 'aria-label': 'Service website'}
     %span.annotated-text-block
       %a{ href: service.website, target: '_blank', itemprop: 'url' }
         = format_url(service.website)
