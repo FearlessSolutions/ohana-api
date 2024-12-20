@@ -344,7 +344,7 @@
     let serviceCardElement = document.getElementById(`service-card-${i}`);
     serviceCardElement.classList.toggle("collapsed");
 
-    e.target.setAttribute("aria-expanded", e.target.classList.contains("closed")? "false" : "true");
+    e.target.setAttribute("aria-expanded", serviceCardElement.classList.contains("collapsed")? "false" : "true");
   }
 
   function isEventValid(e){
