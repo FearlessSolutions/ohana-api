@@ -628,6 +628,11 @@ acorn@^8.7.1, acorn@^8.8.2:
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-8.10.0.tgz#8be5b3907a67221a81ab23c7889c4c5526b62ec5"
   integrity sha512-F0SAmZ8iUtS//m8DmCTA0jlh6TDKkHQyK6xc6V4KDTyZKA9dnvX9/3sRTVQrWm79glUAZbnmmNcdYwUIHWVybw==
 
+ahoy.js@^0.4.4:
+  version "0.4.4"
+  resolved "https://registry.yarnpkg.com/ahoy.js/-/ahoy.js-0.4.4.tgz#51bb393fbc6e53962eefac7155642c2d85405238"
+  integrity sha512-LpEf/4Xe4YWAbCN3SUjf58hhWKQzqECRdXJDCRSUp9cgwTul+CnukXxKXavGvoyiYg1QkdVQuO6tx/HELgizlA==
+
 ajv-formats@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/ajv-formats/-/ajv-formats-2.1.1.tgz#6e669400659eb74973bbf2e33327180a0996b520"
