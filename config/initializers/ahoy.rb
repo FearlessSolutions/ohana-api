@@ -11,3 +11,6 @@ Ahoy.geocode = false
 
 # allow RSpec testing of Ahoy tracking
 Ahoy.track_bots = Rails.env.test?
+
+# set the duration of a single Ahoy visit
+Ahoy.visit_duration = 12.hours

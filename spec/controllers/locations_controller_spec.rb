@@ -23,27 +23,34 @@ describe LocationsController do
     end
   end
 
-  describe "track location visits with ahoy" do
-    it 'tracks the visited location id' do
-      get :show, params: {id: "#{@nearby.slug}"}
+  context "tracking ahoy visits with ahoy" do
+    before(:each){ Ahoy::Event.delete_all }
 
-      ahoy_tracked = Ahoy::Event.where(name: 'Location Visit', id: @nearby.id).count
+    describe "track single location visits with ahoy" do
+      it 'tracks the visited location id' do
+        get :show, params: {id: "#{@nearby.slug}"}
 
-      expect(ahoy_tracked).to eq(1)
+        ahoy_tracked = Ahoy::Event.where(name: 'Location Visit', id: @nearby.id).count
+
+        expect(ahoy_tracked).to eq(1)
+      end
     end
 
-    it 'tracks multiple location visits in the same ahoy visit id' do
-      get :show, params: {id: "#{@nearby.slug}"}
-      get :show, params: {id: "#{@new_test_location.slug}"}
+    describe "track multiple location visits with ahoy" do
+      it 'tracks multiple location visits in the same ahoy visit id' do
+        get :show, params: {id: "#{@nearby.slug}"}
+        get :show, params: {id: "#{@new_test_location.slug}"}
 
-      ahoy_tracked = Ahoy::Event.where(name: 'Location Visit')
-      nearby_loc_tracked = Ahoy::Event.where(name: 'Location Visit', id: @nearby.id)
-      new_loc_tracked = Ahoy::Event.where(name: 'Location Visit', id: @new_test_location.id)
+        ahoy_events = Ahoy::Event.where(name: 'Location Visit')
+        nearby_loc_tracked = Ahoy::Event.where(name: 'Location Visit', id: @nearby.id)
+        new_loc_tracked = Ahoy::Event.where(name: 'Location Visit', id: @new_test_location.id)
 
-      expect(ahoy_tracked.count).to eq(2)
-      expect(nearby_loc_tracked.count).to eq(1)
-      expect(new_loc_tracked.count).to eq(1)
-      expect(nearby_loc_tracked.last.visit_id).to eq(new_loc_tracked.last.visit_id)
+        expect(ahoy_events.count).to eq(2)
+        expect(ahoy_events.first.properties["id"]).to eq(@nearby.id)
+        expect(nearby_loc_tracked.count).to eq(1)
+        expect(new_loc_tracked.count).to eq(1)
+        expect(ahoy_events.first.visit_id).to eq(ahoy_events.last.visit_id)
+      end
     end
   end
 end
