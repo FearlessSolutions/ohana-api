@@ -18,7 +18,7 @@ module AhoyQueries
   ]
 
   def get_visits_by_location_and_date_range(location_id: , date_range:)
-    Ahoy::Event.where(name: 'Location Visit', properties: {id: "#{location_id}"}, time: interval_by_date_range(date_range)).count
+    Ahoy::Event.where(name: 'Location Visit', properties: {id: location_id}, time: interval_by_date_range(date_range)).count
   end
 
   def interval_by_date_range(date_range)

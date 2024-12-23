@@ -48,6 +48,8 @@ dump.rdb
 /data/ohana-api-smc_development.dump
 /data/big.json
 /data/*.json
+data/.DS_Store
+.DS_Store
 
 script/backup_mongo
 script/import_to_staging
@@ -75,3 +77,4 @@ yarn-debug.log*
 /app/assets/builds/*
 !/app/assets/builds/.keep
 public/assets
+databases

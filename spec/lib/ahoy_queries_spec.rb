@@ -6,7 +6,7 @@ describe AhoyQueries do
     before do
       ahoy = Ahoy::Tracker.new
       @location = create(:location)
-      ahoy.track("Location Visit", id:"#{@location.id}")
+      ahoy.track("Location Visit", id: @location.id)
     end
 
     it "returns the right amount of visits when date range is 'Yesterday'" do
