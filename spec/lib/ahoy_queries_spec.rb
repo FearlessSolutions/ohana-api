@@ -6,7 +6,6 @@ describe AhoyQueries do
     before do
       ahoy = Ahoy::Tracker.new
       @location = create(:location)
-      @date_range_options = AhoyQueries::DATE_RANGE_OPTIONS
       ahoy.track("Location Visit", id:"#{@location.id}")
     end
 
