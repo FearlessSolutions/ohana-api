@@ -9,58 +9,15 @@ module ApplicationHelper
   end
 
   def number_of_visits(location_id)
-    visits = ""
-    date_ranges = get_date_range_options
-    number_visits_per_date_range = get_visits_per_date_range(location_id)
-
-    number_visits_per_date_range.each_with_index do |total, i|
-      visits << "<li>#{date_ranges[i]}: #{total}</li>"
-    end
-
-    visits.html_safe
-  end
-
-  def get_date_range_options
-    ['Yesterday', 'Last 7 Days', 'Last 30 Days', 'Last Month', 'Last Quarter', 'Last 12 Months']
-  end
-
-  def get_visits_per_date_range(location_id)
-    intervals = create_date_ranges
-    times_visited = []
-    intervals.each do |interval|
-      times_visited <<
-      Ahoy::Event.where(name: 'Location Visit', properties: {id: "#{@location.id}"}, time: interval).count
-    end
-    times_visited
-  end
-
-  def create_date_ranges
-    today = Date.current.to_time(:utc).beginning_of_day
-    yesterday_end = Date.yesterday.to_time(:utc).end_of_day
-
-    date_ranges = get_date_range_options
-    intervals = []
+    visit_html_list = ""
+    date_ranges = AhoyQueries::DATE_RANGE_OPTIONS
 
     date_ranges.each do |date_range|
-      case date_range
-      when 'Yesterday'
-        intervals << (Date.yesterday.to_time(:utc).beginning_of_day..yesterday_end)
-      when 'Last 7 Days'
-        intervals << ((today - 7.days)..today.end_of_day)
-      when 'Last 30 Days'
-        intervals << ((today - 30.days)..today.end_of_day)
-      when 'Last Month'
-        last_month = today.prev_month
-        intervals << (last_month.beginning_of_month..last_month.end_of_month)
-      when 'Last Quarter'
-        prev_quarter = today.prev_quarter
-        intervals << (prev_quarter.beginning_of_quarter..prev_quarter.end_of_quarter)
-      when 'Last 12 Months'
-        intervals << ((today.prev_year)..today.end_of_day)
-      end
+      visits_per_date_range = AhoyQueries.get_visits_by_location_and_date_range(location_id: location_id, date_range: date_range)
+      visit_html_list << "<li>#{date_range}: #{visits_per_date_range}</li>"
     end
 
-    intervals
+    visit_html_list.html_safe
   end
 
   def upload_server
