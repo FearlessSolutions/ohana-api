@@ -26,9 +26,9 @@ describe LocationsController do
     it 'tracks the visited location id' do
       get :show, params: {id: "#{@nearby.slug}"}
 
-      ahoy_tracked = Ahoy::Event.where(name: 'Location Visit', properties: {id: @nearby.id}).count
+      tracked_visit = Ahoy::Event.where(name: 'Location Visit', properties: {id: @nearby.id}).count
 
-      expect(ahoy_tracked).to eq(1)
+      expect(tracked_visit).to eq(1)
     end
   end
 
@@ -50,59 +50,60 @@ describe LocationsController do
     end
   end
 
-  describe 'location search tracking' do
+
+  describe 'track locations search with ahoy' do
     it 'tracks any search' do
       get :index
 
-      ahoy_tracked = Ahoy::Event.where(name: 'Perform Search').count
+      tracked_search = Ahoy::Event.where(name: 'Perform Search').count
 
-      expect(ahoy_tracked).to eq(1)
+      expect(tracked_search).to eq(1)
     end
 
     it 'tracks a search with params' do
       get :index, params: {keyword: 'house', main_category: '', categories: []}
 
-      ahoy_tracked = Ahoy::Event.where(name: 'Perform Search').count
+      tracked_search = Ahoy::Event.where(name: 'Perform Search').count
 
-      expect(ahoy_tracked).to eq(1)
+      expect(tracked_search).to eq(1)
     end
 
     it 'tracks the search keywords used' do
       get :index, params: {keyword: 'house', main_category: '', categories: []}
 
-      ahoy_tracked = Ahoy::Event.where(name: 'Perform Search').last
+      tracked_search = Ahoy::Event.where(name: 'Perform Search').last
 
-      expect(ahoy_tracked.properties['keywords']).to eq('house')
-      expect(ahoy_tracked.properties['main_category']).to eq('')
-      expect(ahoy_tracked.properties['subcategories']).to eq([])
+      expect(tracked_search.properties['keywords']).to eq('house')
+      expect(tracked_search.properties['main_category']).to eq('')
+      expect(tracked_search.properties['subcategories']).to eq([])
     end
 
     it 'tracks the categories and subcategories used' do
       get :index, params: {keyword: '', main_category: 'Health', categories: ['Dental Care', 'General Population']}
 
-      ahoy_tracked = Ahoy::Event.where(name: 'Perform Search').last
+      tracked_search = Ahoy::Event.where(name: 'Perform Search').last
 
-      expect(ahoy_tracked.properties['keywords']).to eq('')
-      expect(ahoy_tracked.properties['main_category']).to eq('Health')
-      expect(ahoy_tracked.properties['subcategories']).to eq(['Dental Care', 'General Population'])
+      expect(tracked_search.properties['keywords']).to eq('')
+      expect(tracked_search.properties['main_category']).to eq('Health')
+      expect(tracked_search.properties['subcategories']).to eq(['Dental Care', 'General Population'])
     end
 
     it 'tracks the number of search results listed' do
       get :index, params: {keyword: 'house', main_category: 'Health', categories: ['Dental Care', 'General Population']}
 
-      ahoy_tracked = Ahoy::Event.where(name: 'Perform Search').last
+      tracked_search = Ahoy::Event.where(name: 'Perform Search').last
 
-      expect(ahoy_tracked.properties['results']).to eq(0)
+      expect(tracked_search.properties['results']).to eq(0)
     end
 
-    it 'tracks multiple searches with the same visit id' do
+    it 'tracks multiple searches within the same visit' do
       get :index, params: {keyword: 'house', main_category: '', categories: []}
       get :index, params: {keyword: 'diapers', main_category: '', categories: []}
 
-      ahoy_tracked = Ahoy::Event.where(name: 'Perform Search').all
+      tracked_search = Ahoy::Event.where(name: 'Perform Search').all
 
-      expect(ahoy_tracked.count).to eq(2)
-      expect(ahoy_tracked.first.visit_id).to eq(ahoy_tracked.last.visit_id)
+      expect(tracked_search.count).to eq(2)
+      expect(tracked_search.first.visit_id).to eq(tracked_search.last.visit_id)
     end
   end
 end
