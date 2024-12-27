@@ -1,33 +1,3 @@
-%h1 ANALYTICS
+%h1 Analytics
 
-= form_tag('/admin/analytics') do
-  = date_field('analytics', 'start_date', value: @start_date)
-  = date_field('analytics', 'end_date', value: @end_date)
-  = submit_tag
-
-%table.table
-  %tr
-    %td # of Organizations:
-    %td #{@organizations_count}
-  %tr
-    %td # of Organizations created in date range:
-    %td #{@new_org_count}
-  %tr
-    %td # of Locations:
-    %td #{@locations_count}
-  %tr
-    %td # of Locations created in date range:
-    %td #{@new_location_count}
-  %tr
-    %td # of Services:
-    %td #{@services_count}
-  %tr
-    %td # of Services created in date range:
-    %td #{@new_service_count}
-  %tr
-    %td # of Homepage views
-    %td #{@total_homepage_views}
-  %tr
-    %td # of Homepage Views in date range:
-    %td #{@new_homepage_views}
-
+= render 'admin/analytics/main/main_statistics'

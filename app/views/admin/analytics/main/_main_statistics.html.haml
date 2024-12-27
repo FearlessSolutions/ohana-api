@@ -1,0 +1,32 @@
+%h2 Main Statistics
+
+= form_tag('/admin/analytics') do
+  = date_field('analytics', 'start_date', value: @start_date)
+  = date_field('analytics', 'end_date', value: @end_date)
+  = submit_tag
+
+%table.table
+  %tr
+    %td # of Organizations:
+    = organizations_count
+  %tr
+    %td # of Organizations created in date range:
+    = new_org_count(@start_date, @end_date)
+  %tr
+    %td # of Locations:
+    = locations_count
+  %tr
+    %td # of Locations created in date range:
+    = new_location_count(@start_date, @end_date)
+  %tr
+    %td # of Services:
+    = services_count
+  %tr
+    %td # of Services created in date range:
+    = new_service_count(@start_date, @end_date)
+  %tr
+    %td # of Homepage views
+    = total_homepage_views(@landing_page)
+  %tr
+    %td # of Homepage Views in date range:
+    = new_homepage_views(@landing_page, @start_date, @end_date)

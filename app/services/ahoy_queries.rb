@@ -44,4 +44,14 @@ module AhoyQueries
       #not valid date range
     end
   end
+
+  def get_total_homepage_views(landing_page:)
+    Ahoy::Visit.where(landing_page: landing_page).count
+  end
+
+  def get_new_homepage_views(landing_page:, date_range:)
+    Ahoy::Visit.
+      where(landing_page: landing_page).
+      where(started_at: date_range).count
+  end
 end

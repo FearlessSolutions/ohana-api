@@ -6,17 +6,7 @@ class Admin
     layout 'admin'
 
     def index
-      @total_homepage_views = Ahoy::Visit.where(landing_page: root_url).count
-      @new_homepage_views = Ahoy::Visit.
-        where(landing_page: root_url).
-        where(started_at: @start_date..@end_date).count
-
-      @organizations_count = Organization.all.count
-      @new_org_count = Organization.where(created_at: @start_date.beginning_of_day..@end_date.end_of_day).count
-      @locations_count = Location.all.count
-      @new_location_count = Location.where(created_at: @start_date.beginning_of_day..@end_date.end_of_day).count
-      @services_count = Service.all.count
-      @new_service_count = Service.where(created_at: @start_date.beginning_of_day..@end_date.end_of_day).count
+      @landing_page = root_url
     end
 
     def update
