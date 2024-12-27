@@ -54,4 +54,22 @@ module AhoyQueries
       where(landing_page: landing_page).
       where(started_at: date_range).count
   end
+
+  def get_most_visited_locations_last_seven_days(number)
+    most_visited_by_id =
+      Ahoy::Event
+        .where(name: 'Location Visit', time: interval_by_date_range(LAST_7_DAYS))
+        .group("properties -> 'id'")
+        .order('COUNT(id) DESC')
+        .limit(number)
+        .count
+
+    most_visited_name = {}
+    most_visited_by_id.each_pair do |id, count|
+      location_name = Location.where(id: id).last.name
+      most_visited_name[location_name]= count
+    end
+
+    most_visited_name.to_a
+  end
 end

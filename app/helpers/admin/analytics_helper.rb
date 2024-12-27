@@ -45,5 +45,12 @@ class Admin
                                                   date_range: date_range(start_date, end_date))}</td>"
       new_homepage_views.html_safe
     end
+
+    def most_visited_locations
+      top_five_locations = AhoyQueries.get_most_visited_locations_last_seven_days(5)
+    end
+
+    def avg_number_searches_per_visit
+    end
   end
 end
