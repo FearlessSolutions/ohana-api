@@ -281,16 +281,31 @@
   initPrintButton();
 
 
-  document.querySelectorAll('.service-row').forEach( row => {
-    row.addEventListener("click", toggleServiceCard);
-    row.addEventListener("keydown", toggleServiceCard);
-  });
+  // services-related functionality
+  let targetServiceRow;
 
-  document.querySelectorAll('.service-item').forEach( item => {
-    item.addEventListener("click", openServiceCard);
-    item.addEventListener("keydown", openServiceCard);
-  });
+  enableServiceRelatedFunctionality();
 
+  function enableServiceRelatedFunctionality(){
+    // add event listeners to each service item in summary box
+    document.querySelectorAll('.service-item').forEach( item => {
+      item.addEventListener("click", openServiceCard);
+      item.addEventListener("keydown", openServiceCard);
+    });
+
+    // add event listeners to each service row
+    document.querySelectorAll('.service-row').forEach( row => {
+      row.addEventListener("click", toggleServiceCard);
+      row.addEventListener("keydown", toggleServiceCard);
+    });
+
+    // if the location hash property exists, open the corresponding service details section
+    if (window.location.hash){
+      serviceName = window.location.hash.substring(1);
+      targetServiceRow = document.getElementById(serviceName);
+      toggleServiceCard(new Event('click'));
+    }
+  }
 
   // Open service details card
   function openServiceCard(e){
@@ -326,7 +341,11 @@
       return false;
     }
 
-    const serviceRowId = e.target.id;
+    if (e.target) {
+      targetServiceRow = e.target;
+    }
+
+    const serviceRowId = targetServiceRow.id;
     const i = serviceRowId.split("-").pop();
 
     let chevron = document.getElementById(`service-chevron-${i}`);
@@ -344,7 +363,7 @@
     let serviceCardElement = document.getElementById(`service-card-${i}`);
     serviceCardElement.classList.toggle("collapsed");
 
-    e.target.setAttribute("aria-expanded", serviceCardElement.classList.contains("collapsed")? "false" : "true");
+    targetServiceRow.setAttribute("aria-expanded", serviceCardElement.classList.contains("collapsed")? "false" : "true");
   }
 
   function isEventValid(e){
