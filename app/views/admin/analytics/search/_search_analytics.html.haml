@@ -4,9 +4,38 @@
 %p From #{Date.current-7.days} to #{Date.yesterday}
 
 
+%h4 Search data overview
 %table.table
   %tr
-    %td Most visited locations
-    %ul
-      = most_visited_locations.each do |location|
-        %li #{location.first}: #{location.last}
+    %td Total number of visits
+    = total_number_of_visits
+  %tr
+    %td Total number of searches
+    = total_number_of_searches
+  %tr
+    %td Average number of searches per visit with searches
+    = avg_number_searches_per_visit_with_searches
+
+%h4 Most visited locations
+%table.table
+  %tr
+    %td Ranking
+    %td Location name
+    %td # of visits
+  - most_visited_locations.each_with_index do |location, i|
+    %tr
+      %td #{i+1}
+      %td #{location.first}
+      %td #{location.last}
+
+%h4 Most used keywords in searches
+%table.table
+  %tr
+    %td Ranking
+    %td Keywords
+    %td # of times searched
+  - most_used_keywords.each_with_index do |keyword, i|
+    %tr
+      %td #{i+1}
+      %td #{keyword.first.downcase}
+      %td #{keyword.last}

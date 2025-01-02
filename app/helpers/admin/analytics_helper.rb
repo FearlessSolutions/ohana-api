@@ -4,6 +4,7 @@ class Admin
       start_date.beginning_of_day..end_date.end_of_day
     end
 
+    # database figures
     def organizations_count
       total_orgs = "<td>#{Organization.all.count}</td>"
       total_orgs.html_safe
@@ -46,11 +47,32 @@ class Admin
       new_homepage_views.html_safe
     end
 
-    def most_visited_locations
-      top_five_locations = AhoyQueries.get_most_visited_locations_last_seven_days(5)
+
+    # search related figures
+    def total_number_of_visits
+      total_visits = "<td>#{AhoyQueries.get_total_number_of_visits_last_seven_days}</td>"
+      total_visits.html_safe
     end
 
-    def avg_number_searches_per_visit
+    def total_number_of_searches
+      total_searches = "<td>#{AhoyQueries.get_total_number_of_searches_last_seven_days}</td>"
+      total_searches.html_safe
+    end
+
+    def most_visited_locations
+      AhoyQueries.get_most_visited_locations_last_seven_days(5)
+    end
+
+    def most_used_keywords
+      AhoyQueries.get_most_used_keywords_last_seven_days(10)
+    end
+
+    def avg_number_searches_per_visit_with_searches
+      avg_searches_per_visit =
+        "<td>#{
+          AhoyQueries.get_avg_number_searches_per_visit_with_searches_last_seven_days}
+        </td>"
+      avg_searches_per_visit.html_safe
     end
   end
 end

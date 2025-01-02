@@ -55,21 +55,56 @@ module AhoyQueries
       where(started_at: date_range).count
   end
 
-  def get_most_visited_locations_last_seven_days(number)
+  def get_total_number_of_visits_last_seven_days
+    Ahoy::Visit.where(started_at: interval_by_date_range(LAST_7_DAYS)).count
+  end
+
+  def get_total_number_of_visits_with_searches_last_seven_days
+    total_visits_with_searches =
+      Ahoy::Event
+        .where(name: 'Perform Search', time: interval_by_date_range(LAST_7_DAYS))
+        .group(:visit_id)
+        .count
+
+    total_visits_with_searches.length
+  end
+
+  def get_total_number_of_searches_last_seven_days
+    Ahoy::Event
+      .where(name: 'Perform Search', time: interval_by_date_range(LAST_7_DAYS)).count
+  end
+
+  def get_avg_number_searches_per_visit_with_searches_last_seven_days
+    total_searches = get_total_number_of_searches_last_seven_days
+    total_visits = get_total_number_of_visits_with_searches_last_seven_days
+
+    total_searches/total_visits
+  end
+
+  def get_most_visited_locations_last_seven_days(limit)
     most_visited_by_id =
       Ahoy::Event
         .where(name: 'Location Visit', time: interval_by_date_range(LAST_7_DAYS))
         .group("properties -> 'id'")
         .order('COUNT(id) DESC')
-        .limit(number)
+        .limit(limit)
         .count
 
     most_visited_name = {}
     most_visited_by_id.each_pair do |id, count|
       location_name = Location.where(id: id).last.name
-      most_visited_name[location_name]= count
+      most_visited_name[location_name] = count
     end
 
-    most_visited_name.to_a
+    most_visited_name
+  end
+
+  def get_most_used_keywords_last_seven_days(limit)
+    Ahoy::Event
+      .where(name: 'Perform Search', time: interval_by_date_range(LAST_7_DAYS))
+      .group("properties -> LOWER('keywords') ")
+      .order('COUNT(id) DESC')
+      .limit(limit)
+      .count
   end
 end
