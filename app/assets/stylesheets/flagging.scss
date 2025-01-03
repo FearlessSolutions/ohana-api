@@ -4,10 +4,19 @@ input.report-input-checkbox {
   width: 3% !important;
   float: left;
   margin-right: 5px;
+
+  &:disabled {
+    background-color: $light_blue;
+    border: $greyscale_light;
+  }
 }
 
 label.report-label {
   width: 97%;
+
+  &.disabled {
+    color: $greyscale_light;
+  }
 }
 
 .form-container {
@@ -22,6 +31,10 @@ label.report-label {
   p {
     padding-bottom: 1em !important;
     width: 100%;
+
+    &.last {
+      margin-top: 2rem;
+    }
   }
 
   button {
@@ -35,20 +48,9 @@ label.report-label {
     margin-bottom: 0;
   }
 
-  textarea.alert-mode, input.alert-mode{
-    outline: 1px solid $red !important;
-  }
-
   label.detail {
     flex: 1;
     font-size: $font_size_95;
     color: $greyscale_dark;
   }
-
-  label.alert-mode {
-    color: $red !important;
-  }
-
-
-
 }

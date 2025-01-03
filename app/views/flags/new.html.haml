@@ -23,86 +23,25 @@
                 %br
                 - Flag.report_attributes_schema.each do |attribute|
                   %p
-                    = rf.check_box checkbox_name(attribute[:name]),
-                                                 class: "report-input-checkbox",
-                                                 id: checkbox_name(attribute[:name]),
-                                                 data: { "target-id" => attribute[:name], "required" => "#{raw attribute[:details_required]}" },
-                                                 aria: { describedby: "#{attribute[:name]}_description" }
-                    = rf.label checkbox_name(attribute[:name]), attribute[:label], class: "report-label", for: checkbox_name(attribute[:name])
-
-                    - if attribute[:name] == :employee_of_the_org
-                      - if user_signed_in?
-                        = rf.email_field attribute[:name], value: current_user&.email, class: "js-input-field hidden", id: attribute[:name], autocomplete: "email", aria: { label: "Email address" }
-                      -else
-                        = rf.email_field attribute[:name], placeholder: "your.email@example.com", class: "js-input-field hidden", id: attribute[:name], autocomplete: "email", aria: { label: "Email address" }
-                      = label_tag attribute[:name], "You must provide an email address and you agree to being contacted regarding the resource.", class: 'detail hidden', id: 'email-label'
-                    - else
-                      - if attribute[:details_required] == true
-                        = rf.text_area attribute[:name], placeholder: "Please describe (required).", class: "js-input-field hidden", id: attribute[:name], aria: { label: "Description of the issue" }
-                      - elsif attribute[:details_required] != false
-                        = rf.text_area attribute[:name], placeholder: "Please describe (optional).", class: "js-input-field hidden", id: attribute[:name], aria: { label: "Description of the issue" }
-
+                    = render 'component/flags/form_fields', rf: rf, attribute: attribute
               = f.button 'Send!', class: 'button-plain', type:"submit", data: { disable_with: "Sending..." }, aria: { label: "Send" }
+
 
 :javascript
   $(document).ready(function(){
-
-    const $allCheckboxes = $(".flag-form input[type='checkbox']");
-
-    $allCheckboxes.val('false');
-
-    $allCheckboxes.on('click', function() {
-      const $this = $(this);
-      const textFieldTargetID = $(this).data('target-id');
-      const $inputElement = $(`.js-input-field:input[id='${textFieldTargetID}']`);
-      const $emailLabel = $('#email-label');
-      const $orgEmployee = 'employee_of_the_org';
-
-      if ($this.is(':checked')) {
-        $this.val('true');
-        $inputElement.removeClass('hidden');
-        if (textFieldTargetID == $orgEmployee) {
-          $emailLabel.removeClass('hidden');
-        }
-      } else {
-        $this.val('false');
-        $inputElement.addClass('hidden');
-        if (textFieldTargetID == $orgEmployee) {
-          $emailLabel.addClass('hidden');
-        }
-        if ($('other-alert')) {
-          $('#other-alert').remove();
-        }
-      }
-    });
-
+    // validate form fields before submitting form
     $('#flag-form').on('submit', function() {
-      const anyChecked = $('.report-input-checkbox').is(':checked');
-
-      if (!anyChecked) {
+      if (!isAnyCheckboxChecked()) {
         showErrorPopUp('Please check one of the feedback boxes before submitting.');
         return false;
       }
-
-      const checkedCheckboxes = $('.report-input-checkbox:checked');
-
-      if (checkedCheckboxes[0].id == 'employee_of_the_org_selected') {
-        showErrorPopUp('Please check a box that corresponds to the issue you identified.');
-        return false;
-      }
-
-      const emptyRequiredFields = checkForEmptyRequiredFields();
-
-      if (emptyRequiredFields.length > 0){
-        outlineNonValidRequiredFields(emptyRequiredFields);
-        return false;
-      }
-
-      if (!isEmailValid($('#employee_of_the_org').val())){
-        $('#employee_of_the_org').addClass('alert-mode');
-        return false;
-      }
     });
+
+
+    function isAnyCheckboxChecked(){
+      return $('.report-input-checkbox.feedback').is(':checked');
+    }
+
 
     function showErrorPopUp(message){
       const alertDiv = $('<div>', {
@@ -120,77 +59,4 @@
       }, 100);
     };
 
-    function checkForEmptyRequiredFields() {
-      let emptyFields = [];
-
-      $(".report-input-checkbox[data-required='true']").each(function() {
-        // is checkbox checked?
-        if ($(this).prop('checked') == true){
-          const textarea_id = "#" + $(this).attr('id').replace('_selected', '')
-
-          // check if there is valid text in the text field
-          if ($(textarea_id).val().length < 4) {
-            emptyFields.push(textarea_id);
-          }
-        }
-      });
-
-      return emptyFields;
-    };
-
-    function outlineNonValidRequiredFields(emptyRequiredFields) {
-      // reset the outline in all fields
-      $('.js-input-field').each( function(field) {
-        $(this).removeClass('alert-mode');
-        if ($(this).next().attr('id') == 'other-alert') {
-          $('#other-alert').remove();
-        }
-      });
-
-      // add outline only to fields where a problem was identified
-      emptyRequiredFields.forEach( function(field) {
-        $(field).addClass('alert-mode');
-
-        // add message below the 'other' field
-        if (field == '#other'){
-          // ensure the element doesn't exist yet
-          if ($('#other-alert').length == 0) {
-            const detail = $('<label>', {
-              'class': 'detail',
-              'id': 'other-alert',
-              'role': 'alert',
-              text: 'Description must be longer than 3 characters.'
-            });
-
-            $(field).after(detail);
-          }
-        }
-        // set the element below the input field in alert mode
-        $(field).next().addClass('alert-mode');
-      });
-    }
-
-    // remove alert mode on input fields that contain more than 3 letters
-    $('.js-input-field').on('change', function() {
-      if ($(this).val().length > 3) {
-        $(this).removeClass('alert-mode');
-        $(this).next().removeClass('alert-mode');
-
-        // remove the message below the 'other' field
-        if ($(this).next().attr('id') == 'other-alert') {
-          $('#other-alert').remove();
-        }
-      }
-    });
-
-
-    function isEmailValid(email) {
-      const regex = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-      if (!regex.test(email)) {
-        return false;
-      }
-      else {
-        return true;
-      }
-    }
   });
