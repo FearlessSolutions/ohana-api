@@ -141,7 +141,7 @@
         orgEmployeeCheckbox.prop('checked', false);
         orgEmployeeCheckbox.prop('disabled', true);
         orgEmployeeCheckbox.next().addClass('disabled');
-        hideInputField($(`.js-input-field:input[id='${orgEmployee}']`));
+        hideandResetInputField($(`.js-input-field:input[id='${orgEmployee}']`));
       }
     }
 
