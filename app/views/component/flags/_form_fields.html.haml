@@ -10,9 +10,8 @@
 
 // email input field
 - if attribute[:name] == :employee_of_the_org
-  - placeholder = current_user&.email
   = rf.email_field attribute[:name],
-                   placeholder: placeholder,
+                   placeholder: current_user&.email || 'your.email@example.com',
                    class: "js-input-field hidden",
                    id: attribute[:name],
                    autocomplete: "email",
@@ -53,7 +52,7 @@
     orgEmployeeCheckbox.removeClass('feedback');
 
 
-    // find all checkboxes and set them to uncchecked by default
+    // find all checkboxes and set them as unchecked by default
     const $allCheckboxes = $(".flag-form input[type='checkbox']");
     $allCheckboxes.val('false');
     $allCheckboxes.prop('checked', false);
@@ -69,7 +68,7 @@
         showInputField(inputElement);
       } else {
         $(this).val('false');
-        hideandResetInputField(inputElement);
+        hideAndResetInputField(inputElement);
       }
 
       toggleEmailInfo();
@@ -113,7 +112,7 @@
     }
 
 
-    function hideandResetInputField(inputField) {
+    function hideAndResetInputField(inputField) {
       inputField.addClass('hidden');
 
       // reset input field content
@@ -141,7 +140,7 @@
         orgEmployeeCheckbox.prop('checked', false);
         orgEmployeeCheckbox.prop('disabled', true);
         orgEmployeeCheckbox.next().addClass('disabled');
-        hideandResetInputField($(`.js-input-field:input[id='${orgEmployee}']`));
+        hideAndResetInputField($(`.js-input-field:input[id='${orgEmployee}']`));
       }
     }
 

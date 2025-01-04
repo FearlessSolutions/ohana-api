@@ -17,17 +17,17 @@ feature 'report_form_issue' do
       login_as @user
     end
 
-    it "should fill up current user email in the form", skip_ci: true do
+    it "uses current user email as a placeholder in the email field", skip_ci: true do
       allow(Location).to receive(:get).and_return(dummy_loc)
       visit new_flag_path(resource_id: 1, resource_type: 'Location')
 
-      field_label = 'You must provide an email address and you agree to being contacted regarding the resource.'
-      expect(find_field(field_label).value).to eq @user.email
+      input_field = find(:css, "#employee_of_the_org")
+      expect(input_field["placeholder"]).to eq @user.email
     end
   end
 
   context 'for signed out user' do
-    it "should show email field with a placeholder", skip_ci: true do
+    it "shows email field with a generic placeholder", skip_ci: true do
       allow(Location).to receive(:get).and_return(dummy_loc)
       visit new_flag_path(resource_id: 1, resource_type: 'Location')
 
