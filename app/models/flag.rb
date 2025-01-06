@@ -34,11 +34,11 @@ class Flag < ApplicationRecord
     [
       {
         name: :hours_location_contact_info_incorrect,
-        label: "The hours, location, or contact information is incorrect."
+        label: "The hours, location, or contact information is incorrect"
       },
       {
         name: :the_info_listed_is_incorrect,
-        label: "Information listed on this resource page is incorrect."
+        label: "Information listed on this resource page is incorrect"
       },
       {
         name: :other,
@@ -47,7 +47,7 @@ class Flag < ApplicationRecord
       },
       {
         name: :employee_of_the_org,
-        label: "I am an employee of the organization.",
+        label: "I am an employee of the organization",
         details_required: true
       }
     ]
