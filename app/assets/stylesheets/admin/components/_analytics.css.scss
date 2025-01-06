@@ -1,0 +1,46 @@
+
+@import "variables";
+
+.tabs-row {
+  display: flex;
+  flex-direction: row;
+  border-bottom: 1px $greyscale_light solid;
+  margin-top: 5rem;
+}
+
+.tab {
+  min-width: 15rem;
+  color: $greyscale_light;
+  background-color: $greyscale_lightest;
+  text-align: center;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px -50px 36px -28px inset;
+
+  &:hover{
+    background-color: $greyscale_light;
+    color: $greyscale_lightest;
+  }
+
+  &.active {
+    background-color: $light-blue;
+    color: $blue;
+  }
+
+  &.active:hover {
+    background-color: $blue;
+    color: $greyscale_lightest;
+  }
+}
+
+.tab-container {
+  display: none;
+  width: 100%;
+  padding: 1rem;
+
+  &.active {
+    display: block;
+  }
+
+  h4 {
+    margin-top: 3rem;
+  }
+}

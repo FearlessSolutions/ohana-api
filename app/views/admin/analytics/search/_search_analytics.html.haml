@@ -1,4 +1,3 @@
-%h2 Search
 
 %h3 Report for the last 7 days
 %p From #{Date.current-7.days} to #{Date.yesterday}
@@ -16,26 +15,37 @@
     %td Average number of searches per visit with searches
     = avg_number_searches_per_visit_with_searches
 
-%h4 Most visited locations
-%table.table
-  %tr
-    %td Ranking
-    %td Location name
-    %td # of visits
-  - most_visited_locations.each_with_index do |location, i|
-    %tr
-      %td #{i+1}
-      %td #{location.first}
-      %td #{location.last}
 
 %h4 Most used keywords in searches
 %table.table
   %tr
-    %td Ranking
-    %td Keywords
-    %td # of times searched
+    %th Ranking
+    %th Keywords
+    %th # of times searched
   - most_used_keywords.each_with_index do |keyword, i|
     %tr
       %td #{i+1}
       %td #{keyword.first.downcase}
       %td #{keyword.last}
+
+
+%h4 Most visited locations
+%table.table
+  %tr
+    %th Ranking
+    %th Location name
+    %th # of visits
+  - most_visited_locations.each_with_index do |location, i|
+    - location_id = location.first
+    %tr
+      %td #{i+1}
+      = get_location_name(location_id)
+      %td #{location.last}
+    - search_keywords = search_details_leading_to_location_visit(location_id)
+    - search_keywords.each do |keywords|
+      %tr
+        %td
+        %td - #{keywords.first} (#{keywords.second})
+        %td
+      %tr
+

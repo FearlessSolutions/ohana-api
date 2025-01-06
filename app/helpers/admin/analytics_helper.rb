@@ -74,5 +74,10 @@ class Admin
         </td>"
       avg_searches_per_visit.html_safe
     end
+
+    def search_details_leading_to_location_visit(location_id)
+      AhoyQueries
+        .get_search_details_leading_to_location_visit_last_seven_days(location_id)
+    end
   end
 end

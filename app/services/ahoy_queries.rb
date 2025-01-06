@@ -82,21 +82,12 @@ module AhoyQueries
   end
 
   def get_most_visited_locations_last_seven_days(limit)
-    most_visited_by_id =
       Ahoy::Event
         .where(name: 'Location Visit', time: interval_by_date_range(LAST_7_DAYS))
         .group("properties -> 'id'")
         .order('COUNT(id) DESC')
         .limit(limit)
         .count
-
-    most_visited_name = {}
-    most_visited_by_id.each_pair do |id, count|
-      location_name = Location.where(id: id).last.name
-      most_visited_name[location_name] = count
-    end
-
-    most_visited_name
   end
 
   def get_most_used_keywords_last_seven_days(limit)
@@ -106,5 +97,66 @@ module AhoyQueries
       .order('COUNT(id) DESC')
       .limit(limit)
       .count
+  end
+
+  def get_search_details_leading_to_location_visit_last_seven_days(location_id)
+    events_for_location_id =
+      self.get_events_for_location_id_last_seven_days(location_id)
+
+    search_keywords = []
+    events_for_location_id.each do |event|
+      search_keywords << get_search_keywords(event)
+    end
+
+    count_and_sort_unique_keywords(search_keywords)
+  end
+
+
+  #######################
+  #  auxiliary methods
+  #######################
+
+  def get_name_location(location_id)
+    Location.where(id: id).last.name
+  end
+
+  def get_events_for_location_id_last_seven_days(location_id)
+    Ahoy::Event
+      .where(name: 'Location Visit', time: interval_by_date_range(LAST_7_DAYS))
+      .where(properties: {id: location_id})
+      .all
+  end
+
+  def get_last_search_event_before_location_visit(event_id:, visit_id:)
+    Ahoy::Event
+      .where(name: 'Perform Search', time: interval_by_date_range(LAST_7_DAYS))
+      .where(visit_id: visit_id)
+      .where("id < ?", event_id)
+      .last
+  end
+
+  def get_search_keywords(event)
+    search_details =
+      get_last_search_event_before_location_visit(
+        event_id: event.id,
+        visit_id: event.visit_id)
+
+    keywords =
+      if search_details
+        search_details.properties['keywords']
+      else
+        "Not from search results page"
+      end
+  end
+
+  def count_and_sort_unique_keywords(search_keywords)
+    distinct_keywords = search_keywords.to_set
+
+    keywords_and_count = {}
+    distinct_keywords.each do |keyword|
+      keywords_and_count[keyword] = search_keywords.count(keyword)
+    end
+
+    keywords_and_count.sort_by { |_, value| -value }.to_h
   end
 end

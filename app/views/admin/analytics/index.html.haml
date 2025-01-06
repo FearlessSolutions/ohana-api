@@ -1,4 +1,30 @@
 %h1 Analytics
 
-= render 'admin/analytics/main/main_analytics'
-= render 'admin/analytics/search/search_analytics'
+%div.tabs-row
+  .tab.active{ id: 'main-tab' }
+    %h2 Main
+  .tab{ id: 'search-tab' }
+    %h2 Search
+%section.tab-container.active{ id: 'main-tab-analytics' }
+  = render 'admin/analytics/main/main_analytics'
+%section.tab-container{ id: 'search-tab-analytics' }
+  = render 'admin/analytics/search/search_analytics'
+
+
+:javascript
+  $(document).ready(function() {
+
+    $('.tab').on('click', function() {
+      $('.tab').each( function(){
+        $(this).removeClass('active');
+      });
+      $('.tab-container').each( function(){
+        $(this).removeClass('active');
+      });
+
+      $(this).addClass('active');
+      id = $(this).attr('id');
+      $(`\#${id}-analytics`).addClass('active');
+    });
+
+  });
