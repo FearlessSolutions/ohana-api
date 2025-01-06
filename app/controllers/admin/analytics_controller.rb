@@ -6,7 +6,6 @@ class Admin
     layout 'admin'
 
     def index
-      @landing_page = root_url
     end
 
     def update

@@ -25,7 +25,7 @@
     = new_service_count(@start_date, @end_date)
   %tr
     %td # of Homepage views
-    = total_homepage_views(@landing_page)
+    = total_homepage_views
   %tr
     %td # of Homepage Views in date range:
-    = new_homepage_views(@landing_page, @start_date, @end_date)
+    = new_homepage_views(@start_date, @end_date)

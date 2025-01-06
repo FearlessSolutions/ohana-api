@@ -35,15 +35,18 @@ class Admin
       new_services.html_safe
     end
 
-    def total_homepage_views(landing_page)
-      count_homepage_views = "<td>#{AhoyQueries.get_total_homepage_views(landing_page: landing_page)}</td>"
+
+    # homepage visits figures
+    def total_homepage_views
+      count_homepage_views = "<td>#{AhoyQueries.get_total_homepage_views}</td>"
       count_homepage_views.html_safe
     end
 
-    def new_homepage_views(landing_page, start_date, end_date)
+    def new_homepage_views(start_date, end_date)
       new_homepage_views =
-        "<td>#{AhoyQueries.get_new_homepage_views(landing_page: landing_page,
-                                                  date_range: date_range(start_date, end_date))}</td>"
+        "<td>
+          #{AhoyQueries.get_new_homepage_views(date_range: date_range(start_date, end_date))}
+        </td>"
       new_homepage_views.html_safe
     end
 
@@ -78,6 +81,11 @@ class Admin
     def search_details_leading_to_location_visit(location_id)
       AhoyQueries
         .get_search_details_leading_to_location_visit_last_seven_days(location_id)
+    end
+
+    def get_location_name(location_id)
+      location_name = "<td>#{Location.where(id: location_id).last.name}</td>"
+      location_name.html_safe
     end
   end
 end

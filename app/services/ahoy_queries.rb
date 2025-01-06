@@ -45,14 +45,13 @@ module AhoyQueries
     end
   end
 
-  def get_total_homepage_views(landing_page:)
-    Ahoy::Visit.where(landing_page: landing_page).count
+  def get_total_homepage_views
+    Ahoy::Event.where(name: 'Homepage Visit').count
   end
 
-  def get_new_homepage_views(landing_page:, date_range:)
-    Ahoy::Visit.
-      where(landing_page: landing_page).
-      where(started_at: date_range).count
+  def get_new_homepage_views(date_range:)
+    Ahoy::Event.
+      where(name: 'Homepage Visit', time: date_range).count
   end
 
   def get_total_number_of_visits_last_seven_days

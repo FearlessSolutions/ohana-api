@@ -1,4 +1,8 @@
 module AhoyEventsHelper
+  def fire_homepage_view_event
+    ahoy.track("Homepage Visit")
+  end
+
   def fire_location_view_event
     ahoy.track("Location Visit", id: @location.id)
   end
