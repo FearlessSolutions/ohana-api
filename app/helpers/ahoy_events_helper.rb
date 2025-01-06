@@ -12,7 +12,7 @@ module AhoyEventsHelper
 
   def fire_perform_search_event
     ahoy.track( "Perform Search",
-                keywords: params[:keyword],
+                keywords: params[:keyword].downcase,
                 main_category: @main_category_selected_name,
                 subcategories: @selected_categories,
                 results: @search.locations.total_count)

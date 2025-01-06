@@ -62,6 +62,14 @@ class Admin
       total_searches.html_safe
     end
 
+    def number_of_visits_started_on_homepage
+      visits_started_on_homepage =
+        "<td>
+          #{AhoyQueries.get_number_of_visits_started_on_homepage_last_seven_days}
+        </td>"
+      visits_started_on_homepage.html_safe
+    end
+
     def most_visited_locations
       AhoyQueries.get_most_visited_locations_last_seven_days(5)
     end
@@ -84,7 +92,10 @@ class Admin
     end
 
     def get_location_name(location_id)
-      location_name = "<td>#{Location.where(id: location_id).last.name}</td>"
+      location_name =
+        "<td><strong>
+          #{Location.where(id: location_id).last.name}
+        </strong></td>"
       location_name.html_safe
     end
   end

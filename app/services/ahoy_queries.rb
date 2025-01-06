@@ -70,7 +70,8 @@ module AhoyQueries
 
   def get_total_number_of_searches_last_seven_days
     Ahoy::Event
-      .where(name: 'Perform Search', time: interval_by_date_range(LAST_7_DAYS)).count
+      .where(name: 'Perform Search', time: interval_by_date_range(LAST_7_DAYS))
+      .count
   end
 
   def get_avg_number_searches_per_visit_with_searches_last_seven_days
@@ -80,22 +81,43 @@ module AhoyQueries
     total_searches/total_visits
   end
 
-  def get_most_visited_locations_last_seven_days(limit)
+  def get_number_of_visits_started_on_homepage_last_seven_days
+    all_visits_ids =
       Ahoy::Event
-        .where(name: 'Location Visit', time: interval_by_date_range(LAST_7_DAYS))
-        .group("properties -> 'id'")
-        .order('COUNT(id) DESC')
-        .limit(limit)
+        .where(time: interval_by_date_range(LAST_7_DAYS))
+        .group(:visit_id)
         .count
+
+    visits_from_homepage = 0
+
+    all_visits_ids.each_key do |visit_id|
+      first_event_in_visit = Ahoy::Event.where(visit_id: visit_id).first
+
+      if first_event_in_visit['name'] == 'Homepage Visit'
+        visits_from_homepage += 1
+      end
+    end
+
+    visits_from_homepage
   end
 
-  def get_most_used_keywords_last_seven_days(limit)
+  def get_most_visited_locations_last_seven_days(limit)
     Ahoy::Event
-      .where(name: 'Perform Search', time: interval_by_date_range(LAST_7_DAYS))
-      .group("properties -> LOWER('keywords') ")
+      .where(name: 'Location Visit', time: interval_by_date_range(LAST_7_DAYS))
+      .group("properties -> 'id'")
       .order('COUNT(id) DESC')
       .limit(limit)
       .count
+  end
+
+  def get_most_used_keywords_last_seven_days(limit)
+    most_used_keywords =
+      Ahoy::Event
+        .where(name: 'Perform Search', time: interval_by_date_range(LAST_7_DAYS))
+        .group("properties -> (LOWER('keywords'))")
+        .order('COUNT(id) DESC')
+        .limit(limit+5)
+        .count
   end
 
   def get_search_details_leading_to_location_visit_last_seven_days(location_id)
@@ -114,10 +136,6 @@ module AhoyQueries
   #######################
   #  auxiliary methods
   #######################
-
-  def get_name_location(location_id)
-    Location.where(id: id).last.name
-  end
 
   def get_events_for_location_id_last_seven_days(location_id)
     Ahoy::Event
@@ -144,7 +162,7 @@ module AhoyQueries
       if search_details
         search_details.properties['keywords']
       else
-        "Not from search results page"
+        "From direct link"
       end
   end
 
