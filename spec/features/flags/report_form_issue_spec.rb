@@ -21,16 +21,18 @@ feature 'report_form_issue' do
       allow(Location).to receive(:get).and_return(dummy_loc)
       visit new_flag_path(resource_id: 1, resource_type: 'Location')
 
-      expect(find_field('Email').value).to eq @user.email
+      field_label = 'You must provide an email address and you agree to being contacted regarding the resource.'
+      expect(find_field(field_label).value).to eq @user.email
     end
   end
 
   context 'for signed out user' do
-    it "should show email field as an empty field", skip_ci: true do
+    it "should show email field with a placeholder", skip_ci: true do
       allow(Location).to receive(:get).and_return(dummy_loc)
       visit new_flag_path(resource_id: 1, resource_type: 'Location')
 
-      expect(find_field('Email').value).to eq nil
+      field_label = 'You must provide an email address and you agree to being contacted regarding the resource.'
+      expect(find_field(field_label)["placeholder"]).to eq 'your.email@example.com'
     end
   end
 end

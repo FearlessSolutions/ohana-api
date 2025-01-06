@@ -15,7 +15,7 @@ class LocationsSearch
   attribute :accessibility, type: Array
   attribute :lat, type: Float
   attribute :long, type: Float
-  attribute :distance, type: Integer
+  attribute :distance, type: Float
   attribute :languages, type: Array
 
   attribute :page, type: String

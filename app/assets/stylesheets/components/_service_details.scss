@@ -1,0 +1,157 @@
+
+// Service detail values that have bulleted lists (languages, homepage, service areas).
+.service-opt-box ul,
+.services-box ul {
+  margin-bottom: 0;
+  margin-left: 20px;
+  list-style-type: square;
+  li {
+    color: $main-list-mark-color; // IE fallback
+    > span {
+      color: shade($grey, 70);
+    }
+  }
+}
+
+.service-opt-box {
+  > section > section
+  {
+    @include inline-block();
+    vertical-align: top;
+  }
+}
+
+// Services section
+.services-box {
+  margin-top: 40px;
+  margin-bottom: 40px;
+
+  h3.name {
+    display: inline;
+    color: $greyscale_dark;
+    font-size: $font_size_110;
+  }
+
+  .hr-service-divider {
+    margin: 0;
+    border-top: 1px solid $greyscale_light;
+  }
+
+  .service-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: left;
+  }
+
+  .service-title-grey {
+    width: 100%;
+    margin: 0;
+    background-color: $greyscale_lightest;
+  }
+
+  .service-title-blue {
+    width: 100%;
+    margin: 0;
+    background-color: rgba($light-blue, .5);
+  }
+
+  .service-row {
+    display: flex;
+    align-items: center;
+    min-height: 3rem;
+    padding: 1rem 0;
+    width: 100%;
+    margin: 0;
+
+    &:first-of-type{
+      margin-top: -8px;
+    }
+
+    &:hover {
+      background-color: rgba($blue, .25);
+    }
+
+    i.fa.fa-chevron-down {
+      color: $greyscale_dark;
+      margin: 0px 10px;
+    }
+
+    i.fa.fa-chevron-up {
+      color: $greyscale_dark;
+      margin: 0px 10px;
+    }
+
+    .service-title {
+      display: inline;
+
+      .expanded {
+        font-weight: bold;
+      }
+
+      .alternate-name{
+        margin-left: 5px;
+        font-size: $font_size_110;
+        color: $greyscale_dark;
+      }
+    }
+
+  }
+
+  section.service-details-card {
+    padding-bottom: 2rem;
+    box-shadow: $greyscale_light 0px -15px 36px -28px inset;
+
+    h4 {
+      color: $blue;
+      font-size: $font_size_105;
+      font-weight: 500;
+    }
+
+    a{
+      color: $blue;
+      font-weight: 500;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    li::marker {
+      color: $orange;
+    }
+  }
+
+  .collapsed {
+    display: none;
+  }
+
+  .status {
+    font-size: $font_size_95;
+    color: $alert-error-base;
+  }
+
+  // The service's contact methods (website, email, phone).
+  .contact-box {
+    padding-bottom: 0;
+  }
+  .contact-box > section,
+  .contact-box .phone {
+    @include inline-block();
+    // Overrides compass inline-block mixin setting.
+    // Needed for correct font alignment.
+    vertical-align: baseline;
+    margin-right: 10px;
+    margin-bottom: 20px;
+  }
+  .contact-box .phones {
+    margin-bottom: 0;
+  }
+  .schedules-box {
+    @include inline-block();
+    vertical-align: top;
+    h1 {
+      margin-bottom: 10px;
+    }
+  }
+}

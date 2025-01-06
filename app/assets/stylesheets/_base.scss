@@ -615,7 +615,7 @@ body {
     z-index: $layer-7;
     text-align: left;
 
-    > .static-content, {
+    > .static-content {
       @include inline-block();
     }
   }
@@ -660,9 +660,6 @@ body {
       color: $greyscale_midtone;
     }
   }
-
-  > *:last-child {
-  }
 }
 
 #results-entries {
@@ -684,9 +681,6 @@ body {
   font-size: 0.9em;
   margin-bottom: 15px;
   text-align: left;
-}
-
-#results-container.result-map-showing .results-header {
 }
 
 // Hide static content when header is floating.
@@ -740,7 +734,7 @@ body {
       }
 
       > em {
-        font-color: $greyscale_midtone;
+        color: $greyscale_midtone;
       }
 
       ul {
@@ -1083,7 +1077,7 @@ body {
       line-height: 1;
       white-space: nowrap;
       flex-shrink: 0;
-      color: #007FAA;
+      color: $blue;
 
       .hide-map, .show-map {
         display: flex;
@@ -1400,20 +1394,6 @@ body {
     }
   }
 
-  // Location detail values that have bulleted lists (languages, homepage, service areas).
-  .service-opt-box ul,
-  .services-box ul {
-    margin-bottom: 0;
-    margin-left: 20px;
-    list-style-type: square;
-    li {
-      color: $main-list-mark-color; // IE fallback
-      > span {
-        color: shade($grey, 70);
-      }
-    }
-  }
-
   // Details view sidebar.
   > .location-sidebar-box {
    
@@ -1441,8 +1421,6 @@ body {
       }  
     }
 
-    > .location-sidebar:first-child {
-    }
     > .location-sidebar {
       //margin-bottom: 20px;
       background: rgba($purple, .1);
@@ -1454,9 +1432,9 @@ body {
       width: 376px;
 
       .tag {
-        color: #007FAA;
+        color: $blue;
         background: rgba(0, 127, 170, 0.05);
-        border: 1px solid #007FAA;
+        border: 1px solid $blue;
         border-radius: 100px;
         padding: 2px 8px;
         text-transform: capitalize;
@@ -1541,7 +1519,7 @@ body {
     margin-top: 14px;
     max-height: 750px;
     position: static;
-    background-color: #007FAA;
+    background-color: $blue;
     border-radius: 8px;
   
     .markdown-short-desc, .short-desc, a, .phone-type, section {
@@ -1566,6 +1544,14 @@ body {
   .flex-column {
     max-width: 50%;
     flex-grow: 1;
+
+    li:hover{
+      text-decoration: underline;
+    }
+
+    a:hover{
+      text-decoration: underline;
+    }
   }
 
   .overview-flex-container > .flex-column:first-child {
@@ -1587,80 +1573,20 @@ body {
   }
 
   .favorite-toggle{
-    color: #007FAA;
+    color: $blue;
     cursor: pointer;
     border: none;
     background: none;
   }
 
   .button-share-email > * {
-    color: #007FAA;
+    color: $blue;
   }
 
   .button-back > * {
     color: rgba(27, 27, 27, 0.75);
   }
 
-
-  .service-opt-box {
-    > section > section
-    {
-      @include inline-block();
-      vertical-align: top;
-    }
-  }
-
-  .services-box {
-    margin-top: 40px;
-    margin-bottom: 40px;
-
-    h1, h4{
-      font-size: 16px;
-      line-height: 19px;
-      text-transform: uppercase;
-      color: #222222;
-    }
-
-    .service {
-      background: #F1F1F1;
-      border-radius: 8px;
-      margin-top: 15px;
-    }
-
-    .status {
-      font-size: $font_size_95;
-      color: $alert-error-base;
-    }
-    // The service's contact methods (website, email, phone).
-    .contact-box {
-      padding-bottom: 0;
-    }
-    .contact-box > section,
-    .contact-box .phone {
-      @include inline-block();
-      // Overrides compass inline-block mixin setting.
-      // Needed for correct font alignment.
-      vertical-align: baseline;
-      margin-right: 10px;
-      margin-bottom: 20px;
-    }
-    .contact-box .phones {
-      margin-bottom: 0;
-    }
-    .title-box {
-      padding-bottom: 0;
-      margin-left: 0;
-      font-size: 18px;
-      color: #222222;
-    }
-    .schedules-box {
-      @include inline-block();
-      vertical-align: top;
-      h1 {
-        margin-bottom: 10px;
-      }
-    }
-  }
 
   .map {
     position: relative;

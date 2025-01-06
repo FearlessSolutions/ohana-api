@@ -1,5 +1,5 @@
 - if service.description.present?
   %section.service_desc
-    %h1= t('service_fields.description')
+    %h4= t('service_fields.description')
     %span.character-limited
       %span.markdown= render_markdown(service.description)

@@ -2,3 +2,14 @@
 %p Thanks for signing up for an account on #{t('titles.brand')}!
 %p You can confirm your account email through the link below:
 %p= link_to 'Confirm my account', confirmation_url(@resource, confirmation_token: @token)
+%p
+  %img{ src: asset_url(SETTINGS[:site_logo]), alt: "#{t('titles.brand')} Logo" }
+%p You received this email because of your registration with #{t('titles.brand')}. Do not reply to this email.
+%p
+  Baltimore City Health Department
+  %br/
+  City Hall - Room 250
+  %br/
+  100 N. Holliday St
+  %br/
+  Baltimore, MD 21202

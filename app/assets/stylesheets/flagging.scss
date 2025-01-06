@@ -1,3 +1,5 @@
+@import "variables";
+
 input.report-input-checkbox {
   width: 3% !important;
   float: left;
@@ -8,6 +10,45 @@ label.report-label {
   width: 97%;
 }
 
-.flag-form p {
-  padding-bottom: 1em !important;
+.form-container {
+  display: flex;
+  align-items: flex-start;
+  flex-flow: column wrap;
+  padding: 10%;
+  width: 70vmin;
+  margin-top: 1rem;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+
+  p {
+    padding-bottom: 1em !important;
+    width: 100%;
+  }
+
+  button {
+    align-self: center;
+    margin-top: 1rem;
+  }
+
+  .js-input-field {
+    max-width: 100%;
+    margin: 1rem 0;
+    margin-bottom: 0;
+  }
+
+  textarea.alert-mode, input.alert-mode{
+    outline: 1px solid $red !important;
+  }
+
+  label.detail {
+    flex: 1;
+    font-size: $font_size_95;
+    color: $greyscale_dark;
+  }
+
+  label.alert-mode {
+    color: $red !important;
+  }
+
+
+
 }
