@@ -67,6 +67,7 @@ class LocationsController < ApplicationController
   def show
     id = params[:id].split('/').last
     @location = Location.get(id)
+    fire_location_view_event
 
     if current_user.present?
       @current_user = current_user

@@ -58,6 +58,7 @@ group :test, :development do
   gem 'faker', git: 'https://github.com/faker-ruby/faker.git', ref: '91950218dd39119e420ca431fc9fae09b53986c7'
   gem 'rspec-its'
   gem 'rspec-rails', '~> 4.0'
+  gem 'pry-rails'
 end
 
 group :test do
@@ -79,7 +80,6 @@ group :development do
   gem 'derailed'
   gem 'flamegraph'
   gem 'letter_opener'
-  gem 'pry-rails'
   gem 'rack-mini-profiler'
   gem 'stackprof'
 end

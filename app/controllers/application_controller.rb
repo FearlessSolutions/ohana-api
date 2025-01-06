@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
   include Pundit::Authorization
+  include AhoyEventsHelper
   # Prevent CSRF attacks by raising an exception (with: :exception),
   protect_from_forgery with: :exception
 

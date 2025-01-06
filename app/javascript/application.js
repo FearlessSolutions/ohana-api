@@ -1,5 +1,6 @@
 // Manages the application initialization for all pages.
 import alerts from './app/alerts';
+import ahoy from "ahoy.js"
 
 import 'core-js'
 import 'regenerator-runtime/runtime'

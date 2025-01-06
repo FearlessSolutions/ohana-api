@@ -25,6 +25,7 @@ class Admin
       @location = Location.find(params[:id])
       @org = @location.organization
       @updated = @location.updated_at
+
       authorize @location
     end
 
@@ -83,6 +84,7 @@ class Admin
                    page(params[:page]).per(params[:per_page])
       @locations.map! { |location| location.append(@location = Location.find(location[0])) }
     end
+
 
     private
 

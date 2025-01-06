@@ -8,6 +8,18 @@ module ApplicationHelper
     last_updated_text.html_safe
   end
 
+  def number_of_visits(location_id)
+    visit_html_list = ""
+    date_ranges = AhoyQueries::DATE_RANGE_OPTIONS
+
+    date_ranges.each do |date_range|
+      visits_per_date_range = AhoyQueries.get_visits_by_location_and_date_range(location_id: location_id, date_range: date_range)
+      visit_html_list << "<li>#{date_range}: #{visits_per_date_range}</li>"
+    end
+
+    visit_html_list.html_safe
+  end
+
   def upload_server
     Rails.configuration.upload_server
   end

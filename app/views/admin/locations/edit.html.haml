@@ -1,6 +1,9 @@
 .content-box
   %h2= @location.name == @org.try(:name) ? @location.name : "#{@org.try(:name)} / #{@location.name}"
   = last_updated_at(@updated)
+  %p
+    Number of times visited:
+    %ul
+      = number_of_visits(@location.id)
 = form_for [:admin, @location], html: { class: 'edit-entry', novalidate: true } do |f|
   = render 'form', f: f, location: @location, org: @org
-
