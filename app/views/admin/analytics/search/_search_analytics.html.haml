@@ -1,35 +1,38 @@
 
-%h3 Report for the last 7 days
-%p From #{Date.current-7.days} to #{Date.yesterday}
+%h3 Report for the last 7 days (#{Date.current-7.days} - #{Date.yesterday})
 
 
 %h4 Search data overview
 %table.table
   %tr
-    %td Total number of visits
-    = total_number_of_visits
+    %th Metric
+    %th Total
   %tr
-    %td Total number of searches
-    = total_number_of_searches
+    %td Number of visits
+    %td= total_number_of_visits
+  %tr
+    %td Number of searches
+    %td= total_number_of_searches
   %tr
     %td Average number of searches per visit (includes only visits with searches)
-    = avg_number_searches_per_visit_with_searches
+    %td= avg_number_searches_per_visit_with_searches
   %tr
-    %td Number of visits started on homepage
-    = number_of_visits_started_on_homepage
+    %td.bottom Number of visits started on homepage
+    %td.bottom= number_of_visits_started_on_homepage
 
 
-%h4 Most used keywords in searches
+%h4 Most used search keywords
 %table.table
   %tr
     %th Ranking
     %th Keywords
     %th # of times searched
   - most_used_keywords.each_with_index do |keyword, i|
+    - - td_class = (i == most_used_keywords.length-1)? "bottom" : ""
     %tr
-      %td #{i+1}
-      %td #{keyword.first}
-      %td #{keyword.last}
+      %td{class: td_class} #{i+1}
+      %td{class: td_class} #{keyword.first}
+      %td{class: td_class} #{keyword.last}
 
 
 %h4 Most visited locations
@@ -42,13 +45,13 @@
     - location_id = location.first
     %tr
       %td #{i+1}
-      = get_location_name(location_id)
+      %td= get_location_name(location_id)
       %td #{location.last}
-    - search_keywords = search_details_leading_to_location_visit(location_id)
-    - search_keywords.each do |keywords|
-      %tr
-        %td
-        %td - #{keywords.first} (#{keywords.second})
-        %td
-      %tr
 
+    - search_keywords = search_details_leading_to_location_visit(location_id)
+    - search_keywords.each_with_index do |keywords, j|
+      - td_class = (j == search_keywords.length-1)? "bottom" : ""
+      %tr
+        %td{class: td_class}
+        %td{class: td_class} - #{keywords.first} (#{keywords.second})
+        %td{class: td_class}

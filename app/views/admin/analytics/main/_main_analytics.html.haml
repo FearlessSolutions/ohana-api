@@ -7,25 +7,25 @@
 %table.table
   %tr
     %td # of Organizations:
-    = organizations_count
+    %td= organizations_count
   %tr
     %td # of Organizations created in date range:
-    = new_org_count(@start_date, @end_date)
+    %td= new_org_count(@start_date, @end_date)
   %tr
     %td # of Locations:
-    = locations_count
+    %td= locations_count
   %tr
     %td # of Locations created in date range:
-    = new_location_count(@start_date, @end_date)
+    %td= new_location_count(@start_date, @end_date)
   %tr
     %td # of Services:
-    = services_count
+    %td= services_count
   %tr
     %td # of Services created in date range:
-    = new_service_count(@start_date, @end_date)
+    %td= new_service_count(@start_date, @end_date)
   %tr
     %td # of Homepage views
-    = total_homepage_views
+    %td= total_homepage_views
   %tr
     %td # of Homepage Views in date range:
-    = new_homepage_views(@start_date, @end_date)
+    %td= new_homepage_views(@start_date, @end_date)

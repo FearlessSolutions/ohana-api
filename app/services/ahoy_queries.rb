@@ -120,16 +120,15 @@ module AhoyQueries
         .count
   end
 
-  def get_search_details_leading_to_location_visit_last_seven_days(location_id)
-    events_for_location_id =
-      self.get_events_for_location_id_last_seven_days(location_id)
+  def get_search_details_leading_to_location_visit_last_seven_days(location_id, limit)
+    events_for_location_id = get_events_for_location_id_last_seven_days(location_id)
 
     search_keywords = []
     events_for_location_id.each do |event|
       search_keywords << get_search_keywords(event)
     end
 
-    count_and_sort_unique_keywords(search_keywords)
+    count_and_sort_unique_keywords(search_keywords, limit)
   end
 
 
@@ -166,7 +165,7 @@ module AhoyQueries
       end
   end
 
-  def count_and_sort_unique_keywords(search_keywords)
+  def count_and_sort_unique_keywords(search_keywords, limit)
     distinct_keywords = search_keywords.to_set
 
     keywords_and_count = {}
@@ -174,6 +173,10 @@ module AhoyQueries
       keywords_and_count[keyword] = search_keywords.count(keyword)
     end
 
+    # sort keywords by descending number of counts
     keywords_and_count.sort_by { |_, value| -value }.to_h
+
+    # return array with up to the required number of elements
+    keywords_and_count.to_a.slice(0, limit)
   end
 end

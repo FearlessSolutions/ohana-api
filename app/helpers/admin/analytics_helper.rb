@@ -6,67 +6,63 @@ class Admin
 
     # database figures
     def organizations_count
-      total_orgs = "<td>#{Organization.all.count}</td>"
+      total_orgs = "#{Organization.all.count}"
       total_orgs.html_safe
     end
 
     def new_org_count(start_date, end_date)
-      new_orgs = "<td>#{Organization.where(created_at: date_range(start_date, end_date)).count}</td>"
+      new_orgs = "#{Organization.where(created_at: date_range(start_date, end_date)).count}"
       new_orgs.html_safe
     end
 
     def locations_count
-      total_locations = "<td>#{Location.all.count}</td>"
+      total_locations = "#{Location.all.count}"
       total_locations.html_safe
     end
 
     def new_location_count(start_date, end_date)
-      new_locations = "<td>#{Location.where(created_at: date_range(start_date, end_date)).count}</td>"
+      new_locations = "#{Location.where(created_at: date_range(start_date, end_date)).count}"
       new_locations.html_safe
     end
 
     def services_count
-      total_services = "<td>#{Service.all.count}</td>"
+      total_services = "#{Service.all.count}"
       total_services.html_safe
     end
 
     def new_service_count(start_date, end_date)
-      new_services = "<td>#{Service.where(created_at: date_range(start_date, end_date)).count}</td>"
+      new_services = "#{Service.where(created_at: date_range(start_date, end_date)).count}"
       new_services.html_safe
     end
 
 
     # homepage visits figures
     def total_homepage_views
-      count_homepage_views = "<td>#{AhoyQueries.get_total_homepage_views}</td>"
+      count_homepage_views = "#{AhoyQueries.get_total_homepage_views}"
       count_homepage_views.html_safe
     end
 
     def new_homepage_views(start_date, end_date)
       new_homepage_views =
-        "<td>
-          #{AhoyQueries.get_new_homepage_views(date_range: date_range(start_date, end_date))}
-        </td>"
+        "#{AhoyQueries.get_new_homepage_views(date_range: date_range(start_date, end_date))}"
       new_homepage_views.html_safe
     end
 
 
     # search related figures
     def total_number_of_visits
-      total_visits = "<td>#{AhoyQueries.get_total_number_of_visits_last_seven_days}</td>"
+      total_visits = "#{AhoyQueries.get_total_number_of_visits_last_seven_days}"
       total_visits.html_safe
     end
 
     def total_number_of_searches
-      total_searches = "<td>#{AhoyQueries.get_total_number_of_searches_last_seven_days}</td>"
+      total_searches = "#{AhoyQueries.get_total_number_of_searches_last_seven_days}"
       total_searches.html_safe
     end
 
     def number_of_visits_started_on_homepage
       visits_started_on_homepage =
-        "<td>
-          #{AhoyQueries.get_number_of_visits_started_on_homepage_last_seven_days}
-        </td>"
+        "#{AhoyQueries.get_number_of_visits_started_on_homepage_last_seven_days}"
       visits_started_on_homepage.html_safe
     end
 
@@ -80,22 +76,18 @@ class Admin
 
     def avg_number_searches_per_visit_with_searches
       avg_searches_per_visit =
-        "<td>#{
-          AhoyQueries.get_avg_number_searches_per_visit_with_searches_last_seven_days}
-        </td>"
+        "#{AhoyQueries.get_avg_number_searches_per_visit_with_searches_last_seven_days}"
       avg_searches_per_visit.html_safe
     end
 
     def search_details_leading_to_location_visit(location_id)
       AhoyQueries
-        .get_search_details_leading_to_location_visit_last_seven_days(location_id)
+        .get_search_details_leading_to_location_visit_last_seven_days(location_id, 3)
     end
 
     def get_location_name(location_id)
       location_name =
-        "<td><strong>
-          #{Location.where(id: location_id).last.name}
-        </strong></td>"
+        "<strong>#{Location.where(id: location_id).last.name}</strong>"
       location_name.html_safe
     end
   end
