@@ -29,9 +29,9 @@ module AhoyQueries
     when YESTERDAY
       (Date.yesterday.to_time(:utc).beginning_of_day..yesterday_end)
     when LAST_7_DAYS
-      ((today - 7.days)..today.end_of_day)
+      ((today - 8.days)..yesterday_end)
     when LAST_30_DAYS
-      ((today - 30.days)..today.end_of_day)
+      ((today - 31.days)..yesterday_end)
     when LAST_MONTH
       last_month = today.prev_month
       (last_month.beginning_of_month..last_month.end_of_month)
@@ -39,7 +39,7 @@ module AhoyQueries
       prev_quarter = today.prev_quarter
       (prev_quarter.beginning_of_quarter..prev_quarter.end_of_quarter)
     when LAST_12_MONTHS
-      ((today.prev_year)..today.end_of_day)
+      ((today.prev_year)..yesterday_end)
     else
       #not valid date range
     end
@@ -114,9 +114,9 @@ module AhoyQueries
     most_used_keywords =
       Ahoy::Event
         .where(name: 'Perform Search', time: interval_by_date_range(LAST_7_DAYS))
-        .group("properties -> (LOWER('keywords'))")
+        .group("properties -> 'keywords'")
         .order('COUNT(id) DESC')
-        .limit(limit+5)
+        .limit(limit)
         .count
   end
 
