@@ -50,8 +50,7 @@ module AhoyQueries
   end
 
   def get_new_homepage_views(date_range:)
-    Ahoy::Event.
-      where(name: 'Homepage Visit', time: date_range).count
+    Ahoy::Event.where(name: 'Homepage Visit', time: date_range).count
   end
 
   def get_total_number_of_visits_last_seven_days
@@ -120,6 +119,21 @@ module AhoyQueries
         .count
   end
 
+  def determine_origin_of_location_visit_last_seven_days(location_id)
+    # get all Location Visit events for the given location id
+    visit_events_for_location_id = get_location_visit_events_last_seven_days(location_id)
+
+    # get the Perform Search event immediately before the Location Visit
+    preceding_search_events =
+      visit_events_for_location_id.map do |event|
+        get_search_event_preceding_location_visit(
+          event_id: event.id,
+          visit_id: event.visit_id) || nil
+    end
+
+    preceding_search_events
+  end
+
   def get_search_details_leading_to_location_visit_last_seven_days(location_id, limit)
     events_for_location_id = get_events_for_location_id_last_seven_days(location_id)
 
@@ -131,61 +145,43 @@ module AhoyQueries
     count_and_sort_unique_keywords(search_keywords, limit)
   end
 
+  def get_keywords_from_search_events(search_events)
+    keywords_list = []
+    search_events.each do |event_id|
+      next if event_id.nil?
+      keywords_list << get_search_events_keywords(event_id)
+    end
+
+    keywords_list
+  end
+
 
   #######################
   #  auxiliary methods
   #######################
 
-  def get_events_for_location_id_last_seven_days(location_id)
+  def get_location_visit_events_last_seven_days(location_id)
     Ahoy::Event
       .where(name: 'Location Visit', time: interval_by_date_range(LAST_7_DAYS))
       .where(properties: {id: location_id})
       .all
   end
 
-  def get_last_search_event_before_location_visit(event_id:, visit_id:)
+  def get_search_event_preceding_location_visit(event_id:, visit_id:)
+    preceding_search_event =
+      Ahoy::Event
+        .where(name: 'Perform Search', time: interval_by_date_range(LAST_7_DAYS))
+        .where(visit_id: visit_id)
+        .where("id < ?", event_id)
+        .last
+
+    search_event_id = preceding_search_event.nil? ? nil : preceding_search_event.id
+  end
+
+  def get_search_events_keywords(event_id)
     Ahoy::Event
-      .where(name: 'Perform Search', time: interval_by_date_range(LAST_7_DAYS))
-      .where(visit_id: visit_id)
-      .where("id < ?", event_id)
+      .where(id: event_id)
       .last
-  end
-
-  def get_search_keywords(event)
-    search_details =
-      get_last_search_event_before_location_visit(
-        event_id: event.id,
-        visit_id: event.visit_id)
-
-    keywords =
-      if search_details
-        search_details.properties['keywords']
-      else
-        "From direct link"
-      end
-  end
-
-  def count_and_sort_unique_keywords(search_keywords, limit)
-    distinct_keywords = search_keywords.to_set
-
-    keywords_and_count = {}
-    distinct_keywords.each do |keyword|
-      keywords_and_count[keyword] = search_keywords.count(keyword)
-    end
-
-    # sort keywords by descending number of counts
-    keywords_and_count.sort_by { |_, value| -value }.to_h
-
-    # return hash with up to the required number of elements
-    top_keywords = keywords_and_count.keys
-
-    sliced_hash = {}
-    top_keywords.each_with_index do |keyword, i|
-      if i < limit
-        sliced_hash[keyword] = keywords_and_count[keyword]
-      end
-    end
-
-    sliced_hash
+      .properties['keywords']
   end
 end

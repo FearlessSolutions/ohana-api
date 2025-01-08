@@ -49,17 +49,14 @@
         = get_location_name(location_id)
       %td #{location.last}
 
-    - search_keywords = search_details_leading_to_location_visit(location_id)
-    - from_direct_links = search_keywords['From direct link'] || 0
+    - location_visit_origin_events = origin_of_location_visit(location_id)
     %tr.hidden
       %td.bottom
       %td.bottom
-        %p From keyword searches: #{search_keywords.values.sum - from_direct_links}
-        - search_keywords.each_with_index do |keywords, j|
-          - if keywords.first != 'From direct link'
-            %p - #{keywords.first} (#{keywords.second})
+        %p From keyword searches: #{events_from_keyword_searches(location_visit_origin_events)}
+        = top_keywords_and_count(location_visit_origin_events)
       %td.bottom
-        %p From direct links: #{from_direct_links}
+        %p From direct links: #{events_from_direct_links(location_visit_origin_events)}
       %td.bottom
 
 :javascript

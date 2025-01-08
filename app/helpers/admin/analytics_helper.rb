@@ -80,15 +80,56 @@ class Admin
       avg_searches_per_visit.html_safe
     end
 
-    def search_details_leading_to_location_visit(location_id)
-      AhoyQueries
-        .get_search_details_leading_to_location_visit_last_seven_days(location_id, 3)
+    def origin_of_location_visit(location_id)
+      preceding_search_events =
+        AhoyQueries.determine_origin_of_location_visit_last_seven_days(location_id)
+    end
+
+    def events_from_keyword_searches(events)
+      "#{events.select{|x| !x.nil?}.length}".html_safe
+    end
+
+    def events_from_direct_links(events)
+      "#{events.count(nil)}".html_safe
+    end
+
+    def top_keywords_and_count(location_visit_origin_events)
+      return ''.html_safe if location_visit_origin_events.empty?
+
+      search_keywords =
+        AhoyQueries.get_keywords_from_search_events(location_visit_origin_events)
+
+      keywords_and_count = count_and_sort_unique_keywords(search_keywords)
+
+      #limit the results to the top 3 keywords
+      keywords = keywords_and_count.keys.slice(0, 3)
+
+      display = "<ul>"
+      keywords.each do |keyword|
+        keyword_count = keywords_and_count[keyword]
+        keyword = "<em>[no search keywords]</em>" if keyword == ''
+        display += "<li> #{keyword} (#{keyword_count})</li>"
+      end
+      display += "</ul>"
+      display.html_safe
     end
 
     def get_location_name(location_id)
       location_name =
         "<strong>#{Location.where(id: location_id).last.name}</strong>"
       location_name.html_safe
+    end
+
+    def count_and_sort_unique_keywords(search_keywords)
+      distinct_keywords = search_keywords.to_set
+
+      keywords_and_count = {}
+      distinct_keywords.each do |keyword|
+        keywords_and_count[keyword] = search_keywords.count(keyword)
+      end
+
+      # sort keywords by descending number of counts
+      keywords_and_count.sort_by { |_, value| -value }.to_h
     end
   end
 end
