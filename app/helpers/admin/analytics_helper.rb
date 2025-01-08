@@ -60,10 +60,10 @@ class Admin
       total_searches.html_safe
     end
 
-    def number_of_visits_started_on_homepage
-      visits_started_on_homepage =
-        "#{AhoyQueries.get_number_of_visits_started_on_homepage_last_seven_days}"
-      visits_started_on_homepage.html_safe
+    def number_of_visits_initiated_from_homepage
+      visits_initiated_from_homepage =
+        "#{AhoyQueries.get_number_of_visits_initiated_from_homepage_last_seven_days}"
+      visits_initiated_from_homepage.html_safe
     end
 
     def most_visited_locations

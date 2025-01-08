@@ -81,7 +81,7 @@ module AhoyQueries
     total_searches/total_visits
   end
 
-  def get_number_of_visits_started_on_homepage_last_seven_days
+  def get_number_of_visits_initiated_from_homepage_last_seven_days
     all_visits_ids =
       Ahoy::Event
         .where(time: interval_by_date_range(LAST_7_DAYS))
@@ -176,7 +176,16 @@ module AhoyQueries
     # sort keywords by descending number of counts
     keywords_and_count.sort_by { |_, value| -value }.to_h
 
-    # return array with up to the required number of elements
-    keywords_and_count.to_a.slice(0, limit)
+    # return hash with up to the required number of elements
+    top_keywords = keywords_and_count.keys
+
+    sliced_hash = {}
+    top_keywords.each_with_index do |keyword, i|
+      if i < limit
+        sliced_hash[keyword] = keywords_and_count[keyword]
+      end
+    end
+
+    sliced_hash
   end
 end
