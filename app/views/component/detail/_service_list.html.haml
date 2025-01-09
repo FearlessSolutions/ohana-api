@@ -4,9 +4,10 @@
       %i.fa.fa-handshake-o{ tabindex: "0", role: "img", aria: { label: "Services marker" } }
       %h4.annotated-text-block= t('labels.services')
     - location.services.each_with_index do |service, i|
+      - linked_service_row = "#{location_link_for(location)}#service-row-#{i}"
       - if i < location.services.size-1
-        %a{ href: "#{location_link_for(location)}##{service_id_for(service.name)}"}
+        %a.service_item{ href: linked_service_row, id: "service-item-#{i}" }
           #{service.name},
       - else
-        %a{ href: "#{location_link_for(location)}##{service_id_for(service.name)}"}
+        %a.service-item{ href: linked_service_row, id: "service-item-#{i}" }
           #{service.name}

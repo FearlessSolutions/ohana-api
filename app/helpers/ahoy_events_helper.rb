@@ -3,7 +3,8 @@ module AhoyEventsHelper
     ahoy.track("Location Visit", id: @location.id)
   end
 
-  def fire_location_edit_event
+  def fire_location_update_event
+    ahoy.track("Location Update", id: @location.id)
   end
 
   def fire_perform_search_event

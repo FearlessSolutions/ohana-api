@@ -1,7 +1,7 @@
 - if service.accepted_payments.present?
   %section.accepted-payments
-    %h1= t('service_fields.accepted_payments')
-    %ul
+    %h4= t('service_fields.accepted_payments')
+    %ul.fa-ul
       - service.accepted_payments.sort.each do |f|
         %li
           %span

@@ -298,15 +298,50 @@
     display: block;
   }
 
+  #aux-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #F5F9FF;
+    width: 100%;
+
+    #search-bar-aux {
+      max-width: 60%;
+
+      #search-group {
+        margin: 4px;
+        padding-left: 20px;
+
+        input {
+          background: $greyscale_lightest;
+          border-radius: 5px;
+          height: 0.5rem;
+        }
+
+        .button-icon {
+          font-size: $font_size_105;
+          color: $orange;
+        }
+      }
+    }
+
+    @media (max-width: 785px) {
+      display: none;
+    }
+  }
+
   #translation-bar {
+
     &-desktop {
       display: flex;
       align-items: center;
       justify-content: flex-end;
+      align-self: flex-end;
       padding: 10px;
       background-color: #F5F9FF;
       gap: 8px;
       padding-right: 20px;
+      max-width: 50%;
 
       span {
         font-family: $font_sans_serif;
@@ -314,25 +349,21 @@
         line-height: 16px;
         color: $black;
       }
-  
+
       a {
         margin-left: 5px;
-    
+
         img {
           width: 24px;
           height: 16px;
           box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
       }
-
-      @media (max-width: 785px) {
-        display: none;
-      }
     }
-  
+
     &-mobile {
       display: none;
-  
+
       @media (max-width: 785px) {
         display: flex;
         align-items: center;
@@ -340,14 +371,14 @@
         background-color: #FFFFFF;
         gap: 4px;
         border-bottom: 1px solid #B3D4FC;
-  
+
         span {
           display: none;
         }
-  
+
         a {
           margin-left: 5px;
-  
+
           img {
             width: 28px;
             height: auto;
@@ -359,13 +390,14 @@
       @media (max-width: 600px) {
         a {
           margin-left: 0px;
-  
+
           img {
             width: 24px;
             height: auto;
           }
         }
       }
+
 
       @media (max-width: 500px) {
         width: 100%;
@@ -383,7 +415,7 @@
 
         a {
           margin-left: 0;
-  
+
           img {
             width: 28px;
             height: auto;
@@ -391,7 +423,7 @@
         }
       }
     }
-  }  
+  }
 }
 
 #logo {

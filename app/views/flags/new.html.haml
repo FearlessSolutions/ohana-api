@@ -16,48 +16,47 @@
             Thank you for sending us feedback about this resource.
             %br
             Please tell us more about the issue you identified.
-            = form_for :flag, url: flag_path, html: { id: 'flag-form', role: 'form' } do |f|
+            = form_for :flag, url: flag_path, html: { id: 'flag-form', role: 'form', class: 'form-container' } do |f|
               = hidden_field(:flag, :resource_type, value: @resource_type)
               = hidden_field(:flag, :resource_id, value: @resource_id)
               = f.fields_for :report_attributes do |rf|
                 %br
                 - Flag.report_attributes_schema.each do |attribute|
                   %p
-                    = rf.check_box checkbox_name(attribute[:name]), class: "report-input-checkbox", id: checkbox_name(attribute[:name]), data: { "target-id" => attribute[:name] }, aria: { describedby: "#{attribute[:name]}_description" }
-                    = rf.label attribute[:name], attribute[:label], class: "report-label", for: checkbox_name(attribute[:name])
-                    - if attribute[:details_required] != false
-                      = rf.text_area attribute[:name], placeholder: "Please describe.", class: "js-input-field hidden", id: attribute[:name], aria: { label: "Description of the issue" }
-              %p  
-                = f.label :email
-                = f.email_field :email, value: current_user&.email, class: "js-input-field", autocomplete: "email"
+                    = render 'component/flags/form_fields', rf: rf, attribute: attribute
               = f.button 'Send!', class: 'button-plain', type:"submit", data: { disable_with: "Sending..." }, aria: { label: "Send" }
 
+
 :javascript
-  $(function() {
+  $(document).ready(function(){
+    // validate form fields before submitting form
     $('#flag-form').on('submit', function() {
-      var anyChecked = $('.report-input-checkbox').is(':checked');
-      var anyFilled = $('.js-input-field').filter(function() {
-        return $(this).val() !== '';
-      }).length > 0;
-      
-      if (!anyChecked && !anyFilled) {
-        var message = 'Please enter your email or check one of the feedback boxes before submitting.';
-
-        var alertDiv = $('<div>', {
-          'class': 'sr-only',
-          'role': 'alert',
-          'aria-live': 'assertive',
-          text: message
-        });
-
-        $('body').append(alertDiv);
-        setTimeout(function() {
-          alertDiv.remove();
-          
-          alert(message);
-        }, 100);
-
+      if (!isAnyCheckboxChecked()) {
+        showErrorPopUp('Please check one of the feedback boxes before submitting.');
         return false;
       }
     });
+
+
+    function isAnyCheckboxChecked(){
+      return $('.report-input-checkbox.feedback').is(':checked');
+    }
+
+
+    function showErrorPopUp(message){
+      const alertDiv = $('<div>', {
+        'class': 'sr-only',
+        'role': 'alert',
+        'aria-live': 'assertive',
+        text: message
+      });
+
+      $('body').append(alertDiv);
+      setTimeout(function() {
+        alertDiv.remove();
+
+        alert(message);
+      }, 100);
+    };
+
   });

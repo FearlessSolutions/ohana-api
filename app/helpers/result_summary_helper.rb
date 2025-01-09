@@ -43,7 +43,4 @@ module ResultSummaryHelper
     end
   end
 
-  def service_id_for(service_name)
-    service_name.split("(").first.split(" ").join("")
-  end
 end

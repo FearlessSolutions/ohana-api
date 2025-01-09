@@ -2,8 +2,7 @@
 - if service_categories.present?
   - sorted_categories = service_categories.sort { |a, b| a[:id].to_i - b[:id].to_i }
   %section.service-categories-box
-    %h1
-      = t('service_fields.categories.service')
+    %h4= t('service_fields.categories.service')
     %section.location-sidebar-content
       %section.service-categories{ itemscope: '', itemtype: 'http://schema.org/Service' }
         %div{  itemscope: '', itemtype: 'http://schema.org/serviceType' }

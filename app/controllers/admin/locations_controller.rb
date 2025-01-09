@@ -45,6 +45,7 @@ class Admin
       authorize @location
 
       if @location.save
+        fire_location_update_event
         redirect_to [:admin, @location],
                     notice: 'Location was successfully updated.'
       else

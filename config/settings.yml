@@ -241,7 +241,7 @@ date_format: '%m/%d/'
 # The email address that confirmation emails are sent from after user signup,
 # for the Developer and Admin portals.
 # Please make sure to change this to your own email address.
-confirmation_email: Noreply.charmcare@baltimorecity.gov
+confirmation_email: noreply@mg.charmcare.org
 
 # The email address that admin interface users should send questions/issues to.
 # This link appears when an admin views their locations and organizations.
