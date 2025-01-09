@@ -17,6 +17,11 @@ module AhoyQueries
     LAST_12_MONTHS,
   ]
 
+  def get_number_of_updates_last_thirty_days(location_id)
+    interval = interval_by_date_range(LAST_30_DAYS)
+    Ahoy::Event.where(name: 'Location Update', properties: {id: location_id}, time: interval).count
+  end
+
   def get_visits_by_location_and_date_range(location_id: , date_range:)
     Ahoy::Event.where(name: 'Location Visit', properties: {id: location_id}, time: interval_by_date_range(date_range)).count
   end
