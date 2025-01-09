@@ -3,8 +3,7 @@
 - if situation_categories.present?
   - sorted_categories = situation_categories.sort { |a, b| a[:id].to_i - b[:id].to_i }
   %section.situation-categories-box
-    %h1
-      = t(label_key)
+    %h4= t(label_key)
     %section.location-sidebar-content
       %section.service-categories{ itemscope: '', itemtype: 'http://schema.org/Service' }
         %div{  itemscope: '', itemtype: 'http://schema.org/serviceType' }

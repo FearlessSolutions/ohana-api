@@ -20,6 +20,12 @@ module ApplicationHelper
     visit_html_list.html_safe
   end
 
+  def number_of_updates(location_id)
+    updates_last_thirty_days = AhoyQueries.get_number_of_updates_last_thirty_days(location_id)
+    updates = '<p>Updates in the last 30 days: ' + "#{updates_last_thirty_days}" + '</p>'
+    updates.html_safe
+  end
+
   def upload_server
     Rails.configuration.upload_server
   end

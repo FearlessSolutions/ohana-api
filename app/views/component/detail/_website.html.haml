@@ -3,8 +3,9 @@
 
 - if website.present?
   %section.website.icon-text-block
-    %i.fa.fa-external-link-square{'aria-label': 'Website'}
+    %i.fa.fa-external-link-square{tabindex: '0', role: 'img', 'aria-label': 'Location website'}
     %span.annotated-text-block
       %h4 Website
+    %br
     %a{ href: website, target: '_blank', itemprop: 'url' }
       = format_url(website)

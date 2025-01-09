@@ -1,0 +1,147 @@
+
+// checkbox
+= rf.check_box checkbox_name(attribute[:name]),
+               class: "report-input-checkbox feedback",
+               id: checkbox_name(attribute[:name]),
+               data: { "target-id" => attribute[:name], "required" => "#{raw attribute[:details_required]}" },
+               aria: { describedby: "#{attribute[:name]}_description" }
+// checkbox label
+= rf.label checkbox_name(attribute[:name]), attribute[:label], class: "report-label", for: checkbox_name(attribute[:name])
+
+// email input field
+- if attribute[:name] == :employee_of_the_org
+  = rf.email_field attribute[:name],
+                   placeholder: current_user&.email || 'your.email@example.com',
+                   class: "js-input-field hidden",
+                   id: attribute[:name],
+                   autocomplete: "email",
+                   required: false,
+                   aria: { label: "Email address" }
+  // email input label
+  = label_tag attribute[:name],
+              "You must provide an email address and you agree to being contacted regarding the resource.",
+              class: 'detail hidden',
+              id: 'email-label'
+
+- else
+  // text input fields
+  - if attribute[:details_required] == true
+    - description = "Please describe (required)."
+  - elsif attribute[:details_required] != false
+    - description = "Please describe (optional)."
+  = rf.text_area attribute[:name],
+                 placeholder: description,
+                 class: "js-input-field hidden",
+                 id: attribute[:name],
+                 required: false,
+                 minlength: "4",
+                 aria: { label: "Description of the issue" }
+
+
+:javascript
+  $(document).ready(function(){
+    // disable the 'I am an amployee of the organization' checkbox and its label
+    const orgEmployee = 'employee_of_the_org';
+    const orgEmployeeCheckbox = $(`input\#${orgEmployee}_selected`);
+    orgEmployeeCheckbox.prop('disabled', true);
+    orgEmployeeCheckbox.next().addClass('disabled last');
+
+    // add the 'last' class to visually separate the email checkbox from the others
+    orgEmployeeCheckbox.parent().addClass('last');
+    // the 'feedback' class is only for the checkboxes reporting incorrect info
+    orgEmployeeCheckbox.removeClass('feedback');
+
+
+    // find all checkboxes and set them as unchecked by default
+    const $allCheckboxes = $(".flag-form input[type='checkbox']");
+    $allCheckboxes.val('false');
+    $allCheckboxes.prop('checked', false);
+
+
+    // when a checkbox is clicked, show or hide text input fields
+    $allCheckboxes.on('click', function() {
+      const textFieldTargetID = $(this).data('target-id');
+      const inputElement = $(`.js-input-field:input[id='${textFieldTargetID}']`);
+
+      if ($(this).is(':checked')) {
+        $(this).val('true');
+        showInputField(inputElement);
+      } else {
+        $(this).val('false');
+        hideAndResetInputField(inputElement);
+      }
+
+      toggleEmailInfo();
+    });
+
+
+    // automatically populate email field on click when field is empty
+    $(`\#${orgEmployee}`).on('click', function() {
+      if ($(this).val() != ''){
+        return;
+      }
+
+      // uses account email if user is signed in, if not an empty string
+      const userEmail = "#{raw current_user&.email}";
+      $(this).val(userEmail);
+    });
+
+
+    function isAnyCheckboxChecked(){
+      return $('.report-input-checkbox.feedback').is(':checked');
+    }
+
+
+    function isFieldRequired(fieldId) {
+      return $(`\#${fieldId}_selected`).data('required');
+    }
+
+
+    function showInputField(inputField) {
+      inputField.removeClass('hidden');
+
+      // if additional info is required, set the required attribute to true
+      if (isFieldRequired(inputField.attr('id'))) {
+        inputField.prop('required', true);
+      }
+
+      // if this is the email field, show the tag as well
+      if (inputField.attr('id') == orgEmployee){
+        $('#email-label').removeClass('hidden');
+      }
+    }
+
+
+    function hideAndResetInputField(inputField) {
+      inputField.addClass('hidden');
+
+      // reset input field content
+      inputField.val('');
+
+      // if this is the email field, hide the tag as well
+      if (inputField.attr('id') == orgEmployee) {
+        $('#email-label').addClass('hidden');
+      }
+
+      // set the required attribute to false, since using
+      // validation on hidden fields will cause errors
+      inputField.prop('required', false);
+    }
+
+    function toggleEmailInfo() {
+      // if one or more checkboxes are checked, enable the email checkbox
+      if (isAnyCheckboxChecked()) {
+        orgEmployeeCheckbox.prop('disabled', false);
+        orgEmployeeCheckbox.next().removeClass('disabled');
+      }
+      // otherwise, disable the email checkbox and hide email input
+      else {
+        orgEmployeeCheckbox.val('false');
+        orgEmployeeCheckbox.prop('checked', false);
+        orgEmployeeCheckbox.prop('disabled', true);
+        orgEmployeeCheckbox.next().addClass('disabled');
+        hideAndResetInputField($(`.js-input-field:input[id='${orgEmployee}']`));
+      }
+    }
+
+  });

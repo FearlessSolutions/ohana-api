@@ -1,14 +1,14 @@
 %div#categoryFiltersContainerDiv.category-filters-container
 
 - if @main_category_selected_name == ""
-  %div#parent-category.parent-category-label-container{ tabindex: "0", role: "button", aria: { label: 'Select a Topic from above to display additional filters.', expanded: 'false'}}
+  %div#parent-category.parent-category-label-container{ tabindex: "1", aria: { label: 'Select a Topic from above to display additional filters.', expanded: 'false'}}
     %legend
       %span#subcategoriesFilterTitle
     %div#filterDropdownContainer.filter-dropdown-closed
       %i#iconContainer
   %fieldset#subcategoriesList
     %legend.sr-only= "Subcategories"
-  
+
 - else
   %div#categoryFiltersContainerDiv.category-filters-container
     %div#parent-category.parent-category-label-container.hoverable{ tabindex: "0", role: "button", aria: { label: 'Click enter to expand and collapse filters', expanded: 'false'}}

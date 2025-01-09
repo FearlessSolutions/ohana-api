@@ -17,6 +17,10 @@ module AhoyQueries
     LAST_12_MONTHS,
   ]
 
+  def get_number_of_updates_last_thirty_days(location_id)
+    interval = interval_by_date_range(LAST_30_DAYS)
+    Ahoy::Event.where(name: 'Location Update', properties: {id: location_id}, time: interval).count
+  end
 
   def interval_by_date_range(date_range)
     today = Date.current.to_time(:utc).beginning_of_day

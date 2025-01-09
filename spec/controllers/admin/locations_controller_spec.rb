@@ -91,6 +91,14 @@ describe Admin::LocationsController do
 
         expect(response).to redirect_to admin_location_url(@loc.reload.friendly_id)
       end
+
+      it 'tracks update to location with ahoy' do
+        log_in_as_admin(:super_admin)
+
+        post :update, params: { id: @loc.id, location: { name: 'Updated location' } }
+
+        expect(AhoyQueries.get_number_of_updates_last_thirty_days(@loc.id)).to eq(1)
+      end
     end
 
     context 'when admin is regular admin without privileges' do

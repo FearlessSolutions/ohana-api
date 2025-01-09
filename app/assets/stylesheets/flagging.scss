@@ -1,13 +1,56 @@
+@import "variables";
+
 input.report-input-checkbox {
   width: 3% !important;
   float: left;
   margin-right: 5px;
+
+  &:disabled {
+    background-color: $light_blue;
+    border: $greyscale_light;
+  }
 }
 
 label.report-label {
   width: 97%;
+
+  &.disabled {
+    color: $greyscale_light;
+  }
 }
 
-.flag-form p {
-  padding-bottom: 1em !important;
+.form-container {
+  display: flex;
+  align-items: flex-start;
+  flex-flow: column wrap;
+  padding: 10%;
+  width: 70vmin;
+  margin-top: 1rem;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+
+  p {
+    padding-bottom: 1em !important;
+    width: 100%;
+
+    &.last {
+      margin-top: 2rem;
+    }
+  }
+
+  button {
+    align-self: center;
+    margin-top: 1rem;
+  }
+
+  .js-input-field {
+    max-width: 100%;
+    margin: 1rem 0;
+    margin-bottom: 0;
+  }
+
+  label.detail {
+    flex: 1;
+    font-size: $font_size_95;
+    color: $greyscale_dark;
+  }
 }

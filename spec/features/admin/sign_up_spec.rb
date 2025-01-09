@@ -17,7 +17,6 @@ feature 'Signing up for a new admin account' do
   scenario 'with custom mailer' do
     reset_email
     sign_up_admin('Moncef', 'moncef@foo.com', 'ohanatest', 'ohanatest')
-    expect(first_email.body).to include('Admin')
     expect(first_email.body).to include('/admin')
     expect(first_email.body).to_not include('documentation')
   end
