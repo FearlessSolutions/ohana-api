@@ -19,7 +19,6 @@
           dataType: 'json',
           success: function(data) {
             updateSubcategories(data.sub_cat_array);
-            checkMatchedCategory();
           },
           error: function(jqXHR, textStatus, errorThrown) {
             if (jqXHR.status === 422) {
@@ -67,31 +66,11 @@
       }
     }
 
-    function checkMatchedCategory() {
-      var matchedCategoryName = "#{@matched_category&.name}";
-      var matchedCategoryParentName = "#{@matched_category&.parent&.name || @matched_category&.name}";
-      var keywordMatchedCategory = #{@keyword_matched_category};
-      var clearCategories = #{@clear_categories};
-
-
-      if (matchedCategoryName && keywordMatchedCategory) {
-        $('#main_category').val(matchedCategoryParentName);
-
-        var checkbox = $('input[type="checkbox"][value="' + matchedCategoryName + '"]');
-        if (checkbox.length) {
-          checkbox.prop('checked', true);
-        }
-      } else if (clearCategories) {
-        clearSubcategories();
-      }
-    }
-
     $('#main_category').change(function() {
       loadSubcategories($(this).val());
     });
 
     loadSubcategories($('#main_category').val());
-    checkMatchedCategory();
 
     function clearSubcategories() {
       $('#subcategoriesList').empty();
