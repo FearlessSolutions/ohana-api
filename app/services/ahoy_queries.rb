@@ -17,10 +17,6 @@ module AhoyQueries
     LAST_12_MONTHS,
   ]
 
-  def get_number_of_updates_last_thirty_days(location_id)
-    interval = interval_by_date_range(LAST_30_DAYS)
-    Ahoy::Event.where(name: 'Location Update', properties: {id: location_id}, time: interval).count
-  end
 
   def interval_by_date_range(date_range)
     today = Date.current.to_time(:utc).beginning_of_day
@@ -47,7 +43,13 @@ module AhoyQueries
   end
 
 
-  def get_location_visit_events(location_id: , date_range:)
+  def get_number_of_updates_last_thirty_days(location_id)
+    interval = interval_by_date_range(LAST_30_DAYS)
+    Ahoy::Event.where(name: 'Location Update', properties: {id: location_id}, time: interval).count
+  end
+
+
+  def get_visits_by_location_and_date_range(location_id, date_range = LAST_7_DAYS)
     Ahoy::Event
       .where(name: 'Location Visit', time: interval_by_date_range(date_range))
       .where(properties: {id: location_id})
@@ -75,6 +77,7 @@ module AhoyQueries
       .count
   end
 
+
   def get_total_number_of_searches(date_range = LAST_7_DAYS)
     Ahoy::Event
       .where(name: 'Perform Search', time: interval_by_date_range(date_range))
@@ -88,6 +91,7 @@ module AhoyQueries
 
     total_searches/total_visits
   end
+
 
   def get_number_of_visits_initiated_from_homepage(date_range = LAST_7_DAYS)
     all_visits_ids =
@@ -170,14 +174,6 @@ module AhoyQueries
         .count
 
     total_visits_with_searches.length
-  end
-
-
-  def get_location_visit_events(location_id, date_range = LAST_7_DAYS)
-    Ahoy::Event
-      .where(name: 'Location Visit', time: interval_by_date_range(date_range))
-      .where(properties: {id: location_id})
-      .all
   end
 
 
