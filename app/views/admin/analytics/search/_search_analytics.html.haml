@@ -53,11 +53,12 @@
     %tr.hidden
       %td.bottom
       %td.bottom
-        %p From keyword searches: #{events_from_keyword_searches(location_visit_origin_events)}
+        %p From keyword searches: #{views_from_keyword_searches(location_visit_origin_events)}
         = top_keywords_and_count(location_visit_origin_events)
       %td.bottom
-        %p From direct links: #{events_from_direct_links(location_visit_origin_events)}
+        %p From direct links: #{views_from_direct_links(location_visit_origin_events)}
       %td.bottom
+
 
 :javascript
   $(document).ready(function() {

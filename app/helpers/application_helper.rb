@@ -13,7 +13,7 @@ module ApplicationHelper
     date_ranges = AhoyQueries::DATE_RANGE_OPTIONS
 
     date_ranges.each do |date_range|
-      visits_per_date_range = AhoyQueries.get_visits_by_location_and_date_range(location_id: location_id, date_range: date_range)
+      visits_per_date_range = AhoyQueries.get_location_visit_events(location_id: location_id, date_range: date_range)
       visit_html_list << "<li>#{date_range}: #{visits_per_date_range}</li>"
     end
 
