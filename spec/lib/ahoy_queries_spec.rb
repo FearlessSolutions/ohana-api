@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe AhoyQueries do
-  describe "#get_visits_by_location_and_date_range" do
+  describe "#get_total_visits_by_location_and_date_range" do
 
     before do
       ahoy = Ahoy::Tracker.new
@@ -15,7 +15,7 @@ describe AhoyQueries do
       ahoy_entry.update(time: 1.day.ago)
       ahoy_entry.reload
 
-      visits = AhoyQueries.get_visits_by_location_and_date_range(location_id: @location.id, date_range: date_range)
+      visits = AhoyQueries.get_total_visits_by_location_and_date_range(location_id: @location.id, date_range: date_range)
       expect(visits).to eq(1)
     end
 
@@ -25,7 +25,7 @@ describe AhoyQueries do
       ahoy_entry.update(time: 1.day.ago)
       ahoy_entry.reload
 
-      visits = AhoyQueries.get_visits_by_location_and_date_range(location_id: @location.id, date_range: date_range)
+      visits = AhoyQueries.get_total_visits_by_location_and_date_range(location_id: @location.id, date_range: date_range)
       expect(visits).to eq(1)
     end
 
@@ -35,7 +35,7 @@ describe AhoyQueries do
       ahoy_entry.update(time: 1.day.ago)
       ahoy_entry.reload
 
-      visits = AhoyQueries.get_visits_by_location_and_date_range(location_id: @location.id, date_range: date_range)
+      visits = AhoyQueries.get_total_visits_by_location_and_date_range(location_id: @location.id, date_range: date_range)
       expect(visits).to eq(1)
     end
 
@@ -45,7 +45,7 @@ describe AhoyQueries do
       ahoy_entry.update(time: 1.month.ago)
       ahoy_entry.reload
 
-      visits = AhoyQueries.get_visits_by_location_and_date_range(location_id: @location.id, date_range: date_range)
+      visits = AhoyQueries.get_total_visits_by_location_and_date_range(location_id: @location.id, date_range: date_range)
       expect(visits).to eq(1)
     end
 
@@ -55,7 +55,7 @@ describe AhoyQueries do
       ahoy_entry.update(time: Date.current.prev_quarter - 1.day)
       ahoy_entry.reload
 
-      visits = AhoyQueries.get_visits_by_location_and_date_range(location_id: @location.id, date_range: date_range)
+      visits = AhoyQueries.get_total_visits_by_location_and_date_range(location_id: @location.id, date_range: date_range)
       expect(visits).to eq(1)
     end
 
@@ -65,7 +65,7 @@ describe AhoyQueries do
       ahoy_entry.update(time: 1.day.ago)
       ahoy_entry.reload
 
-      visits = AhoyQueries.get_visits_by_location_and_date_range(location_id: @location.id, date_range: date_range)
+      visits = AhoyQueries.get_total_visits_by_location_and_date_range(location_id: @location.id, date_range: date_range)
       expect(visits).to eq(1)
     end
   end

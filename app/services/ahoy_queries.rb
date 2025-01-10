@@ -49,7 +49,7 @@ module AhoyQueries
   end
 
 
-  def get_visits_by_location_and_date_range(location_id, date_range = LAST_7_DAYS)
+  def get_total_visits_by_location_and_date_range(location_id, date_range = LAST_7_DAYS)
     Ahoy::Event
       .where(name: 'Location Visit', time: interval_by_date_range(date_range))
       .where(properties: {id: location_id})
@@ -174,6 +174,14 @@ module AhoyQueries
         .count
 
     total_visits_with_searches.length
+  end
+
+
+  def get_location_visit_events(location_id, date_range = LAST_7_DAYS)
+    Ahoy::Event
+      .where(name: 'Location Visit', time: interval_by_date_range(date_range))
+      .where(properties: {id: location_id})
+      .all
   end
 
 
