@@ -31,7 +31,11 @@
     - td_class = (i == most_used_keywords.length-1)? "bottom" : ""
     %tr
       %td{class: td_class} #{i+1}
-      %td{class: td_class} #{keyword.first}
+      - if keyword.first == ''
+        %td{class: td_class}
+          %em [no keywords]
+      - else
+        %td{class: td_class} #{keyword.first}
       %td{class: td_class} #{keyword.last}
 
 
