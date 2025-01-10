@@ -1,6 +1,9 @@
 %section#list-view
   %ul
-    - search.locations.each do |location|
+    - search.locations.each_with_index do |location, i|
+
+      - if i == 2
+        = render 'component/locations/results/search_rating'
 
       %li{class: cycle('search-result-blue', 'search-result-white')}
         %section.results-entry{ itemscope: '', itemtype: 'http://schema.org/Organization' }
@@ -48,6 +51,9 @@
                     = render 'component/locations/results/service_wait_table_row', service: service
             - else
               %h2.visuallyhidden= "Service Availability"
+
+      - if search.locations.length == 1
+        = render 'component/locations/results/search_rating'
 
   %footer
     %div.columns-wrapper

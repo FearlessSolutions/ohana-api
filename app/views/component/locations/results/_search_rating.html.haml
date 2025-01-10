@@ -1,0 +1,40 @@
+%div#rating-bar
+  %p Do these results match what you are looking for?
+  %span Please rate these search results from 1 star (No Match) to 5 stars (High Match).
+
+  %div.stars
+    - for i in 1..5 do
+      %i.fa.fa-star-o{ tabindex: '0',
+                       id: "#{i}-star",
+                       role: 'button',
+                       aria: {label: "#{i}-star rating"}}
+
+
+:javascript
+  $(document).ready(function() {
+
+    $('i.fa').on('mouseenter', function() {
+      index = Number($(this).attr('id')[0]);
+
+      for (let i = 1; i <= index; i++) {
+        $(`i\#${i}-star`)
+          .removeClass('fa-star-o')
+          .addClass('fa-star');
+      }
+    });
+
+
+    $('i.fa').on('mouseout', function() {
+      $('i.fa')
+        .removeClass('fa-star')
+        .addClass('fa-star-o');
+    });
+
+
+    $('i.fa').on('click', function() {
+      $('#rating-bar').fadeOut(2500, function() {
+        $(this).remove();
+      });
+    });
+
+  });
