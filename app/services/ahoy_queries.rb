@@ -44,15 +44,17 @@ module AhoyQueries
 
 
   def get_number_of_updates_last_thirty_days(location_id)
-    interval = interval_by_date_range(LAST_30_DAYS)
-    Ahoy::Event.where(name: 'Location Update', properties: {id: location_id}, time: interval).count
+    Ahoy::Event
+      .where(name: 'Location Update', time: interval_by_date_range(LAST_30_DAYS))
+      .where_props(id: location_id)
+      .count
   end
 
 
   def get_total_visits_by_location_and_date_range(location_id, date_range = LAST_7_DAYS)
     Ahoy::Event
       .where(name: 'Location Visit', time: interval_by_date_range(date_range))
-      .where(properties: {id: location_id})
+      .where_props(id: location_id)
       .count
   end
 
@@ -117,7 +119,7 @@ module AhoyQueries
   def get_most_visited_locations(limit, date_range = LAST_7_DAYS)
     Ahoy::Event
       .where(name: 'Location Visit', time: interval_by_date_range(date_range))
-      .group("properties -> 'id'")
+      .group_prop(:id)
       .order('COUNT(id) DESC')
       .limit(limit)
       .count
@@ -128,7 +130,7 @@ module AhoyQueries
     most_used_keywords =
       Ahoy::Event
         .where(name: 'Perform Search', time: interval_by_date_range(date_range))
-        .group("properties -> 'keywords'")
+        .group_prop(:keywords)
         .order('COUNT(id) DESC')
         .limit(limit)
         .count
@@ -180,7 +182,7 @@ module AhoyQueries
   def get_location_visit_events(location_id, date_range = LAST_7_DAYS)
     Ahoy::Event
       .where(name: 'Location Visit', time: interval_by_date_range(date_range))
-      .where(properties: {id: location_id})
+      .where_props(id: location_id)
       .all
   end
 

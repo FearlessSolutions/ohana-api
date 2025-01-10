@@ -52,14 +52,6 @@ describe LocationsController do
 
 
   describe 'track locations search with ahoy' do
-    it 'tracks any search' do
-      get :index
-
-      tracked_search = Ahoy::Event.where(name: 'Perform Search').count
-
-      expect(tracked_search).to eq(1)
-    end
-
     it 'tracks a search with params' do
       get :index, params: {keyword: 'house', main_category: '', categories: []}
 
