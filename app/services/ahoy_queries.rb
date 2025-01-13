@@ -163,6 +163,12 @@ module AhoyQueries
     keywords_list
   end
 
+  def get_most_recent_search_event
+    Ahoy::Event
+      .where(name: 'Perform Search')
+      .last
+  end
+
 
   #######################
   #  auxiliary methods

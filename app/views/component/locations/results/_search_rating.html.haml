@@ -32,9 +32,39 @@
 
 
     $('i.fa').on('click', function() {
+      searchRating = Number($(this).attr('id')[0]);
       $('#rating-bar').fadeOut(2500, function() {
+        saveRating(searchRating);
         $(this).remove();
       });
     });
 
+    function saveRating(searchRating){
+      const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+      $.ajax({
+        type: 'POST',
+        url: '/locations/set_search_rating',
+        headers: {
+          'X-CSRF-Token': csrfToken
+        },
+        data: { search_rating: searchRating},
+        dataType: 'json',
+        success: "Search rating saved successfully!",
+        error: function(jqXHR, textStatus, errorThrown) {
+          if (jqXHR.status === 422) {
+            // Handle 422 error
+            console.error('Unprocessable Entity:', jqXHR.responseJSON);
+          } else {
+            // Handle other errors, like for instance:
+            // '400' : "Server understood the request, but request content was invalid.",
+            // '401' : "Unauthorized access.",
+            // '403' : "Forbidden resource can't be accessed.",
+            // '500' : "Internal server error.",
+            // '503' : "Service unavailable."
+            console.error(textStatus, errorThrown);
+          }
+        }
+      });
+    }
   });

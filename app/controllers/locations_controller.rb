@@ -104,6 +104,18 @@ class LocationsController < ApplicationController
     end
   end
 
+  def set_search_rating
+    permitted = params.permit(:search_rating)
+    search_rating = permitted["search_rating"]
+
+    current_event = Ahoy::Event.where(name:'Perform Search', visit_id: session[:visit_id]).last
+
+    new_properties_hash = current_event.properties
+    new_properties_hash["rating"] = search_rating
+
+    current_event.update(properties: new_properties_hash)
+  end
+
   def validate_category
     return helpers.main_categories_array.map{|row| row[0] }.include?(params[:main_category])
   end
