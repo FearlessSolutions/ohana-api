@@ -49,6 +49,9 @@ class LocationsController < ApplicationController
 
     @exact_match_found = @locations_search.exact_match_found?
 
+    # tracks info about the current search
+    fire_perform_search_event
+
     # caches the search results and renders the view
     cache_page(@search.locations) if @search.locations.present?
 
