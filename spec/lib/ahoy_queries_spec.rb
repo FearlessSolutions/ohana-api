@@ -12,7 +12,7 @@ describe AhoyQueries do
     it "returns the right amount of visits when date range is 'Yesterday'" do
       date_range = AhoyQueries::YESTERDAY
       ahoy_entry = Ahoy::Event.last
-      ahoy_entry.update(time: 1.day.ago)
+      ahoy_entry.update(time: Date.yesterday)
       ahoy_entry.reload
 
       visits = AhoyQueries.get_total_visits_by_location_and_date_range(@location.id, date_range)
@@ -22,7 +22,7 @@ describe AhoyQueries do
     it "returns the right amount of visits when date range is 'Last 7 Days'" do
       date_range = AhoyQueries::LAST_7_DAYS
       ahoy_entry = Ahoy::Event.last
-      ahoy_entry.update(time: 1.day.ago)
+      ahoy_entry.update(time: 2.days.ago)
       ahoy_entry.reload
 
       visits = AhoyQueries.get_total_visits_by_location_and_date_range(@location.id, date_range)
@@ -32,7 +32,7 @@ describe AhoyQueries do
     it "returns the right amount of visits when date range is 'Last 30 Days'" do
       date_range = AhoyQueries::LAST_30_DAYS
       ahoy_entry = Ahoy::Event.last
-      ahoy_entry.update(time: 1.day.ago)
+      ahoy_entry.update(time: 2.days.ago)
       ahoy_entry.reload
 
       visits = AhoyQueries.get_total_visits_by_location_and_date_range(@location.id, date_range)
@@ -62,7 +62,7 @@ describe AhoyQueries do
     it "returns the right amount of visits when date range is 'Last 12 Months'" do
       date_range = AhoyQueries::LAST_12_MONTHS
       ahoy_entry = Ahoy::Event.last
-      ahoy_entry.update(time: 1.day.ago)
+      ahoy_entry.update(time: 2.days.ago)
       ahoy_entry.reload
 
       visits = AhoyQueries.get_total_visits_by_location_and_date_range(@location.id, date_range)
