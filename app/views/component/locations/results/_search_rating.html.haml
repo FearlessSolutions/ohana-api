@@ -6,6 +6,7 @@
     - for i in 1..5 do
       %i.fa.fa-star-o{ tabindex: '0',
                        id: "#{i}-star",
+                       class: "star",
                        role: 'button',
                        aria: {label: "#{i}-star rating"}}
 
@@ -13,28 +14,45 @@
 :javascript
   $(document).ready(function() {
 
-    $('i.fa').on('mouseenter', function() {
-      index = Number($(this).attr('id')[0]);
+    $('.star').on('mouseenter', function() {
+      starIndex = Number($(this).attr('id')[0]);
+      solidStars(starIndex);
+    });
 
-      for (let i = 1; i <= index; i++) {
+    $('.star').on('mouseout', function() {
+      outlineStars();
+    });
+
+    $('.star').on('click', function() {
+      removeStarAnimations();
+      removeRatingRow();
+    });
+
+    function solidStars(starIndex) {
+      for (let i = 1; i <= starIndex; i++) {
         $(`i\#${i}-star`)
           .removeClass('fa-star-o')
           .addClass('fa-star');
       }
-    });
+    }
 
-
-    $('i.fa').on('mouseout', function() {
-      $('i.fa')
+    function outlineStars() {
+      $('.star')
         .removeClass('fa-star')
         .addClass('fa-star-o');
-    });
+    }
 
+    function removeStarAnimations() {
+      $('.star')
+        .off('mouseenter')
+        .off('mouseout')
+        .off('click');
+    }
 
-    $('i.fa').on('click', function() {
+    function removeRatingRow() {
       $('#rating-bar').fadeOut(2500, function() {
         $(this).remove();
       });
-    });
+    }
 
   });
