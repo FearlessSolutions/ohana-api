@@ -16,7 +16,7 @@ class Admin
       new_orgs =
         "#{Organization
             .where(created_at: date_range(start_date, end_date))
-             .count}"
+            .count}"
       new_orgs.html_safe
     end
 
@@ -69,7 +69,7 @@ class Admin
 
     # search related figures
     def total_number_of_visits
-      total_visits = "#{AhoyQueries.get_total_number_of_visits}"
+      total_visits = "#{AhoyQueries.get_total_number_of_ahoy_visits}"
       total_visits.html_safe
     end
 
