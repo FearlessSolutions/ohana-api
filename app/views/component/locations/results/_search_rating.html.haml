@@ -26,6 +26,9 @@
     $('.star').on('click', function() {
       removeStarAnimations();
       removeRatingRow();
+
+      searchRating = Number($(this).attr('id')[0]);
+      saveRating(searchRating);
     });
 
     function solidStars(starIndex) {
@@ -51,7 +54,6 @@
 
     function removeRatingRow() {
       $('#rating-bar').fadeOut(2500, function() {
-        saveRating(searchRating);
         $(this).remove();
       });
     }
