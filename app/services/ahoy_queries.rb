@@ -73,7 +73,7 @@ module AhoyQueries
   end
 
 
-  def get_total_number_of_visits(date_range = LAST_7_DAYS)
+  def get_total_number_of_ahoy_visits(date_range = LAST_7_DAYS)
     Ahoy::Visit
       .where(started_at: interval_by_date_range(date_range))
       .count
