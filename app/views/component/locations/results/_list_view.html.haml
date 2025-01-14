@@ -52,7 +52,7 @@
             - else
               %h2.visuallyhidden= "Service Availability"
 
-      - if search.locations.length == 1
+      - if search.locations.length < 3 && i == search.locations.length-1
         = render 'component/locations/results/search_rating'
 
   %footer
