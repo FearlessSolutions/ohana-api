@@ -100,7 +100,7 @@ class Admin
     def avg_number_searches_per_visit
       avg_searches_per_visit =
         "#{AhoyQueries.get_total_number_of_searches
-        .div AhoyQueries.get_total_number_of_visits}"
+        .div AhoyQueries.get_total_number_of_ahoy_visits}"
       avg_searches_per_visit.html_safe
     end
 
