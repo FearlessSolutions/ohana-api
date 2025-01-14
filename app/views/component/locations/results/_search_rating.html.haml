@@ -27,7 +27,7 @@
       removeStarAnimations();
       removeRatingRow();
 
-      searchRating = Number($(this).attr('id')[0]);
+      searchRating = $(this).attr('id')[0];
       saveRating(searchRating);
     });
 

@@ -80,15 +80,18 @@ class Admin
     end
 
 
+    def avg_number_searches_per_visit
+      avg_searches_per_visit =
+        "#{AhoyQueries.get_total_number_of_searches
+        .div AhoyQueries.get_total_number_of_visits}"
+      avg_searches_per_visit.html_safe
+    end
+
+
     def number_of_visits_initiated_from_homepage
       visits_initiated_from_homepage =
         "#{AhoyQueries.get_number_of_visits_initiated_from_homepage}"
       visits_initiated_from_homepage.html_safe
-    end
-
-
-    def most_visited_locations
-      AhoyQueries.get_most_visited_locations(5)
     end
 
 
@@ -97,11 +100,25 @@ class Admin
     end
 
 
-    def avg_number_searches_per_visit
-      avg_searches_per_visit =
-        "#{AhoyQueries.get_total_number_of_searches
-        .div AhoyQueries.get_total_number_of_visits}"
-      avg_searches_per_visit.html_safe
+    def get_average_search_rating(keyword)
+      all_rated_search_events = AhoyQueries.get_all_rated_search_events_with_keyword(keyword)
+
+      sum_ratings = all_rated_search_events.reduce(0) { |sum, num| sum + num.properties['rating'] }
+
+      number_of_rated_events = all_rated_search_events.length
+      average_rating =
+        if number_of_rated_events.zero?
+          0
+        else
+          sum_ratings/number_of_rated_events
+        end
+
+      [average_rating, number_of_rated_events]
+    end
+
+
+    def most_visited_locations
+      AhoyQueries.get_most_visited_locations(5)
     end
 
 

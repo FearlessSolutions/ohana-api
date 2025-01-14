@@ -111,7 +111,7 @@ class LocationsController < ApplicationController
     current_event = Ahoy::Event.where(name:'Perform Search', visit_id: session[:visit_id]).last
 
     new_properties_hash = current_event.properties
-    new_properties_hash["rating"] = search_rating
+    new_properties_hash["rating"] = search_rating.to_i
 
     current_event.update(properties: new_properties_hash)
   end

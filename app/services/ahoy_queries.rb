@@ -116,6 +116,26 @@ module AhoyQueries
   end
 
 
+  def get_most_used_keywords(limit, date_range = LAST_7_DAYS)
+    Ahoy::Event
+      .where(name: 'Perform Search', time: interval_by_date_range(date_range))
+      .group_prop(:keywords)
+      .order('COUNT(id) DESC')
+      .limit(limit)
+      .count
+  end
+
+
+  def get_all_rated_search_events_with_keyword(keyword, date_range = LAST_7_DAYS)
+    all_rated_search_events =
+      Ahoy::Event
+        .where(name: 'Perform Search', time: interval_by_date_range(date_range))
+        .where_props(keywords: keyword)
+        .where("CAST(properties -> 'rating' AS int) > ?", 0)
+        .all
+  end
+
+
   def get_most_visited_locations(limit, date_range = LAST_7_DAYS)
     Ahoy::Event
       .where(name: 'Location Visit', time: interval_by_date_range(date_range))
@@ -123,17 +143,6 @@ module AhoyQueries
       .order('COUNT(id) DESC')
       .limit(limit)
       .count
-  end
-
-
-  def get_most_used_keywords(limit, date_range = LAST_7_DAYS)
-    most_used_keywords =
-      Ahoy::Event
-        .where(name: 'Perform Search', time: interval_by_date_range(date_range))
-        .group_prop(:keywords)
-        .order('COUNT(id) DESC')
-        .limit(limit)
-        .count
   end
 
 
