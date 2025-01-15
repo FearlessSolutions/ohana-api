@@ -80,7 +80,6 @@ describe AhoyQueries do
     end
   end
 
-
   describe "#get_total_number_of_ahoy_visits" do
     before do
       first_ahoy_visit = Ahoy::Visit.create
@@ -96,7 +95,6 @@ describe AhoyQueries do
       expect(total_number_ahoy_visits).to eq(2)
     end
   end
-
 
   describe "#get_total_number_of_searches " do
     before do
@@ -116,7 +114,6 @@ describe AhoyQueries do
       expect(total_number_searches).to eq(3)
     end
   end
-
 
   describe "#get_number_of_visits_initiated_from_homepage" do
     before do
@@ -139,9 +136,7 @@ describe AhoyQueries do
       visits_from_homepage = AhoyQueries.get_number_of_visits_initiated_from_homepage
       expect(visits_from_homepage).to eq(1)
     end
-
   end
-
 
   describe "#most_used_keywords" do
     before do
@@ -177,7 +172,6 @@ describe AhoyQueries do
       end
     end
   end
-
 
   describe "#get_most_visited_locations" do
     before do
@@ -215,7 +209,6 @@ describe AhoyQueries do
       end
     end
   end
-
 
   describe "#determine_origin_of_location_visit and #get_keywords_from_search_events" do
     before do
@@ -262,7 +255,6 @@ describe AhoyQueries do
       end
     end
   end
-
 
   # auxiliar function
   def move_date_back_last_ahoy_event(n_days)
