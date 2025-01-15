@@ -63,7 +63,6 @@ describe AhoyQueries do
     end
   end
 
-
   describe "#get_number_of_updates_last_thirty_days" do
     before do
       ahoy = Ahoy::Tracker.new

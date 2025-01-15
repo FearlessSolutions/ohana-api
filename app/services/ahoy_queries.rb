@@ -55,7 +55,6 @@ module AhoyQueries
       .count
   end
 
-
   def get_total_homepage_views
     Ahoy::Event
       .where(name: 'Homepage Visit')
@@ -107,7 +106,6 @@ module AhoyQueries
     visits_from_homepage
   end
 
-
   def get_most_used_keywords(limit, date_range = LAST_7_DAYS)
     Ahoy::Event
       .where(name: 'Perform Search', time: interval_by_date_range(date_range))
@@ -117,8 +115,7 @@ module AhoyQueries
       .count
   end
 
-
-  def get_all_rated_search_events_with_keyword(keyword, date_range = LAST_7_DAYS)
+  def get_all_rated_search_events_for_keyword(keyword, date_range = LAST_7_DAYS)
     Ahoy::Event
       .where(name: 'Perform Search', time: interval_by_date_range(date_range))
       .where_props(keywords: keyword)
@@ -126,14 +123,12 @@ module AhoyQueries
       .all
   end
 
-
   def get_number_of_searches_for_rating(rating, date_range = LAST_7_DAYS)
     Ahoy::Event
       .where(name: 'Perform Search', time: interval_by_date_range(date_range))
       .where_props(rating: rating)
       .count
   end
-
 
   def get_search_events_for_rating(rating, date_range = LAST_7_DAYS)
     Ahoy::Event

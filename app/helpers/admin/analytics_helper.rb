@@ -67,7 +67,6 @@ class Admin
       total_searches.html_safe
     end
 
-
     def avg_number_searches_per_visit
       avg_searches_per_visit =
         "#{AhoyQueries.get_total_number_of_searches
@@ -75,21 +74,18 @@ class Admin
       avg_searches_per_visit.html_safe
     end
 
-
     def number_of_visits_initiated_from_homepage
       visits_initiated_from_homepage =
         "#{AhoyQueries.get_number_of_visits_initiated_from_homepage}"
       visits_initiated_from_homepage.html_safe
     end
 
-
     def most_used_keywords
       AhoyQueries.get_most_used_keywords(10)
     end
 
-
     def get_average_search_rating(keyword)
-      all_rated_search_events = AhoyQueries.get_all_rated_search_events_with_keyword(keyword)
+      all_rated_search_events = AhoyQueries.get_all_rated_search_events_for_keyword(keyword)
 
       sum_ratings = all_rated_search_events.reduce(0) { |sum, num| sum + num.properties['rating'] }
 
@@ -104,7 +100,6 @@ class Admin
       [average_rating, number_of_rated_events]
     end
 
-
     def number_of_searches_for_rating(rating)
       total_searches_for_rating =
         "(#{AhoyQueries.get_number_of_searches_for_rating(rating)})"
@@ -112,18 +107,15 @@ class Admin
       total_searches_for_rating.html_safe
     end
 
-
     def searches_for_rating(rating)
       searches_with_rating = AhoyQueries.get_search_events_for_rating(rating)
 
       group_keywords_and_count(searches_with_rating)
     end
 
-
     def most_visited_locations
       AhoyQueries.get_most_visited_locations(5)
     end
-
 
     def avg_number_searches_per_visit
       avg_searches_per_visit =
@@ -172,7 +164,6 @@ class Admin
       location_name.html_safe
     end
 
-
     def group_keywords_and_count(search_events)
       keywords_list = []
 
@@ -182,7 +173,6 @@ class Admin
 
       keywords_and_count = count_and_sort_unique_keywords(keywords_list)
     end
-
 
     def count_and_sort_unique_keywords(search_keywords)
       distinct_keywords = search_keywords.to_set
