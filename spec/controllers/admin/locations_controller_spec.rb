@@ -97,7 +97,9 @@ describe Admin::LocationsController do
 
         post :update, params: { id: @loc.id, location: { name: 'Updated location' } }
 
-        expect(AhoyQueries.get_number_of_updates_last_thirty_days(@loc.id)).to eq(1)
+        ahoy_entry = Ahoy::Event.where_props(id: @loc.id).last
+
+        expect(ahoy_entry.name).to eq("Location Update")
       end
     end
 

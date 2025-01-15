@@ -1,33 +1,30 @@
-%h1 ANALYTICS
+%h1 Analytics
 
-= form_tag('/admin/analytics') do
-  = date_field('analytics', 'start_date', value: @start_date)
-  = date_field('analytics', 'end_date', value: @end_date)
-  = submit_tag
+%div.tabs-row
+  .tab.active{ id: 'main-tab' }
+    %h2 Main
+  .tab{ id: 'search-tab' }
+    %h2 Search
+%section.tab-container.active{ id: 'main-tab-analytics' }
+  = render 'admin/analytics/main/main_analytics'
+%section.tab-container{ id: 'search-tab-analytics' }
+  = render 'admin/analytics/search/search_analytics'
 
-%table.table
-  %tr
-    %td # of Organizations:
-    %td #{@organizations_count}
-  %tr
-    %td # of Organizations created in date range:
-    %td #{@new_org_count}
-  %tr
-    %td # of Locations:
-    %td #{@locations_count}
-  %tr
-    %td # of Locations created in date range:
-    %td #{@new_location_count}
-  %tr
-    %td # of Services:
-    %td #{@services_count}
-  %tr
-    %td # of Services created in date range:
-    %td #{@new_service_count}
-  %tr
-    %td # of Homepage views
-    %td #{@total_homepage_views}
-  %tr
-    %td # of Homepage Views in date range:
-    %td #{@new_homepage_views}
 
+:javascript
+  $(document).ready(function() {
+
+    $('.tab').on('click', function() {
+      $('.tab').each( function(){
+        $(this).removeClass('active');
+      });
+      $('.tab-container').each( function(){
+        $(this).removeClass('active');
+      });
+
+      $(this).addClass('active');
+      id = $(this).attr('id');
+      $(`\#${id}-analytics`).addClass('active');
+    });
+
+  });
