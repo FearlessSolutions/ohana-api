@@ -1872,3 +1872,34 @@ body {
     }
   }
 }
+
+#rating-bar {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  min-height: 5rem;
+  padding: 1rem;
+  background-color: $yellow;
+
+  p {
+    font-weight: 600;
+    text-align: center;
+  }
+
+  span {
+    text-align: center;
+  }
+
+  &:hover {
+    background-color: $light-orange;
+  }
+
+  .stars {
+    margin-top: 1em;
+
+    .fa.fa-star, .fa.fa-star-o {
+      font-size: $font_size_120;
+      color: $greyscale_dark;
+    }
+  }
+}
