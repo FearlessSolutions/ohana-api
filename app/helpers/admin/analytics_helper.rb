@@ -128,7 +128,6 @@ class Admin
       location_name.html_safe
     end
 
-
     def count_and_sort_unique_keywords(search_keywords)
       distinct_keywords = search_keywords.to_set
 
