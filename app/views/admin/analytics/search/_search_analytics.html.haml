@@ -52,6 +52,25 @@
           (#{rating_and_count[1]})
 
 
+%h4 Searches by rating
+- for l in 5.downto(1) do
+  - rating = l
+  %div.rating-row
+    %span  #{rating}-stars
+    - for j in 1..5 do
+      - if j <= rating
+        %i.fa.fa-star
+      - else
+        %i.fa.fa-star-o
+    = number_of_searches_for_rating(rating)
+  - top_keywords_for_rating = searches_for_rating(rating)
+  - if top_keywords_for_rating.length > 0
+    %div.keywords-for-rating-row.hidden
+      %ul
+        - top_keywords_for_rating.each do |keyword|
+          %li #{keyword.first} (#{keyword.last})
+
+
 %h4 Most visited locations
 %table.table
   %tr
@@ -83,4 +102,12 @@
     $('tr.top-locations').on('click', function(){
       $(this).next().toggleClass('hidden');
     });
+
+    $('.rating-row').on('click', function(){
+      nextElemClasses = $(this).next().attr('class').split(" ");
+      if (nextElemClasses.includes('keywords-for-rating-row')){
+        $(this).next().toggleClass('hidden');
+      }
+    });
+
   });

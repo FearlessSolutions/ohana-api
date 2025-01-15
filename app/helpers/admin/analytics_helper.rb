@@ -117,9 +117,25 @@ class Admin
     end
 
 
+    def number_of_searches_for_rating(rating)
+      total_searches_for_rating =
+        "(#{AhoyQueries.get_number_of_searches_for_rating(rating)})"
+
+      total_searches_for_rating.html_safe
+    end
+
+
+    def searches_for_rating(rating)
+      searches_with_rating = AhoyQueries.get_search_events_for_rating(rating)
+
+      group_keywords_and_count(searches_with_rating)
+    end
+
+
     def most_visited_locations
       AhoyQueries.get_most_visited_locations(5)
     end
+
 
     def avg_number_searches_per_visit
       avg_searches_per_visit =
@@ -171,6 +187,17 @@ class Admin
       location_name =
         "<strong>#{Location.where(id: location_id).last.name}</strong>"
       location_name.html_safe
+    end
+
+
+    def group_keywords_and_count(search_events)
+      keywords_list = []
+
+      search_events.each do |event|
+        keywords_list << event.properties['keywords']
+      end
+
+      keywords_and_count = count_and_sort_unique_keywords(keywords_list)
     end
 
 

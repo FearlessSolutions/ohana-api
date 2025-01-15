@@ -127,12 +127,27 @@ module AhoyQueries
 
 
   def get_all_rated_search_events_with_keyword(keyword, date_range = LAST_7_DAYS)
-    all_rated_search_events =
-      Ahoy::Event
-        .where(name: 'Perform Search', time: interval_by_date_range(date_range))
-        .where_props(keywords: keyword)
-        .where("CAST(properties -> 'rating' AS int) > ?", 0)
-        .all
+    Ahoy::Event
+      .where(name: 'Perform Search', time: interval_by_date_range(date_range))
+      .where_props(keywords: keyword)
+      .where("CAST(properties -> 'rating' AS int) > ?", 0)
+      .all
+  end
+
+
+  def get_number_of_searches_for_rating(rating, date_range = LAST_7_DAYS)
+    Ahoy::Event
+      .where(name: 'Perform Search', time: interval_by_date_range(date_range))
+      .where_props(rating: rating)
+      .count
+  end
+
+
+  def get_search_events_for_rating(rating, date_range = LAST_7_DAYS)
+    Ahoy::Event
+      .where(name: 'Perform Search', time: interval_by_date_range(date_range))
+      .where_props(rating: rating)
+      .all
   end
 
 

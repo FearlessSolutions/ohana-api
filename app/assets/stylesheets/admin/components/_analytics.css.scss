@@ -67,6 +67,22 @@ h1 {
     margin-top: 5rem;
   }
 
+  .rating-row {
+    font-weight: 600;
+    color: $grey-t;
+    min-height: 4rem;
+    padding: 1rem;
+    border-top: 1px $greyscale_light solid;
+
+    &:hover {
+      background-color: $light-blue;
+    }
+
+    i {
+      color: $blue;
+    }
+  }
+
   .table {
     td {
       border-top: none !important;
@@ -76,6 +92,10 @@ h1 {
       }
 
       p:first-of-type {
+        color: $blue;
+      }
+
+      i {
         color: $blue;
       }
     }
