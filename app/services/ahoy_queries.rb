@@ -17,7 +17,6 @@ module AhoyQueries
     LAST_12_MONTHS,
   ]
 
-
   def interval_by_date_range(date_range)
     today = Date.current.to_time(:utc).beginning_of_day
     yesterday_end = Date.yesterday.to_time(:utc).end_of_day
@@ -42,14 +41,12 @@ module AhoyQueries
     end
   end
 
-
   def get_number_of_updates_last_thirty_days(location_id)
     Ahoy::Event
       .where(name: 'Location Update', time: interval_by_date_range(LAST_30_DAYS))
       .where_props(id: location_id)
       .count
   end
-
 
   def get_total_visits_by_location_and_date_range(location_id, date_range = LAST_7_DAYS)
     Ahoy::Event
@@ -65,13 +62,11 @@ module AhoyQueries
       .count
   end
 
-
   def get_new_homepage_views(date_range:)
     Ahoy::Event
       .where(name: 'Homepage Visit', time: date_range)
       .count
   end
-
 
   def get_total_number_of_ahoy_visits(date_range = LAST_7_DAYS)
     Ahoy::Visit
@@ -79,13 +74,11 @@ module AhoyQueries
       .count
   end
 
-
   def get_total_number_of_searches(date_range = LAST_7_DAYS)
     Ahoy::Event
       .where(name: 'Perform Search', time: interval_by_date_range(date_range))
       .count
   end
-
 
   def get_avg_number_searches_per_visit_with_searches(date_range = LAST_7_DAYS)
     total_searches = get_total_number_of_searches
@@ -93,7 +86,6 @@ module AhoyQueries
 
     total_searches/total_visits
   end
-
 
   def get_number_of_visits_initiated_from_homepage(date_range = LAST_7_DAYS)
     all_visits_ids =
@@ -115,7 +107,6 @@ module AhoyQueries
     visits_from_homepage
   end
 
-
   def get_most_visited_locations(limit, date_range = LAST_7_DAYS)
     Ahoy::Event
       .where(name: 'Location Visit', time: interval_by_date_range(date_range))
@@ -124,7 +115,6 @@ module AhoyQueries
       .limit(limit)
       .count
   end
-
 
   def get_most_used_keywords(limit, date_range = LAST_7_DAYS)
     most_used_keywords =
@@ -135,7 +125,6 @@ module AhoyQueries
         .limit(limit)
         .count
   end
-
 
   def determine_origin_of_location_visit(location_id, date_range = LAST_7_DAYS)
     # get all Location Visit events for the given location id
@@ -152,7 +141,6 @@ module AhoyQueries
     preceding_search_events
   end
 
-
   def get_keywords_from_search_events(search_events)
     keywords_list = []
     search_events.each do |event_id|
@@ -163,11 +151,9 @@ module AhoyQueries
     keywords_list
   end
 
-
   #######################
   #  auxiliary methods
   #######################
-
   def get_total_number_of_visits_with_searches(date_range = LAST_7_DAYS)
     total_visits_with_searches =
       Ahoy::Event
@@ -178,14 +164,12 @@ module AhoyQueries
     total_visits_with_searches.length
   end
 
-
   def get_location_visit_events(location_id, date_range = LAST_7_DAYS)
     Ahoy::Event
       .where(name: 'Location Visit', time: interval_by_date_range(date_range))
       .where_props(id: location_id)
       .all
   end
-
 
   def get_search_event_preceding_location_visit(event_id:, visit_id:)
     preceding_search_event =
@@ -197,7 +181,6 @@ module AhoyQueries
 
     search_event_id = preceding_search_event.nil? ? nil : preceding_search_event.id
   end
-
 
   def get_search_events_keywords(event_id)
     Ahoy::Event
