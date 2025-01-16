@@ -24,7 +24,6 @@
 %h4 Most used search keywords
 %table.table
   %tr
-    %th Ranking
     %th Keywords
     %th # of times searched
     %th Rating
@@ -33,7 +32,6 @@
     - keyword_term = keyword.first
     - keyword_count = keyword.last
     %tr
-      %td{class: td_class} #{i+1}
       - if keyword_term == ''
         %td{class: td_class}
           %em [no keywords]
@@ -89,13 +87,11 @@
 %h4 Most visited locations
 %table.table
   %tr
-    %th Ranking
     %th{colspan: "2"} Location name
     %th # of visits
   - most_visited_locations.each_with_index do |location, i|
     - location_id = location.first
     %tr.top-locations{tabindex: '0', role: 'button'}
-      %td #{i+1}
       %td{colspan: "2"}
         = get_location_name(location_id)
         %i.fa.fa-chevron-down
@@ -103,7 +99,6 @@
 
     - location_visit_origin_events = origin_of_location_visit(location_id)
     %tr.hidden
-      %td.bottom
       %td.bottom
         %p From keyword searches: #{views_from_keyword_searches(location_visit_origin_events)}
         = top_keywords_and_count(location_visit_origin_events)
