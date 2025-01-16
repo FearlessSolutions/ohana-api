@@ -67,21 +67,43 @@ h1 {
     margin-top: 5rem;
   }
 
+  i {
+    color: $blue;
+    font-size: $font_size_90;
+  }
+
   .rating-row {
     font-weight: 600;
     color: $grey-t;
+    background-color: rgba(171,171,171, 0.15);
     min-height: 4rem;
     padding: 1rem;
     border-top: 1px $greyscale_light solid;
+  }
+
+  .keywords-list {
+    p {
+      margin-top: 1rem;
+      padding: 0 1.5rem;
+      color: $greyscale_midtone;
+      text-decoration: underline;
+    }
+  }
+
+  .keywords-for-rating-row {
+    padding: 1rem 1.5rem;
 
     &:hover {
       background-color: $light-blue;
     }
-
-    i {
-      color: $blue;
-    }
   }
+
+  .details-keyword-search-rating {
+    padding: 0.5rem 2rem;
+    display: flex;
+    width: 50%;
+  }
+
 
   .table {
     td {

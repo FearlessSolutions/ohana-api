@@ -102,7 +102,7 @@ class Admin
 
     def number_of_searches_for_rating(rating)
       total_searches_for_rating =
-        "(#{AhoyQueries.get_number_of_searches_for_rating(rating)})"
+        "(#{AhoyQueries.get_number_of_searches_for_rating(rating)} ratings)"
 
       total_searches_for_rating.html_safe
     end
@@ -111,6 +111,28 @@ class Admin
       searches_with_rating = AhoyQueries.get_search_events_for_rating(rating)
 
       group_keywords_and_count(searches_with_rating)
+    end
+
+    def keyword_search_rating_details(keyword, rating)
+      keyword_searches_with_rating = AhoyQueries.get_keyword_search_rating_details(keyword, rating)
+
+      keyword_search_breakdown = {}
+      keyword_searches_with_rating.each do |search|
+        main_category = search.properties['main_category']
+        main_category = '--' if main_category.empty?
+
+        subcategories = search.properties['subcategories'].empty? ? "No" : "Yes"
+        grouping = "#{main_category}_#{subcategories}"
+
+        keyword_search_breakdown[grouping] =
+          if keyword_search_breakdown[grouping]
+            keyword_search_breakdown[grouping]+1
+          else
+            1
+          end
+      end
+
+      keyword_search_breakdown.sort_by { |_, value| -value }[0..5]
     end
 
     def most_visited_locations
@@ -154,6 +176,12 @@ class Admin
         keyword = "<em>[no search keywords]</em>" if keyword == ''
         display += "<li> #{keyword} (#{keyword_count})</li>"
       end
+
+      if keywords_and_count.length > 3
+        other_keyword_searches = keywords_and_count.values.sum - keywords_and_count.values.slice(0, 3).sum
+        display += "<li><em>[all others]</em> (#{other_keyword_searches})</li>"
+      end
+
       display += "</ul>"
       display.html_safe
     end

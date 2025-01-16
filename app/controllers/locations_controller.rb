@@ -211,7 +211,7 @@ class LocationsController < ApplicationController
       @main_category_selected_name = @matched_category.parent&.name || @matched_category.name
       @main_category_selected_id = @matched_category.parent&.id || @matched_category.id
       params[:main_category] = @main_category_selected_name
-      params[:categories] = [@matched_category.name]
+      params[:categories] = [@matched_category.name] if @matched_category.parent
       params[:category_ids] = [@matched_category.id]
 
     ## otherwise, use the selected main category, if present

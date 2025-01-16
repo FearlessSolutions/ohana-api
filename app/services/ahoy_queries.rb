@@ -137,6 +137,12 @@ module AhoyQueries
       .all
   end
 
+  def get_keyword_search_rating_details(keyword, rating, date_range = LAST_7_DAYS)
+    Ahoy::Event
+    .where(name: 'Perform Search', time: interval_by_date_range(date_range))
+    .where_props(keywords: keyword, rating: rating)
+    .all
+  end
 
   def get_most_visited_locations(limit, date_range = LAST_7_DAYS)
     Ahoy::Event
@@ -187,7 +193,6 @@ module AhoyQueries
       .where(name: 'Perform Search')
       .last
   end
-
 
   #######################
   #  auxiliary methods

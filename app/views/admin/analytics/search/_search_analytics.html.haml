@@ -49,7 +49,7 @@
             - else
               %i.fa.fa-star-o
         %span
-          (#{rating_and_count[1]})
+          (#{rating_and_count[1]} ratings)
 
 
 %h4 Searches by rating
@@ -65,10 +65,25 @@
     = number_of_searches_for_rating(rating)
   - top_keywords_for_rating = searches_for_rating(rating)
   - if top_keywords_for_rating.length > 0
-    %div.keywords-for-rating-row.hidden
-      %ul
-        - top_keywords_for_rating.each do |keyword|
-          %li #{keyword.first} (#{keyword.last})
+    %div.keywords-list
+      %p Top 5 keyword searches
+      - top_keywords_for_rating.each do |keyword|
+        %div.keywords-for-rating-row{tabindex:'0', role: 'button'}
+          %i.fa.fa-chevron-down
+          #{keyword.first} (#{keyword.last})
+        %div.details-keyword-search-rating.hidden
+          - search_details = keyword_search_rating_details(keyword.first, rating)
+          %table.table
+            %tr
+              %th # of searches
+              %th Main category
+              %th Subcategories selected
+            - search_details.each_with_index do |search, i|
+              - td_class = (i == search_details.length-1)? "bottom" : ""
+              %tr
+                %td{class: td_class} #{search.last}
+                %td{class: td_class} #{search.first.split('_')[0]}
+                %td{class: td_class} #{search.first.split('_')[1]}
 
 
 %h4 Most visited locations
@@ -83,6 +98,7 @@
       %td #{i+1}
       %td{colspan: "2"}
         = get_location_name(location_id)
+        %i.fa.fa-chevron-down
       %td #{location.last}
 
     - location_visit_origin_events = origin_of_location_visit(location_id)
@@ -101,12 +117,14 @@
 
     $('tr.top-locations').on('click', function(){
       $(this).next().toggleClass('hidden');
+      $(this).find('i.fa').toggleClass('fa-chevron-down fa-chevron-up')
     });
 
-    $('.rating-row').on('click', function(){
+    $('div.keywords-for-rating-row').on('click', function(){
       nextElemClasses = $(this).next().attr('class').split(" ");
-      if (nextElemClasses.includes('keywords-for-rating-row')){
+      if (nextElemClasses.includes('details-keyword-search-rating')){
         $(this).next().toggleClass('hidden');
+        $(this).find('i.fa').toggleClass('fa-chevron-down fa-chevron-up')
       }
     });
 
