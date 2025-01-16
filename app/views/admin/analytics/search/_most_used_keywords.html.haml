@@ -1,0 +1,27 @@
+%h4 Most used search keywords
+%table.table
+  %tr
+    %th Keywords
+    %th # of times searched
+    %th Rating
+  - most_used_keywords.each_with_index do |keyword, i|
+    - td_class = (i == most_used_keywords.length-1)? "bottom" : ""
+    - keyword_term = keyword.first
+    - keyword_count = keyword.last
+    %tr
+      - if keyword_term == ''
+        %td{class: td_class}
+          %em [no keywords]
+      - else
+        %td{class: td_class} #{keyword_term}
+      %td{class: td_class} #{keyword_count}
+      %td{class: td_class}
+        - rating_and_count = get_average_search_rating(keyword_term)
+        %span
+          - for i in 1..5 do
+            - if i <= rating_and_count[0]
+              %i.fa.fa-star
+            - else
+              %i.fa.fa-star-o
+        %span
+          (#{rating_and_count[1]} ratings)

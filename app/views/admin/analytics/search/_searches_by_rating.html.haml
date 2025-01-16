@@ -1,0 +1,45 @@
+%h4 Searches by rating
+- for l in 5.downto(1) do
+  - rating = l
+  %div.rating-row
+    %span  #{rating}-stars
+    - for j in 1..5 do
+      - if j <= rating
+        %i.fa.fa-star
+      - else
+        %i.fa.fa-star-o
+    = number_of_searches_for_rating(rating)
+  - top_keywords_for_rating = searches_for_rating(rating)
+  - if top_keywords_for_rating.length > 0
+    %div.keywords-list
+      %p Top 5 search keywords
+      - top_keywords_for_rating.each do |keyword|
+        %div.keywords-for-rating-row{tabindex:'0', role: 'button'}
+          %span
+            %i.fa.fa-chevron-down
+            #{keyword.first} (#{keyword.last})
+          %div.details-container.hidden
+            %div.details-keyword-search-rating
+            - search_details = keyword_search_rating_details(keyword.first, rating)
+            %table.table
+              %tr
+                %th # of searches
+                %th Main category
+                %th Subcategories selected
+              - search_details.each_with_index do |search, i|
+                - td_class = (i == search_details.length-1)? "bottom" : ""
+                %tr
+                  %td{class: td_class} #{search.last}
+                  %td{class: td_class} #{search.first.split('_')[0]}
+                  %td{class: td_class} #{search.first.split('_')[1]}
+
+
+:javascript
+  $(document).ready(function() {
+
+    $('div.keywords-for-rating-row').on('click', function(){
+      $(this).find('div.details-container').toggleClass('hidden');
+      $(this).find('i.fa').toggleClass('fa-chevron-down fa-chevron-up');
+    });
+
+  });
