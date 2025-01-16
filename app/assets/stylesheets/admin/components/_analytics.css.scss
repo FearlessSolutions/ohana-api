@@ -82,6 +82,10 @@ h1 {
   }
 
   .keywords-list {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
     p {
       margin-top: 1rem;
       padding: 0 1.5rem;
@@ -91,17 +95,24 @@ h1 {
   }
 
   .keywords-for-rating-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: flex-start;
+    gap: 15%;
+    width: 100%;
     padding: 1rem 1.5rem;
 
     &:hover {
       background-color: $light-blue;
     }
+
+    span {
+      width: 20%;
+    }
   }
 
   .details-keyword-search-rating {
     padding: 0.5rem 2rem;
-    display: flex;
-    width: 50%;
   }
 
 
