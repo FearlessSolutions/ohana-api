@@ -153,16 +153,6 @@ module AhoyQueries
       .count
   end
 
-  def get_most_used_keywords(limit, date_range = LAST_7_DAYS)
-    most_used_keywords =
-      Ahoy::Event
-        .where(name: 'Perform Search', time: interval_by_date_range(date_range))
-        .group_prop(:keywords)
-        .order('COUNT(id) DESC')
-        .limit(limit)
-        .count
-  end
-
   def determine_origin_of_location_visit(location_id, date_range = LAST_7_DAYS)
     # get all Location Visit events for the given location id
     visit_events_for_location_id = get_location_visit_events(location_id)
