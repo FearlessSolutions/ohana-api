@@ -115,20 +115,26 @@ class Admin
       group_keywords_and_count(searches_with_rating)
     end
 
+    # returns a breakdown of the searches with the given keyword rated with the given rating
     def keyword_search_rating_details(keyword, rating)
       keyword_searches_with_rating = AhoyQueries.get_keyword_search_rating_details(keyword, rating)
 
       keyword_search_breakdown = {}
       keyword_searches_with_rating.each do |search|
+        # get the main category
         main_category = search.properties['main_category']
-        main_category = '--' if main_category.empty?
+        main_category = '--' if main_category.empty
 
+        # check if any subcategory was applied to the search
         subcategories = search.properties['subcategories'].empty? ? "No" : "Yes"
+
+        # create a hashmap entry with the main category and 'Yes' or 'No' for subcategories,
+        # which allows to group and count the different ways the same keyword was used in searches
         grouping = "#{main_category}_#{subcategories}"
 
         keyword_search_breakdown[grouping] =
           if keyword_search_breakdown[grouping]
-            keyword_search_breakdown[grouping]+1
+            keyword_search_breakdown[grouping] + 1
           else
             1
           end
