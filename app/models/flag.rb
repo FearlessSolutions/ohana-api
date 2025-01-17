@@ -107,6 +107,8 @@ class Flag < ApplicationRecord
     serialized_attributes
   end
 
+  update_index('locations') { Location.find(self.resource_id) }
+
   # from api again
   private
 
