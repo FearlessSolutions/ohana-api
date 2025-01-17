@@ -70,7 +70,7 @@ class Admin
     def avg_number_searches_per_visit
       avg_searches_per_visit =
         "#{AhoyQueries.get_total_number_of_searches
-        .div AhoyQueries.get_total_number_of_ahoy_visits}"
+        .div(AhoyQueries.get_total_number_of_ahoy_visits)}"
       avg_searches_per_visit.html_safe
     end
 
@@ -84,6 +84,7 @@ class Admin
       AhoyQueries.get_most_used_keywords(10)
     end
 
+    # calculates the average rating for the given keyword (includes only rated searches)
     def get_average_search_rating(keyword)
       all_rated_search_events = AhoyQueries.get_all_rated_search_events_for_keyword(keyword)
 
@@ -107,6 +108,7 @@ class Admin
       total_searches_for_rating.html_safe
     end
 
+    # retrieves all the search events for the given rating
     def searches_for_rating(rating)
       searches_with_rating = AhoyQueries.get_search_events_for_rating(rating)
 
@@ -160,7 +162,7 @@ class Admin
 
       keywords_and_count = count_and_sort_unique_keywords(search_keywords)
 
-      #limit the results to the top 3 keywords
+      # limit the results to the top 3 keywords
       keywords = keywords_and_count.keys.slice(0, 3)
 
       display = "<ul>"
