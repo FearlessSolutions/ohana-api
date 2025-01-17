@@ -70,16 +70,16 @@ class Admin
     def avg_number_searches_per_visit
       avg_searches_per_visit =
         "#{AhoyQueries.get_total_number_of_searches
-        .div AhoyQueries.get_total_number_of_visits}"
+        .div AhoyQueries.get_total_number_of_ahoy_visits}"
       avg_searches_per_visit.html_safe
     end
-    
+
     def number_of_visits_initiated_from_homepage
       visits_initiated_from_homepage =
         "#{AhoyQueries.get_number_of_visits_initiated_from_homepage}"
       visits_initiated_from_homepage.html_safe
     end
- 
+
     def most_used_keywords
       AhoyQueries.get_most_used_keywords(10)
     end
