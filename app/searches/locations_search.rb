@@ -255,6 +255,15 @@ class LocationsSearch
           {
             filter: { exists: { field: "featured_at" } },
             weight: 1.2
+          },
+          {
+            gauss: {
+              open_flags: {
+                origin: 0,
+                scale: 5,
+                decay: 0.75
+              }
+            }
           }
         ],
         boost_mode: "multiply"
@@ -327,6 +336,7 @@ class LocationsSearch
   def apply_sorting(query)
     query.order(
       "_score": { "order": "desc" },
+      open_flags: { order: "asc" },
       updated_at: { order: "desc" }
     )
   end

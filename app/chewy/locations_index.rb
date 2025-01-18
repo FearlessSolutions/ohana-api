@@ -52,4 +52,5 @@ class LocationsIndex < Chewy::Index
   field :updated_at, type: 'date'
   field :zipcode, value: -> { address.try(:postal_code) }
   field :languages, type: 'keyword', value: -> { services.map(&:languages).concat(languages).flatten.uniq.reject(&:blank?) }
+  field :open_flags, type: 'integer', value: -> {Flag.where(resource_id: id, completed_at: nil, resource_type: "Location").count}
 end
