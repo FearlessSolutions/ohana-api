@@ -123,12 +123,12 @@ class Admin
       keyword_searches_with_rating.each do |search|
         # get the main category
         main_category = search.properties['main_category']
-        main_category = '--' if main_category.empty
+        main_category = '--' if main_category.empty?
 
         # check if any subcategory was applied to the search
         subcategories = search.properties['subcategories'].empty? ? "No" : "Yes"
 
-        # create a hashmap entry with the main category and 'Yes' or 'No' for subcategories,
+        # create a hashmap entry with the main category and 'Yes' or 'No' to indicate the use of subcategories,
         # which allows to group and count the different ways the same keyword was used in searches
         grouping = "#{main_category}_#{subcategories}"
 
