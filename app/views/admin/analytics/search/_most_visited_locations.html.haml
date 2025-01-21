@@ -1,0 +1,31 @@
+%h4 Most visited locations
+%table.table
+  %tr
+    %th{colspan: "2"} Location name
+    %th # of visits
+  - most_visited_locations.each_with_index do |location, i|
+    - location_id = location.first
+    %tr.top-locations{tabindex: '0', role: 'button'}
+      %td{colspan: "2"}
+        = get_location_name(location_id)
+        %i.fa.fa-chevron-down
+      %td #{location.last}
+
+    - location_visit_origin_events = origin_of_location_visit(location_id)
+    %tr.hidden
+      %td.bottom
+        %p From keyword searches: #{views_from_keyword_searches(location_visit_origin_events)}
+        = top_keywords_and_count(location_visit_origin_events)
+      %td.bottom
+        %p From direct links: #{views_from_direct_links(location_visit_origin_events)}
+      %td.bottom
+
+
+:javascript
+  $(document).ready(function() {
+
+    $('tr.top-locations').on('click', function(){
+      $(this).next().toggleClass('hidden');
+      $(this).find('i.fa').toggleClass('fa-chevron-down fa-chevron-up')
+    });
+  });

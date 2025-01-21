@@ -16,6 +16,10 @@ module AhoyEventsHelper
                 keywords: params[:keyword].downcase,
                 main_category: @main_category_selected_name,
                 subcategories: @selected_categories,
-                results: @search.locations.total_count)
+                results: @search.locations.total_count,
+                rating: 0)
+
+    # save current ahoy visit id to session
+    session[:visit_id] = AhoyQueries.get_most_recent_search_event.visit_id
   end
 end

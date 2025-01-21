@@ -2,72 +2,7 @@
 %h3 Report for the last 7 days (#{Date.current-7.days} - #{Date.yesterday})
 
 
-%h4 Search data overview
-%table.table
-  %tr
-    %th Metric
-    %th Value
-  %tr
-    %td Total number of visits
-    %td= total_number_of_visits
-  %tr
-    %td Total number of searches
-    %td= total_number_of_searches
-  %tr
-    %td Average number of searches per visit
-    %td= avg_number_searches_per_visit
-  %tr
-    %td.bottom Total number of visits initiated from homepage
-    %td.bottom= number_of_visits_initiated_from_homepage
-
-
-%h4 Most used search keywords
-%table.table
-  %tr
-    %th Ranking
-    %th Keywords
-    %th # of times searched
-  - most_used_keywords.each_with_index do |keyword, i|
-    - td_class = (i == most_used_keywords.length-1)? "bottom" : ""
-    %tr
-      %td{class: td_class} #{i+1}
-      - if keyword.first == ''
-        %td{class: td_class}
-          %em [no keywords]
-      - else
-        %td{class: td_class} #{keyword.first}
-      %td{class: td_class} #{keyword.last}
-
-
-%h4 Most visited locations
-%table.table
-  %tr
-    %th Ranking
-    %th{colspan: "2"} Location name
-    %th # of visits
-  - most_visited_locations.each_with_index do |location, i|
-    - location_id = location.first
-    %tr.top-locations{tabindex: '0', role: 'button'}
-      %td #{i+1}
-      %td{colspan: "2"}
-        = get_location_name(location_id)
-      %td #{location.last}
-
-    - location_visit_origin_events = origin_of_location_visit(location_id)
-    %tr.hidden
-      %td.bottom
-      %td.bottom
-        %p From keyword searches: #{views_from_keyword_searches(location_visit_origin_events)}
-        = top_keywords_and_count(location_visit_origin_events)
-      %td.bottom
-        %p From direct links: #{views_from_direct_links(location_visit_origin_events)}
-      %td.bottom
-
-
-:javascript
-  $(document).ready(function() {
-
-    $('tr.top-locations').on('click', function(){
-      $(this).next().toggleClass('hidden');
-    })
-  });
+= render 'admin/analytics/search/search_data_overview'
+= render 'admin/analytics/search/most_visited_locations'
+= render 'admin/analytics/search/most_used_keywords'
+= render 'admin/analytics/search/searches_by_rating'
