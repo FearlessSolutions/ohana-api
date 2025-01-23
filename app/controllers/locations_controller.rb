@@ -88,6 +88,7 @@ class LocationsController < ApplicationController
     request.query_parameters["layout"] = true
     @query_parameters = request.query_parameters
     @url = request.url
+    @url_params = @url.split('?').last
   end
 
   # Ajax response to update the exanded div listing subcategories
