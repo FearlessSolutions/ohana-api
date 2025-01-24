@@ -1,7 +1,7 @@
 %div.content-header
   %span.utility-links
     %span
-      %a.button-utility.button-back{ href: "#{locations_url(@query_parameters)}##{location.id}", target: '_self' }
+      %a.button-utility.button-back{ href: "#{locations_url(@query_parameters_back_navigation)}##{location.id}", target: '_self' }
         %i.fa.fa-arrow-left{ aria: { hidden: 'true' } }
         %span Back
     %span.header-right><
@@ -9,7 +9,6 @@
         %i.fa.fa-share-square-o.fa-lg
         %span{ "aria-label" => "Share resource via email" }
       %button.fa.fa-heart-o.favorite-toggle.fa-lg{ "aria-label" => "Add to favorites" }
-        
 
   .left-column
     .floating-content.hide

@@ -20,6 +20,6 @@ module AhoyEventsHelper
                 rating: 0)
 
     # save current ahoy visit id to session
-    session[:visit_id] = AhoyQueries.get_most_recent_search_event.visit_id
+    session[:visit_id] = AhoyQueries.get_visit_id_of_most_recent_search_event
   end
 end

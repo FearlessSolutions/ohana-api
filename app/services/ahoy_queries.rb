@@ -178,9 +178,16 @@ module AhoyQueries
     keywords_list
   end
 
-  def get_most_recent_search_event
+  def get_visit_id_of_most_recent_search_event
     Ahoy::Event
       .where(name: 'Perform Search')
+      .last
+      .visit_id
+  end
+
+  def get_latest_search_event_in_current_visit(visit_id)
+    Ahoy::Event
+      .where(name: 'Perform Search', visit_id: visit_id)
       .last
   end
 

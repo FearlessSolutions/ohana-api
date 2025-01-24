@@ -50,7 +50,7 @@ class LocationsController < ApplicationController
     @exact_match_found = @locations_search.exact_match_found?
 
     # tracks info about the current search
-    fire_perform_search_event
+    fire_perform_search_event if !params[:back_navigation].present?
 
     # caches the search results and renders the view
     cache_page(@search.locations) if @search.locations.present?
@@ -87,6 +87,12 @@ class LocationsController < ApplicationController
 
     request.query_parameters["layout"] = true
     @query_parameters = request.query_parameters
+
+    # creating new hashmap with additional url parameter that indicates
+    # the user is navigating back from a location page to the results page
+    @query_parameters_back_navigation = @query_parameters
+    @query_parameters_back_navigation[:back_navigation] = true
+
     @url = request.url
   end
 
@@ -109,7 +115,7 @@ class LocationsController < ApplicationController
     permitted = params.permit(:search_rating)
     search_rating = permitted["search_rating"]
 
-    current_event = Ahoy::Event.where(name:'Perform Search', visit_id: session[:visit_id]).last
+    current_event = AhoyQueries.get_latest_search_event_in_current_visit(session[:visit_id])
 
     new_properties_hash = current_event.properties
     new_properties_hash["rating"] = search_rating.to_i
