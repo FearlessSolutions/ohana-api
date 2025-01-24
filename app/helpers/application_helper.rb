@@ -26,6 +26,11 @@ module ApplicationHelper
     updates.html_safe
   end
 
+  def current_search_not_rated?
+    last_search_event = AhoyQueries.get_latest_search_event_in_current_visit(session[:visit_id])
+    last_search_event.properties['rating'].zero?
+  end
+
   def upload_server
     Rails.configuration.upload_server
   end

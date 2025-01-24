@@ -3,7 +3,7 @@
 - @location.name == @location.organization.name ? canonical("#{locations_url}/#{@location.slug}") : canonical("#{locations_url}/#{@location.organization.slug}/#{@location.slug}")
 
 - content_for :breadcrumbs do
-  = link_to 'Community Resources', "#{locations_path}?#{@url_params}"
+  = link_to 'Community Resources', "#{locations_url(@query_parameters_back_navigation)}##{@location.id}"
   %span.breadcrumb-separator /
   %span= @location.name
 

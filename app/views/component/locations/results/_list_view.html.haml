@@ -2,7 +2,7 @@
   %ul
     - search.locations.each_with_index do |location, i|
 
-      - if i == 2
+      - if current_search_not_rated? && i == 2
         = render 'component/locations/results/search_rating'
 
       %li{class: cycle('search-result-blue', 'search-result-white')}
@@ -52,7 +52,7 @@
             - else
               %h2.visuallyhidden= "Service Availability"
 
-      - if search.locations.length < 3 && i == search.locations.length-1
+      - if current_search_not_rated? && search.locations.length < 3 && i == search.locations.length-1
         = render 'component/locations/results/search_rating'
 
   %footer
