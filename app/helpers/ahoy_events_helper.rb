@@ -13,7 +13,7 @@ module AhoyEventsHelper
 
   def fire_perform_search_event
     keyword = params[:keyword]
-    keyword = keyword.present? ? keyword.downcase : nil
+    keyword = keyword.present? ? keyword.downcase : ""
     ahoy.track("Perform Search",
                keywords: keyword,
                main_category: @main_category_selected_name,
