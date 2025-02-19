@@ -28,6 +28,8 @@ module ApplicationHelper
 
   def current_search_not_rated?
     last_search_event = AhoyQueries.get_latest_search_event_in_current_visit(session[:visit_id])
+    return true unless last_search_event.present?
+    return true unless last_search_event.properties['rating'].present?
     last_search_event.properties['rating'].zero?
   end
 

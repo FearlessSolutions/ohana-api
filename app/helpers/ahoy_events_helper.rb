@@ -12,12 +12,14 @@ module AhoyEventsHelper
   end
 
   def fire_perform_search_event
-    ahoy.track( "Perform Search",
-                keywords: params[:keyword].downcase,
-                main_category: @main_category_selected_name,
-                subcategories: @selected_categories,
-                results: @search.locations.total_count,
-                rating: 0)
+    keyword = params[:keyword]
+    keyword = keyword.present? ? keyword.downcase : nil
+    ahoy.track("Perform Search",
+               keywords: keyword,
+               main_category: @main_category_selected_name,
+               subcategories: @selected_categories,
+               results: @search.locations.total_count,
+               rating: 0)
 
     # save current ahoy visit id to session
     session[:visit_id] = AhoyQueries.get_visit_id_of_most_recent_search_event
