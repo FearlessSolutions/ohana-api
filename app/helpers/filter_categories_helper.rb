@@ -25,11 +25,13 @@ module FilterCategoriesHelper
   end
 
   def category_name_by_id(category_id)
-    main_categories_array.select{ |x| x[1] == category_id.to_i }.first.first
+    category = main_categories_array.find{ |x| x[1] == category_id.to_i }
+    category&.first
   end
 
   def get_category_id_by_name(main_category_selected_name)
-    main_categories_array.select{ |x| x[0] == main_category_selected_name }.first.second
+    category = main_categories_array.find{ |x| x[0] == main_category_selected_name }
+    category&.second
   end
 
   def category_filters_title(category_name)
